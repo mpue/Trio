@@ -157,8 +157,6 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     
     if (playing) {
         
-        
-        
         float* const left = buffer.getWritePointer(0);
         float* const right = buffer.getWritePointer(1);
         
@@ -168,20 +166,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             left[sample] = value;
             right[sample] = value;
         }
-        
-        
-        /*
-        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-        {
-            // Get a pointer to the start sample in the buffer for this audio output channel
-            float* const out = buffer.getWritePointer(channel);
-            
-            for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-                // sawtooth->setAmplitude(amplitude);
-                out[sample] = value;
-            }
-        }
-         */
+
     }
     
 }

@@ -15,6 +15,10 @@
 #include "WhiteNoise.h"
 #include "Sawtooth.h"
 
+#include <stack>
+
+using namespace std;
+
 //==============================================================================
 /**
 */
