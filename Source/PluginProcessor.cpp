@@ -213,4 +213,8 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new TrioAudioProcessor();
 }
 
+Voice* TrioAudioProcessor::getVoice() const {
+    return this->voice;
+}
+
 

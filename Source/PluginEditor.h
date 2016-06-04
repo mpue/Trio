@@ -15,6 +15,7 @@
 #include "PluginProcessor.h"
 #include "MainWindow.h"
 #include "TrioLookAndFeel.h"
+#include "Model.h"
 
 
 //==============================================================================
@@ -37,6 +38,7 @@ private:
 
     MainWindow* window;
     TrioLookAndFeel lookAndFeel;
+    Model* model;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrioAudioProcessorEditor)
 };

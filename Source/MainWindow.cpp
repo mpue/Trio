@@ -47,7 +47,7 @@ MainWindow::MainWindow ()
     resoSlider->addListener (this);
 
     addAndMakeVisible (osc1PitchSlider = new Slider ("osc1PitchSlider"));
-    osc1PitchSlider->setRange (0, 10, 0);
+    osc1PitchSlider->setRange (-36, 36, 1);
     osc1PitchSlider->setSliderStyle (Slider::Rotary);
     osc1PitchSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     osc1PitchSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
@@ -359,6 +359,7 @@ MainWindow::MainWindow ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    osc1PitchSlider->setValue(0);
     //[/Constructor]
 }
 
@@ -501,6 +502,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == osc1PitchSlider)
     {
         //[UserSliderCode_osc1PitchSlider] -- add your slider handling code here..
+        this->model->setOsc1Pitch(osc1PitchSlider->getValue());
         //[/UserSliderCode_osc1PitchSlider]
     }
     else if (sliderThatWasMoved == osc1FineSlider)
@@ -721,6 +723,11 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+
+void MainWindow::setModel(Model* model) {
+    this->model = model;
+}
+
 //[/MiscUserCode]
 
 
@@ -752,7 +759,7 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <SLIDER name="osc1PitchSlider" id="860a64caafed9e9a" memberName="osc1PitchSlider"
           virtualName="" explicitFocusOrder="0" pos="27 96 64 64" rotaryslideroutline="66ffffff"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
+          min="-36" max="36" int="1" style="Rotary" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <SLIDER name="osc1FineSlider" id="4fc66824ef24b612" memberName="osc1FineSlider"

@@ -22,6 +22,7 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Model.h"
 //[/Headers]
 
 
@@ -46,6 +47,9 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+
+    void setModel(Model* model);
+
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -67,6 +71,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    Model* model;
     //[/UserVariables]
 
     //==============================================================================
