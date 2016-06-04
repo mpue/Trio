@@ -17,13 +17,13 @@
 class Sawtooth : public Oszillator {
     
 public:
-    virtual float process();
+    virtual float process() override;
     
     Sawtooth(float sampleRate);
     float currentValue;
     float stepSize;
     
-    void setFrequency(float frequency);
+    void setFrequency(float frequency) override;
 };
 
 

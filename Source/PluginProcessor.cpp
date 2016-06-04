@@ -82,16 +82,23 @@ void TrioAudioProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    cout << "Sample rate : " << sampleRate << "kHz" << endl;
-    cout << "Samples per block " << samplesPerBlock << endl;
-    
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
     
-    this->whiteNoise = new WhiteNoise(sampleRate);
-    this->sawtooth = new Sawtooth(sampleRate);
+    WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
+    Sawtooth* osc1 = new Sawtooth(sampleRate);
+    Sawtooth* osc2 = new Sawtooth(sampleRate);
+    Sawtooth* osc3 = new Sawtooth(sampleRate);
     
-    this->calculateFrequencyTable();
+    osc2->setPitch(5);
+    osc3->setPitch(12);
+    
+    voice = new Voice();
+    voice->addOszillator(osc1);
+    voice->addOszillator(osc2);
+    voice->addOszillator(osc3);
+    // voice->addOszillator(whiteNoise);
+    
 }
 
 void TrioAudioProcessor::releaseResources()
@@ -130,6 +137,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     MidiMessage m;
     int time;
     
+    Note note;
+    
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
     {
         if (m.isNoteOn())
@@ -138,7 +147,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             velocity = m.getVelocity();
             amplitude = (1.0f / (float) 127) * velocity;
             cout << "Amplitude :" << amplitude << endl;
-            sawtooth->setFrequency(midiNote[m.getNoteNumber()]);
+            note.setMidiNote(m.getNoteNumber());
+            voice->setNote(&note);
             playing = true;
         }
         else if (m.isNoteOff())
@@ -161,7 +171,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         float* const right = buffer.getWritePointer(1);
         
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-            float value = sawtooth->process();
+            float value = voice->process();
             // sawtooth->setAmplitude(amplitude);
             left[sample] = value;
             right[sample] = value;
@@ -203,10 +213,4 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new TrioAudioProcessor();
 }
 
-void TrioAudioProcessor::calculateFrequencyTable() {
-    int a = 440; // a is 440 hz...
-    for (int x = 0; x < 127; ++x)
-    {
-        midiNote[x] = a * pow(2.0,(x-69.0)/12.0);
-    }
-}
+

@@ -19,13 +19,14 @@ class WhiteNoise : public Oszillator {
 public:
     
     WhiteNoise(double sampleRate);
+    ~WhiteNoise();
     
     virtual float process() override;
   
     
     
 private:
-    Random random;
+    Random* random;
     
 };
 

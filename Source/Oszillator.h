@@ -18,11 +18,13 @@ public:
     Oszillator(double sampleRate);
     virtual ~Oszillator();
 
-    void setFrequency(float frequency);
+    virtual void setFrequency(float frequency);
     void setPhase(float phase);
     void setAmplitude(float amplitude);
     
     virtual float process() = 0;
+    void setPitch(int pitch);
+    int getPitch() const;
     
 protected:
        
@@ -31,6 +33,7 @@ protected:
     float frequency;
     double sampleRate;
     float phaseIncrement;
+    int pitch; // halftones
 };
 
 

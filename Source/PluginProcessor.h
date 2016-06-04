@@ -14,6 +14,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "WhiteNoise.h"
 #include "Sawtooth.h"
+#include "Voice.h"
 
 #include <stack>
 
@@ -69,16 +70,11 @@ private:
     int samplesPerBlock;
     
     bool playing;
-
-    float midiNote[128];
-    
-    WhiteNoise* whiteNoise;
-    Sawtooth* sawtooth;
     
     int velocity;
     float amplitude;
     
-    void calculateFrequencyTable();
+    Voice* voice;
 
     
 };

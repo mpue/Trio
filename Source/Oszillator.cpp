@@ -11,7 +11,7 @@
 #include "Oszillator.h"
 
 Oszillator::Oszillator() {
-    
+    this->pitch = 0;
 }
 
 Oszillator::Oszillator(double sampleRate) {
@@ -34,3 +34,10 @@ void Oszillator::setFrequency(float frequency) {
     this->frequency = frequency;
 }
 
+void Oszillator::setPitch(int pitch) {
+    this->pitch = pitch;
+}
+
+int Oszillator::getPitch() const {
+    return this->pitch;
+}
