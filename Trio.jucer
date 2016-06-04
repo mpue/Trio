@@ -16,6 +16,10 @@
     </GROUP>
     <GROUP id="{973A5F90-B82E-4BC1-6D49-78E790BACA7B}" name="Source">
       <GROUP id="{826D2A94-B03C-6072-5870-EC17E24DF23B}" name="Oscillators">
+        <FILE id="Qu1PLf" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
+        <FILE id="qFfVLB" name="Voice.cpp" compile="1" resource="0" file="Source/Voice.cpp"/>
+        <FILE id="R4iZXK" name="Note.h" compile="0" resource="0" file="Source/Note.h"/>
+        <FILE id="nRorJJ" name="Note.cpp" compile="1" resource="0" file="Source/Note.cpp"/>
         <FILE id="d2QLZV" name="WhiteNoise.h" compile="0" resource="0" file="Source/WhiteNoise.h"/>
         <FILE id="IcfLX3" name="WhiteNoise.cpp" compile="1" resource="0" file="Source/WhiteNoise.cpp"/>
         <FILE id="S4QuNl" name="Sawtooth.h" compile="0" resource="0" file="Source/Sawtooth.h"/>
