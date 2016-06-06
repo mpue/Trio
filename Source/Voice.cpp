@@ -13,6 +13,7 @@
 
 Voice::Voice() {
     this->calculateFrequencyTable();
+    this->playing = false;
 }
 
 Voice::~Voice() {
@@ -83,4 +84,15 @@ void Voice::calculateFrequencyTable() {
     {
         midiNote[x] = a * pow(2.0,(x-69.0)/12.0);
     }
+}
+
+void Voice::setPlaying(bool playing) {
+    this->playing = playing;
+    if (!playing) {
+        delete this->note;
+    }
+}
+
+bool Voice::isPlaying() const {
+    return this->playing;
 }

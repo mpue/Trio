@@ -23,7 +23,7 @@ TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
     // editor's size to whatever you need it to be.
     setSize (910, 600);
     
-    model = new Model(p.getVoice());
+    model = new Model(p.getVoices());
     
     window = new MainWindow();
     window->setModel(model);

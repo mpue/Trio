@@ -13,11 +13,15 @@
 
 #include "Voice.h"
 
+#include <vector>
+
+using namespace std;
+
 class Model {
     
 public:
     
-    Model(Voice* voice);
+    Model(vector<Voice*> voices);
     
     int getOsc1Pitch();
     void setOsc1Pitch(int pitch);
@@ -43,7 +47,7 @@ private:
     float osc2Fine;
     float osc3Fine;
     
-    Voice* voice;
+    vector<Voice*> voices;
 };
 
 

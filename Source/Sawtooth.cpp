@@ -9,6 +9,7 @@
 */
 
 #include "Sawtooth.h"
+#include <math.h>
 
 #include <iostream>
 
@@ -29,7 +30,7 @@ Sawtooth::Sawtooth(float sampleRate) : Oszillator(sampleRate) {
 
 float Sawtooth::process() {
     
-    if (phase < 360.0f) {
+    if (phase + phaseIncrement <= 360.0) {
         phase += phaseIncrement;
         currentValue += stepSize;
     }
@@ -41,16 +42,20 @@ float Sawtooth::process() {
     return (currentValue - 0.5f) * amplitude;
 }
 
-void Sawtooth::setFrequency(float frequency) {
+void Sawtooth::setFrequency(double frequency) {
     
     cout << "Frequency : "  << frequency << endl;
     cout << "Fine : " << fine << endl;
+    cout << "Pitch : " << pitch << endl;
     
-    this->phase = 0.0f;
+    this->phase = 0.0;
     this->frequency = frequency;
-    this->phaseIncrement = (360.0f / sampleRate) * (frequency + this->fine);
+    this->phaseIncrement = (360.0 / sampleRate) * (frequency + this->fine);
     this->currentValue = 0;
-    this->stepSize = 1.0f / (sampleRate / (frequency + this->fine));
+    this->stepSize = 1.0 / (sampleRate / (frequency + this->fine));
+    
+    cout << "phaseIncrement : " << phaseIncrement << endl;
+    cout << "stepSize : " << stepSize << endl;
     
 }
 

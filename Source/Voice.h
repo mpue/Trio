@@ -40,14 +40,19 @@ public:
     int getPitch() const;
     void updateOscillator(int index);
     
+    void setPlaying(bool playing);
+    bool isPlaying() const;
+
+    
 private:
     vector<Oszillator*> oscillators;
     Note* note;
     int noteNumber;
     int pitch;
     int velocity;
-    float midiNote[128];
+    double midiNote[128];
     void calculateFrequencyTable();
+    bool playing;
     
 };
 

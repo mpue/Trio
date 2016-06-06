@@ -22,7 +22,7 @@ Oszillator::~Oszillator() {
     
 }
 
-void Oszillator::setPhase(float phase) {
+void Oszillator::setPhase(double phase) {
     this->phase = phase;
 }
 
@@ -30,7 +30,7 @@ void Oszillator::setAmplitude(float amplitude) {
     this->amplitude = amplitude;
 }
 
-void Oszillator::setFrequency(float frequency) {
+void Oszillator::setFrequency(double frequency) {
     this->frequency = frequency;
 }
 

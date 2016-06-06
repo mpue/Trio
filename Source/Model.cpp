@@ -17,8 +17,8 @@
 
 using namespace std;
 
-Model::Model(Voice* voice) {
-    this->voice = voice;
+Model::Model(vector<Voice*> voices) {
+    this->voices = voices;
 }
 
 int Model::getOsc1Pitch() {
@@ -28,8 +28,13 @@ int Model::getOsc1Pitch() {
 void Model::setOsc1Pitch(int pitch) {
     cout << "Pitch : " << pitch << endl;
     this->osc1Pitch = pitch;
-    voice->getOszillators().at(0)->setPitch(pitch);
-    voice->updateOscillator(0);
+    
+    for (int i = 0; i < voices.size();i++) {
+        if (!voices.at(i)->isPlaying()) continue;
+        voices.at(i)->getOszillators().at(0)->setPitch(pitch);
+        voices.at(i)->updateOscillator(0);
+    }
+
 }
 
 int Model::getOsc2Pitch() {
@@ -39,8 +44,11 @@ int Model::getOsc2Pitch() {
 void Model::setOsc2Pitch(int pitch) {
     cout << "Pitch : " << pitch << endl;
     this->osc2Pitch = pitch;
-    voice->getOszillators().at(1)->setPitch(pitch);
-    voice->updateOscillator(1);
+    for (int i = 0; i < voices.size();i++) {
+        if (!voices.at(i)->isPlaying()) continue;
+        voices.at(i)->getOszillators().at(1)->setPitch(pitch);
+        voices.at(i)->updateOscillator(1);
+    }
 }
 
 int Model::getOsc3Pitch() {
@@ -50,8 +58,11 @@ int Model::getOsc3Pitch() {
 void Model::setOsc3Pitch(int pitch) {
     cout << "Pitch : " << pitch << endl;
     this->osc3Pitch = pitch;
-    voice->getOszillators().at(2)->setPitch(pitch);
-    voice->updateOscillator(2);
+    for (int i = 0; i < voices.size();i++) {
+        if (!voices.at(i)->isPlaying()) continue;
+        voices.at(i)->getOszillators().at(2)->setPitch(pitch);
+        voices.at(i)->updateOscillator(2);
+    }
 }
 
 int Model::getOsc1Fine() {
@@ -60,8 +71,11 @@ int Model::getOsc1Fine() {
 
 void Model::setOsc1Fine(float fine) {
     this->osc1Fine = fine;
-    voice->getOszillators().at(0)->setFine(fine);
-    voice->updateOscillator(0);
+    for (int i = 0; i < voices.size();i++) {
+        if (!voices.at(i)->isPlaying()) continue;
+        voices.at(i)->getOszillators().at(0)->setFine(fine);
+        voices.at(i)->updateOscillator(0);
+    }
 }
 
 int Model::getOsc2Fine() {
@@ -70,8 +84,11 @@ int Model::getOsc2Fine() {
 
 void Model::setOsc2Fine(float fine) {
     this->osc2Fine = fine;
-    voice->getOszillators().at(1)->setFine(fine);
-    voice->updateOscillator(1);
+    for (int i = 0; i < voices.size();i++) {
+        if (!voices.at(i)->isPlaying()) continue;
+        voices.at(i)->getOszillators().at(1)->setFine(fine);
+        voices.at(i)->updateOscillator(1);
+    }
 }
 
 int Model::getOsc3Fine() {
@@ -79,8 +96,12 @@ int Model::getOsc3Fine() {
 }
 void Model::setOsc3Fine(float fine) {
     this->osc3Fine = fine;
-    voice->getOszillators().at(2)->setFine(fine);
-    voice->updateOscillator(2);
+    for (int i = 0; i < voices.size();i++) {
+        if (!voices.at(i)->isPlaying()) continue;
+        voices.at(i)->getOszillators().at(2)->setFine(fine);
+        voices.at(i)->updateOscillator(2);
+    }
+        
 }
 
 

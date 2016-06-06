@@ -17,6 +17,7 @@
 #include "Voice.h"
 
 #include <stack>
+#include <vector>
 
 using namespace std;
 
@@ -62,7 +63,7 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    Voice* getVoice() const;
+    vector<Voice*> getVoices() const;
 
 private:
     //==============================================================================
@@ -71,10 +72,13 @@ private:
     double sampleRate;
     int samplesPerBlock;
     
-    bool playing;
     int globalPitch;
     
-    Voice* voice;
+    vector<Voice*> voices;
+    
+    int getVoicesPlaying();
+    
+    // Voice* voice;
 
     
 };

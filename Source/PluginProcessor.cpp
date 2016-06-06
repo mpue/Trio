@@ -19,7 +19,6 @@ using namespace std;
 //==============================================================================
 TrioAudioProcessor::TrioAudioProcessor()
 {
-    playing = false;
     globalPitch = 0;
 }
 
@@ -88,18 +87,24 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
     
-    Sawtooth* osc1 = new Sawtooth(sampleRate);
-    Sawtooth* osc2 = new Sawtooth(sampleRate);
-    Sawtooth* osc3 = new Sawtooth(sampleRate);
+    for (int i = 0; i < 127; i++) {
+        Voice* v = new Voice();
+        
+        Sawtooth* osc1 = new Sawtooth(sampleRate);
+        Sawtooth* osc2 = new Sawtooth(sampleRate);
+        Sawtooth* osc3 = new Sawtooth(sampleRate);
+        
+        osc1->setPitch(0);
+        osc2->setPitch(0);
+        osc3->setPitch(0);
+        
+        v->addOszillator(osc1);
+        v->addOszillator(osc2);
+        v->addOszillator(osc3);
+        
+        voices.push_back(v);
+    }
     
-    osc1->setPitch(0);
-    osc2->setPitch(0);
-    osc3->setPitch(0);
-    
-    voice = new Voice();
-    voice->addOszillator(osc1);
-    voice->addOszillator(osc2);
-    voice->addOszillator(osc3);
     // voice->addOszillator(whiteNoise);
     
 }
@@ -140,22 +145,21 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     MidiMessage m;
     int time;
     
-    Note note;
-    
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
     {
         if (m.isNoteOn())
         {
+            Note* note = new Note();
             cout << "Note on " << m.getNoteNumber() << ", " << "velocity : " << static_cast<int>(m.getVelocity()) << endl;
-            note.setMidiNote(m.getNoteNumber());
-            note.setVelocity(m.getVelocity());
-            voice->setNote(&note);
-            playing = true;
+            note->setMidiNote(m.getNoteNumber());
+            note->setVelocity(m.getVelocity());
+            voices.at(m.getNoteNumber())->setNote(note);
+            voices.at(m.getNoteNumber())->setPlaying(true);
         }
         else if (m.isNoteOff())
         {
             cout << "Note off " << m.getNoteNumber() << endl;
-            playing = false;
+            voices.at(m.getNoteNumber())->setPlaying(false);
         }
         else if (m.isAftertouch())
         {
@@ -165,31 +169,39 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             int pitch = m.getPitchWheelValue();
             
             if (pitch != globalPitch) {
+                
                 globalPitch = pitch;
+                
+                /*
                 cout << "PitchWheel : " << globalPitch << endl;
                 voice->setPitch(globalPitch / 4);
                 voice->updateOscillator(0);
                 voice->updateOscillator(1);
                 voice->updateOscillator(2);
+                 */
             }
 
         }
         
     }
     
-    if (playing) {
+    if (getVoicesPlaying() > 0) {
         
         float* const left = buffer.getWritePointer(0);
         float* const right = buffer.getWritePointer(1);
         
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-            float value = voice->process();
-            // sawtooth->setAmplitude(amplitude);
+            
+            float value = 0;
+            
+            for (int i = 0; i < voices.size();i++) {
+                if (voices.at(i)->isPlaying()) {
+                    value += voices.at(i)->process();
+                }
+            }
             left[sample] = value;
             right[sample] = value;
         }
-
-        
         
     }
     
@@ -227,8 +239,19 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new TrioAudioProcessor();
 }
 
-Voice* TrioAudioProcessor::getVoice() const {
-    return this->voice;
+int TrioAudioProcessor::getVoicesPlaying() {
+    int num = 0;
+    
+    for (int i = 0; i < voices.size();i++) {
+        if (voices.at(i)->isPlaying()) {
+            num++;
+        }
+    }
+    return num;
+}
+
+vector<Voice*> TrioAudioProcessor::getVoices() const {
+    return this->voices;
 }
 
 

@@ -26,7 +26,7 @@ public:
     float currentValue;
     float stepSize;
     float fine;
-    void setFrequency(float frequency) override;
+    virtual void setFrequency(double frequency) override;
 };
 
 
