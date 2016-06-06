@@ -30,8 +30,8 @@ void Model::setOsc1Pitch(int pitch) {
     this->osc1Pitch = pitch;
     
     for (int i = 0; i < voices.size();i++) {
-        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->getOszillators().at(0)->setPitch(pitch);
+        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->updateOscillator(0);
     }
 
@@ -45,8 +45,8 @@ void Model::setOsc2Pitch(int pitch) {
     cout << "Pitch : " << pitch << endl;
     this->osc2Pitch = pitch;
     for (int i = 0; i < voices.size();i++) {
-        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->getOszillators().at(1)->setPitch(pitch);
+        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->updateOscillator(1);
     }
 }
@@ -59,8 +59,8 @@ void Model::setOsc3Pitch(int pitch) {
     cout << "Pitch : " << pitch << endl;
     this->osc3Pitch = pitch;
     for (int i = 0; i < voices.size();i++) {
-        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->getOszillators().at(2)->setPitch(pitch);
+        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->updateOscillator(2);
     }
 }
@@ -72,8 +72,8 @@ int Model::getOsc1Fine() {
 void Model::setOsc1Fine(float fine) {
     this->osc1Fine = fine;
     for (int i = 0; i < voices.size();i++) {
-        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->getOszillators().at(0)->setFine(fine);
+        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->updateOscillator(0);
     }
 }
@@ -85,8 +85,8 @@ int Model::getOsc2Fine() {
 void Model::setOsc2Fine(float fine) {
     this->osc2Fine = fine;
     for (int i = 0; i < voices.size();i++) {
-        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->getOszillators().at(1)->setFine(fine);
+        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->updateOscillator(1);
     }
 }
@@ -94,11 +94,12 @@ void Model::setOsc2Fine(float fine) {
 int Model::getOsc3Fine() {
     return this->osc3Fine;
 }
+
 void Model::setOsc3Fine(float fine) {
     this->osc3Fine = fine;
     for (int i = 0; i < voices.size();i++) {
-        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->getOszillators().at(2)->setFine(fine);
+        if (!voices.at(i)->isPlaying()) continue;
         voices.at(i)->updateOscillator(2);
     }
         
