@@ -26,6 +26,9 @@ public:
     void setPitch(int pitch);
     int getPitch() const;
     
+    virtual void setFine(float fine) = 0;
+    virtual float getFine() const = 0;
+    
 protected:
        
     double phase;
@@ -34,6 +37,7 @@ protected:
     double sampleRate;
     float phaseIncrement;
     int pitch; // halftones
+
 };
 
 

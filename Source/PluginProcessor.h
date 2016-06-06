@@ -72,9 +72,7 @@ private:
     int samplesPerBlock;
     
     bool playing;
-    
-    int velocity;
-    float amplitude;
+    int globalPitch;
     
     Voice* voice;
 

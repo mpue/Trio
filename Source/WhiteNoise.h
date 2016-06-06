@@ -23,7 +23,10 @@ public:
     
     virtual float process() override;
   
+    virtual void setFine(float fine) override;
+    virtual float getFine() const override;
     
+    float fine;
     
 private:
     Random* random;

@@ -21,6 +21,7 @@ Sawtooth::Sawtooth(float sampleRate) : Oszillator(sampleRate) {
     this->phaseIncrement = (360.0f / sampleRate) * frequency;
     this->currentValue = 0;
     this->stepSize = 1.0f / (sampleRate / frequency);
+    this->fine = 0.0f;
     
     cout << "phaseIncrement : " << phaseIncrement << endl;
     cout << "stepSize : " << stepSize << endl;
@@ -41,10 +42,22 @@ float Sawtooth::process() {
 }
 
 void Sawtooth::setFrequency(float frequency) {
+    
+    cout << "Frequency : "  << frequency << endl;
+    cout << "Fine : " << fine << endl;
+    
     this->phase = 0.0f;
     this->frequency = frequency;
-    this->phaseIncrement = (360.0f / sampleRate) * frequency;
+    this->phaseIncrement = (360.0f / sampleRate) * (frequency + this->fine);
     this->currentValue = 0;
-    this->stepSize = 1.0f / (sampleRate / frequency);
+    this->stepSize = 1.0f / (sampleRate / (frequency + this->fine));
     
+}
+
+void Sawtooth::setFine(float fine) {
+    this->fine = fine;
+}
+
+float Sawtooth::getFine() const {
+    return this->fine;
 }

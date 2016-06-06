@@ -19,10 +19,13 @@ class Sawtooth : public Oszillator {
 public:
     virtual float process() override;
     
+    virtual void setFine(float fine) override;
+    virtual float getFine() const override;
+    
     Sawtooth(float sampleRate);
     float currentValue;
     float stepSize;
-    
+    float fine;
     void setFrequency(float frequency) override;
 };
 

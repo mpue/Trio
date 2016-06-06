@@ -34,9 +34,18 @@ public:
     
     float process();
     
+    void setNoteNumber(int number);
+    int getNoteNumber() const;
+    void setPitch(int number);
+    int getPitch() const;
+    void updateOscillator(int index);
+    
 private:
     vector<Oszillator*> oscillators;
     Note* note;
+    int noteNumber;
+    int pitch;
+    int velocity;
     float midiNote[128];
     void calculateFrequencyTable();
     

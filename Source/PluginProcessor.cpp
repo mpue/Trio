@@ -20,6 +20,7 @@ using namespace std;
 TrioAudioProcessor::TrioAudioProcessor()
 {
     playing = false;
+    globalPitch = 0;
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -86,12 +87,14 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     this->samplesPerBlock = samplesPerBlock;
     
     WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
+    
     Sawtooth* osc1 = new Sawtooth(sampleRate);
     Sawtooth* osc2 = new Sawtooth(sampleRate);
     Sawtooth* osc3 = new Sawtooth(sampleRate);
     
-    osc2->setPitch(5);
-    osc3->setPitch(12);
+    osc1->setPitch(0);
+    osc2->setPitch(0);
+    osc3->setPitch(0);
     
     voice = new Voice();
     voice->addOszillator(osc1);
@@ -144,10 +147,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         if (m.isNoteOn())
         {
             cout << "Note on " << m.getNoteNumber() << ", " << "velocity : " << static_cast<int>(m.getVelocity()) << endl;
-            velocity = m.getVelocity();
-            amplitude = (1.0f / (float) 127) * velocity;
-            cout << "Amplitude :" << amplitude << endl;
             note.setMidiNote(m.getNoteNumber());
+            note.setVelocity(m.getVelocity());
             voice->setNote(&note);
             playing = true;
         }
@@ -161,6 +162,17 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         }
         else if (m.isPitchWheel())
         {
+            int pitch = m.getPitchWheelValue();
+            
+            if (pitch != globalPitch) {
+                globalPitch = pitch;
+                cout << "PitchWheel : " << globalPitch << endl;
+                voice->setPitch(globalPitch / 4);
+                voice->updateOscillator(0);
+                voice->updateOscillator(1);
+                voice->updateOscillator(2);
+            }
+
         }
         
     }
@@ -177,6 +189,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             right[sample] = value;
         }
 
+        
+        
     }
     
 }

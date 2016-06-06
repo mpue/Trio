@@ -41,3 +41,4 @@ void Oszillator::setPitch(int pitch) {
 int Oszillator::getPitch() const {
     return this->pitch;
 }
+

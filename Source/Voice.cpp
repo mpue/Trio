@@ -21,6 +21,8 @@ Voice::~Voice() {
 
 void Voice::setNote(Note* note) {
     this->note = note;
+    this->noteNumber = note->getMidiNote();
+    this->velocity = note->getVelocity();
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
         o->setFrequency(midiNote[note->getMidiNote() + o->getPitch()]);
@@ -42,16 +44,37 @@ vector<Oszillator*> Voice::getOszillators() const {
 float Voice::process() {
     
     float value = 0;
+    float amplitude = (1.0f / (float) 127) * this->velocity;
     
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
         value += o->process();
     }
     
-    value = value / oscillators.size();
+    value = (value / oscillators.size()) * amplitude;
     
     return value;
     
+}
+
+void Voice::setNoteNumber(int number) {
+    this->noteNumber = number;
+}
+
+int Voice::getNoteNumber() const {
+    return this->noteNumber;
+}
+
+void Voice::setPitch(int number) {
+    this->pitch = number;
+}
+
+int Voice::getPitch() const {
+    return this->pitch;
+}
+
+void Voice::updateOscillator(int index) {
+    oscillators.at(index)->setFrequency(midiNote[this->noteNumber + oscillators.at(index)->getPitch()]);
 }
 
 void Voice::calculateFrequencyTable() {
