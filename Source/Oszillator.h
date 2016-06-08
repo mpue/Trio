@@ -20,7 +20,7 @@ public:
 
     virtual void setFrequency(double frequency);
     void setPhase(double phase);
-    void setAmplitude(float amplitude);
+    void setVolume(float volume);
     
     virtual float process() = 0;
     void setPitch(int pitch);
@@ -32,7 +32,7 @@ public:
 protected:
     
     double phase;
-    float amplitude;
+    float volume;
     double frequency;
     double sampleRate;
     double phaseIncrement;

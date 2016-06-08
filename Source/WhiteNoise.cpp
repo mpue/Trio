@@ -11,7 +11,7 @@
 #include "WhiteNoise.h"
 
 WhiteNoise::WhiteNoise(double sampleRate) : Oszillator(sampleRate) {
-    this->amplitude = 1.0f;
+    this->volume = 1.0f;
     random = new Random();
     this->fine = 0.0f;
 }
@@ -21,7 +21,7 @@ WhiteNoise::~WhiteNoise() {
 }
 
 float WhiteNoise::process() {
-    return (random->nextFloat() * 0.25f - 0.125f) * amplitude;
+    return (random->nextFloat() * 0.25f - 0.125f) * volume;
 }
 
 void WhiteNoise::setFine(float fine) {

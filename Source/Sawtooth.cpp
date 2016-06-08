@@ -16,7 +16,7 @@
 using namespace std;
 
 Sawtooth::Sawtooth(float sampleRate) : Oszillator(sampleRate) {
-    this->amplitude = 1.0f;
+    this->volume = 1.0f;
     this->frequency = 440.0f;
     this->fine = 0.0f;
     this->p = 0.0f;      //current position
@@ -55,7 +55,7 @@ float Sawtooth::process() {
         lastValue = saw;
     
     
-    return saw;
+    return saw * this->volume;
 }
 
 void Sawtooth::setFrequency(double frequency) {

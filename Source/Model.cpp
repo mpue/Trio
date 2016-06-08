@@ -105,6 +105,41 @@ void Model::setOsc3Fine(float fine) {
         
 }
 
+int Model::getOsc1Volume() {
+    return this->osc1Volume;
+}
+
+void Model::setOsc1Volume(float volume) {
+    this->osc1Volume = volume;
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getOszillators().at(0)->setVolume(volume);
+    }
+}
+
+int Model::getOsc2Volume() {
+    return this->osc2Volume;
+}
+
+void Model::setOsc2Volume(float Volume) {
+    this->osc2Volume = Volume;
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getOszillators().at(1)->setVolume(Volume);
+    }
+}
+
+int Model::getOsc3Volume() {
+    return this->osc3Volume;
+}
+
+void Model::setOsc3Volume(float Volume) {
+    this->osc3Volume = Volume;
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getOszillators().at(2)->setVolume(Volume);
+    }
+    
+}
+
+
 float Model::getAmpEnvAttack() {
     return this->ampEnvAttack;
 }

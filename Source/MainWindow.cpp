@@ -96,8 +96,8 @@ MainWindow::MainWindow ()
     modCombo->addListener (this);
 
     addAndMakeVisible (osc1VolumeSlider = new Slider ("osc1VolumeSlider"));
-    osc1VolumeSlider->setRange (0, 10, 0);
-    osc1VolumeSlider->setSliderStyle (Slider::Rotary);
+    osc1VolumeSlider->setRange (0, 1, 0.02);
+    osc1VolumeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     osc1VolumeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     osc1VolumeSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
     osc1VolumeSlider->addListener (this);
@@ -117,8 +117,8 @@ MainWindow::MainWindow ()
     osc2FineSlider->addListener (this);
 
     addAndMakeVisible (osc2VolumeSlider = new Slider ("osc2VolumeSlider"));
-    osc2VolumeSlider->setRange (0, 10, 0);
-    osc2VolumeSlider->setSliderStyle (Slider::Rotary);
+    osc2VolumeSlider->setRange (0, 1, 0.02);
+    osc2VolumeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     osc2VolumeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     osc2VolumeSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
     osc2VolumeSlider->addListener (this);
@@ -138,8 +138,8 @@ MainWindow::MainWindow ()
     osc3FineSlider->addListener (this);
 
     addAndMakeVisible (osc3VolumeSlider = new Slider ("osc3VolumeSlider"));
-    osc3VolumeSlider->setRange (0, 10, 0);
-    osc3VolumeSlider->setSliderStyle (Slider::Rotary);
+    osc3VolumeSlider->setRange (0, 1, 0.02);
+    osc3VolumeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     osc3VolumeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     osc3VolumeSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
     osc3VolumeSlider->addListener (this);
@@ -208,7 +208,7 @@ MainWindow::MainWindow ()
     filterDecaySlider->addListener (this);
 
     addAndMakeVisible (filterSustainSlider = new Slider ("filterSustainSlider"));
-    filterSustainSlider->setRange (0, 1, 0.1);
+    filterSustainSlider->setRange (0, 1, 0.02);
     filterSustainSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterSustainSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterSustainSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -359,9 +359,15 @@ MainWindow::MainWindow ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    
     osc1PitchSlider->setValue(0);
     ampSustainSlider->setValue(0.8);
     filterSustainSlider->setValue(0.8);
+    
+    osc1VolumeSlider->setValue(1.0f);
+    osc2VolumeSlider->setValue(1.0f);
+    osc3VolumeSlider->setValue(1.0f);
+    
     //[/Constructor]
 }
 
@@ -516,6 +522,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == osc1VolumeSlider)
     {
         //[UserSliderCode_osc1VolumeSlider] -- add your slider handling code here..
+        this->model->setOsc1Volume(osc1VolumeSlider->getValue());
         //[/UserSliderCode_osc1VolumeSlider]
     }
     else if (sliderThatWasMoved == osc2PitchSlider)
@@ -533,6 +540,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == osc2VolumeSlider)
     {
         //[UserSliderCode_osc2VolumeSlider] -- add your slider handling code here..
+        this->model->setOsc2Volume(osc2VolumeSlider->getValue());
         //[/UserSliderCode_osc2VolumeSlider]
     }
     else if (sliderThatWasMoved == osc3PitchSlider)
@@ -550,6 +558,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == osc3VolumeSlider)
     {
         //[UserSliderCode_osc3VolumeSlider] -- add your slider handling code here..
+        this->model->setOsc3Volume(osc3VolumeSlider->getValue());
         //[/UserSliderCode_osc3VolumeSlider]
     }
     else if (sliderThatWasMoved == filterModSlider)
@@ -792,9 +801,9 @@ BEGIN_JUCER_METADATA
             textWhenNoItems="(no choices)"/>
   <SLIDER name="osc1VolumeSlider" id="4c562bc5b4c27b9" memberName="osc1VolumeSlider"
           virtualName="" explicitFocusOrder="0" pos="184 96 64 64" rotaryslideroutline="66ffffff"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="osc2PitchSlider" id="c7017c174a50a23" memberName="osc2PitchSlider"
           virtualName="" explicitFocusOrder="0" pos="27 256 64 64" rotaryslideroutline="66ffffff"
           min="-36" max="36" int="1" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
@@ -807,9 +816,9 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="osc2VolumeSlider" id="b8f800c1689b6ef0" memberName="osc2VolumeSlider"
           virtualName="" explicitFocusOrder="0" pos="184 256 64 64" rotaryslideroutline="66ffffff"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="osc3PitchSlider" id="bbf153190061abe1" memberName="osc3PitchSlider"
           virtualName="" explicitFocusOrder="0" pos="27 416 64 64" rotaryslideroutline="66ffffff"
           min="-36" max="36" int="1" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
@@ -822,9 +831,9 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="osc3VolumeSlider" id="faa7136819574037" memberName="osc3VolumeSlider"
           virtualName="" explicitFocusOrder="0" pos="184 416 64 64" rotaryslideroutline="66ffffff"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="resoSlider" id="9160d334c6170269" memberName="filterModSlider"
           virtualName="" explicitFocusOrder="0" pos="480 96 64 64" rotaryslideroutline="66fff8f8"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
@@ -872,7 +881,7 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterSustainSlider" id="221683b72a922f05" memberName="filterSustainSlider"
           virtualName="" explicitFocusOrder="0" pos="750 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterReleaseSlider" id="7c537539090ea5d7" memberName="filterReleaseSlider"
