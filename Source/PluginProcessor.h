@@ -66,6 +66,8 @@ public:
     
     vector<Voice*> getVoices() const;
 
+    IIRFilter* getLeftFilter();
+    IIRFilter* getRightFilter();
 
 private:
     //==============================================================================
@@ -75,6 +77,13 @@ private:
     int samplesPerBlock;
     
     int globalPitch;
+    
+    IIRFilter* leftFilter;
+    IIRFilter* rightFilter;
+    
+    IIRCoefficients ic;
+    
+    float filterCutoff;
     
     vector<Voice*> voices;
     int getVoicesPlaying();

@@ -12,6 +12,7 @@
 #define MODEL_H_INCLUDED
 
 #include "Voice.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 
 #include <vector>
 
@@ -21,7 +22,7 @@ class Model {
     
 public:
     
-    Model(vector<Voice*> voices);
+    Model(vector<Voice*> voices, IIRFilter* leftFilter, IIRFilter* rightFilter);
     
     int getOsc1Pitch();
     void setOsc1Pitch(int pitch);
@@ -53,8 +54,12 @@ public:
     float getAmpEnvRelease();
     void setAmpEnvRelease(float release);
     
+    float getFilterCutoff();
+    void setFilterCutoff(float cutoff);
     
 private:
+    
+    float filterCutoff;
     
     int osc1Pitch;
     int osc2Pitch;
@@ -74,6 +79,8 @@ private:
     float ampEnvRelease;
     
     vector<Voice*> voices;
+    IIRFilter* leftFilter;
+    IIRFilter* rightFilter;
     
 };
 

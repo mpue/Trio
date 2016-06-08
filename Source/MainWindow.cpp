@@ -33,8 +33,8 @@ MainWindow::MainWindow ()
     //[/Constructor_pre]
 
     addAndMakeVisible (cutoffSlider = new Slider ("cutoffSlider"));
-    cutoffSlider->setRange (0, 10, 0);
-    cutoffSlider->setSliderStyle (Slider::Rotary);
+    cutoffSlider->setRange (0.1, 12, 0.1);
+    cutoffSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     cutoffSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     cutoffSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     cutoffSlider->addListener (this);
@@ -359,15 +359,17 @@ MainWindow::MainWindow ()
 
 
     //[Constructor] You can add your own custom stuff here..
-    
+
     osc1PitchSlider->setValue(0);
     ampSustainSlider->setValue(0.8);
     filterSustainSlider->setValue(0.8);
-    
+
     osc1VolumeSlider->setValue(1.0f);
     osc2VolumeSlider->setValue(1.0f);
     osc3VolumeSlider->setValue(1.0f);
-    
+
+    cutoffSlider->setValue(12);
+
     //[/Constructor]
 }
 
@@ -500,6 +502,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == cutoffSlider)
     {
         //[UserSliderCode_cutoffSlider] -- add your slider handling code here..
+        model->setFilterCutoff(cutoffSlider->getValue());
         //[/UserSliderCode_cutoffSlider]
     }
     else if (sliderThatWasMoved == resoSlider)
@@ -769,9 +772,9 @@ BEGIN_JUCER_METADATA
   </BACKGROUND>
   <SLIDER name="cutoffSlider" id="33e55ada7f13106b" memberName="cutoffSlider"
           virtualName="" explicitFocusOrder="0" pos="304 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0.10000000000000000555" max="12" int="0.10000000000000000555"
+          style="RotaryVerticalDrag" textBoxPos="NoTextBox" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="resoSlider" id="72ce21eac8eaa69c" memberName="resoSlider"
           virtualName="" explicitFocusOrder="0" pos="376 96 64 64" rotaryslideroutline="66fff8f8"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"

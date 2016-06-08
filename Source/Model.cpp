@@ -17,8 +17,10 @@
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices) {
+Model::Model(vector<Voice*> voices, IIRFilter* leftFilter, IIRFilter* rightFilter) {
     this->voices = voices;
+    this->leftFilter = leftFilter;
+    this->rightFilter = rightFilter;
 }
 
 int Model::getOsc1Pitch() {
@@ -187,6 +189,19 @@ void Model::setAmpEnvRelease(float release) {
     }
     
 }
+
+float Model::getFilterCutoff() {
+    return this->filterCutoff;
+}
+
+void Model::setFilterCutoff(float cutoff) {
+    this->filterCutoff = cutoff;
+    IIRCoefficients ic  = IIRCoefficients::makeLowPass (voices.at(0)->getSampleRate(), filterCutoff * 1000);
+    leftFilter->setCoefficients(ic);
+    rightFilter->setCoefficients(ic);
+}
+
+
 
 
 

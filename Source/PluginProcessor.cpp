@@ -20,11 +20,9 @@ using namespace std;
 TrioAudioProcessor::TrioAudioProcessor()
 {
     globalPitch = 0;
-    
-
-    
-
-    
+    leftFilter = new IIRFilter();
+    rightFilter = new IIRFilter();
+    filterCutoff = 12000.0f;
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -110,6 +108,11 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
         voices.push_back(v);
 
     }
+    
+    ic = IIRCoefficients::makeLowPass (sampleRate, filterCutoff );
+    
+    leftFilter->setCoefficients(ic);
+    rightFilter->setCoefficients(ic);
     
     // voice->addOszillator(whiteNoise);
     
@@ -210,6 +213,10 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         right[sample] = value;
         
     }
+
+    
+    leftFilter->processSamples (left, buffer.getNumSamples());
+    rightFilter->processSamples (right, buffer.getNumSamples());
     
     
 }
@@ -259,6 +266,14 @@ int TrioAudioProcessor::getVoicesPlaying() {
 
 vector<Voice*> TrioAudioProcessor::getVoices() const {
     return this->voices;
+}
+
+IIRFilter* TrioAudioProcessor::getLeftFilter() {
+    return leftFilter;
+}
+
+IIRFilter* TrioAudioProcessor::getRightFilter() {
+    return rightFilter;
 }
 
 
