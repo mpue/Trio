@@ -15,6 +15,10 @@
       <FILE id="XRvFiQ" name="Knob_64.png" compile="0" resource="1" file="../../knob/Knob_64.png"/>
     </GROUP>
     <GROUP id="{973A5F90-B82E-4BC1-6D49-78E790BACA7B}" name="Source">
+      <GROUP id="{C4D87346-FD23-E98A-B930-F244E3C758CF}" name="Modulators">
+        <FILE id="aarOVo" name="ADSR.cpp" compile="1" resource="0" file="Source/ADSR.cpp"/>
+        <FILE id="SpHGcP" name="ADSR.h" compile="0" resource="0" file="Source/ADSR.h"/>
+      </GROUP>
       <FILE id="TrpiD7" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
       <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
       <GROUP id="{826D2A94-B03C-6072-5870-EC17E24DF23B}" name="Oscillators">
