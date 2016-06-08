@@ -15,6 +15,7 @@
 #include "WhiteNoise.h"
 #include "Sawtooth.h"
 #include "Voice.h"
+#include "ADSR.h"
 
 #include <stack>
 #include <vector>
@@ -65,6 +66,7 @@ public:
     
     vector<Voice*> getVoices() const;
 
+
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrioAudioProcessor)
@@ -75,10 +77,8 @@ private:
     int globalPitch;
     
     vector<Voice*> voices;
-    
     int getVoicesPlaying();
     
-    // Voice* voice;
 
     
 };

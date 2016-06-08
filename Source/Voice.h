@@ -16,6 +16,7 @@
 #include "Oszillator.h"
 #include "Sawtooth.h"
 #include "Note.h"
+#include "ADSR.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class Voice {
     
 public:
     
-    Voice();
+    Voice(float sampleRate);
     ~Voice();
     
     void setNote(Note* note);
@@ -42,17 +43,21 @@ public:
     
     void setPlaying(bool playing);
     bool isPlaying() const;
+    void setPending(bool pending);
+    bool isPending() const;
 
     
 private:
     vector<Oszillator*> oscillators;
     Note* note;
+    float sampleRate;
     int noteNumber;
     int pitch;
     int velocity;
     double midiNote[128];
     void calculateFrequencyTable();
     bool playing;
+    ADSR* ampEnvelope;
     
 };
 

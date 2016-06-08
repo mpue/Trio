@@ -20,6 +20,11 @@ using namespace std;
 TrioAudioProcessor::TrioAudioProcessor()
 {
     globalPitch = 0;
+    
+
+    
+
+    
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -84,11 +89,11 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
-    
+        
     WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
     
     for (int i = 0; i < 127; i++) {
-        Voice* v = new Voice();
+        Voice* v = new Voice(sampleRate);
         
         Sawtooth* osc1 = new Sawtooth(sampleRate);
         Sawtooth* osc2 = new Sawtooth(sampleRate);
@@ -97,12 +102,13 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
         osc1->setPitch(0);
         osc2->setPitch(0);
         osc3->setPitch(0);
-        
+                
         v->addOszillator(osc1);
         v->addOszillator(osc2);
         v->addOszillator(osc3);
         
         voices.push_back(v);
+
     }
     
     // voice->addOszillator(whiteNoise);
@@ -155,11 +161,13 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             note->setVelocity(m.getVelocity());
             voices.at(m.getNoteNumber())->setNote(note);
             voices.at(m.getNoteNumber())->setPlaying(true);
+          
         }
         else if (m.isNoteOff())
         {
             cout << "Note off " << m.getNoteNumber() << endl;
             voices.at(m.getNoteNumber())->setPlaying(false);
+            
         }
         else if (m.isAftertouch())
         {
@@ -184,26 +192,25 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         }
         
     }
+
+    float* const left = buffer.getWritePointer(0);
+    float* const right = buffer.getWritePointer(1);
     
-    if (getVoicesPlaying() > 0) {
+    for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
         
-        float* const left = buffer.getWritePointer(0);
-        float* const right = buffer.getWritePointer(1);
+        float value = 0;
         
-        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-            
-            float value = 0;
-            
-            for (int i = 0; i < voices.size();i++) {
-                if (voices.at(i)->isPlaying()) {
-                    value += voices.at(i)->process();
-                }
-            }
-            left[sample] = value;
-            right[sample] = value;
+        for (int i = 0; i < voices.size();i++) {
+            // if (voices.at(i)->isPlaying()) {
+                value += voices.at(i)->process();
+            // }
         }
         
+        left[sample] = value;
+        right[sample] = value;
+        
     }
+    
     
 }
 

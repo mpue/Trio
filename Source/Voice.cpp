@@ -11,9 +11,17 @@
 #include "Voice.h"
 #include "Math.h"
 
-Voice::Voice() {
+Voice::Voice(float sampleRate) {
+
+    this->sampleRate = sampleRate;
     this->calculateFrequencyTable();
     this->playing = false;
+    this->ampEnvelope = new ADSR();
+
+    ampEnvelope->setAttackRate(1 * sampleRate);  // 1 second
+    ampEnvelope->setDecayRate(.8 * sampleRate);
+    ampEnvelope->setReleaseRate(5 * sampleRate);
+    ampEnvelope->setSustainLevel(.8);
 }
 
 Voice::~Voice() {
@@ -45,14 +53,21 @@ vector<Oszillator*> Voice::getOszillators() const {
 float Voice::process() {
     
     float value = 0;
-    float amplitude = (1.0f / (float) 127) * this->velocity;
     
-    for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
-        Oszillator* o = *it;
-        value += o->process();
+    if(ampEnvelope->getState() != ADSR::env_idle) {
+        float amplitude = (1.0f / (float) 127) * this->velocity;
+        
+        for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
+            Oszillator* o = *it;
+            value += o->process();
+        }
+        
+        value = (value / oscillators.size()) * amplitude * ampEnvelope->process();
+        
     }
-    
-    value = (value / oscillators.size()) * amplitude;
+    else {
+        ampEnvelope->reset();
+    }
     
     return value;
     
@@ -87,12 +102,16 @@ void Voice::calculateFrequencyTable() {
 }
 
 void Voice::setPlaying(bool playing) {
-    this->playing = playing;
-    if (!playing) {
-        delete this->note;
+    if (playing) {
+        ampEnvelope->gate(true);
     }
+    else {
+        ampEnvelope->gate(false);
+    }
+    this->playing = playing;
 }
 
 bool Voice::isPlaying() const {
     return this->playing;
 }
+

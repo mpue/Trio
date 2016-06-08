@@ -23,10 +23,17 @@ public:
     virtual float getFine() const override;
     
     Sawtooth(float sampleRate);
-    float currentValue;
-    float stepSize;
     float fine;
     virtual void setFrequency(double frequency) override;
+    
+    float p;      //current position
+    float dp;     //change in postion per sample
+    float pmax;   //maximum position
+    float x;      //position in sinc function
+    float leak;   //leaky integrator
+    float dc;     //dc offset
+    float saw;    //output
+    float lastValue;
 };
 
 

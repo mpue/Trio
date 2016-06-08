@@ -30,7 +30,7 @@ public:
     virtual float getFine() const = 0;
     
 protected:
-       
+    
     double phase;
     float amplitude;
     double frequency;

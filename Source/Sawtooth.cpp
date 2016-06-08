@@ -17,29 +17,45 @@ using namespace std;
 
 Sawtooth::Sawtooth(float sampleRate) : Oszillator(sampleRate) {
     this->amplitude = 1.0f;
-    this->phase = 0.0f;
     this->frequency = 440.0f;
-    this->phaseIncrement = (360.0f / sampleRate) * frequency;
-    this->currentValue = 0;
-    this->stepSize = 1.0f / (sampleRate / frequency);
     this->fine = 0.0f;
-    
-    cout << "phaseIncrement : " << phaseIncrement << endl;
-    cout << "stepSize : " << stepSize << endl;
+    this->p = 0.0f;      //current position
+    this->dp = 1.0f;     //change in postion per sample
+    this->leak = 0.995f; //leaky integrator
+    this->pmax = 0.5f * sampleRate / (frequency + this->fine);
+    this->dc = -0.498f / this->pmax;
+    this->lastValue = 0;
 }
 
 float Sawtooth::process() {
     
-    if (phase + phaseIncrement <= 360.0) {
-        phase += phaseIncrement;
-        currentValue += stepSize;
+    p += dp;
+    
+    if(p < 0.0f)
+    {
+        p = -p;
+        dp = -dp;
     }
-    else {
-        phase = 0;
-        currentValue = 0;
+    else if(p > pmax)
+    {
+        p = pmax + pmax - p;
+        dp = -dp;
     }
     
-    return (currentValue - 0.5f) * amplitude;
+    x = M_PI * p;
+    
+    if(x < 0.00001f)
+        x=0.00001f; //don't divide by 0
+    
+    saw = leak * saw + dc + (float)sin(x)/(x);
+    
+    if (saw > 1.0f)
+        saw = lastValue;
+    else
+        lastValue = saw;
+    
+    
+    return saw;
 }
 
 void Sawtooth::setFrequency(double frequency) {
@@ -48,14 +64,8 @@ void Sawtooth::setFrequency(double frequency) {
     cout << "Fine : " << fine << endl;
     cout << "Pitch : " << pitch << endl;
     
-    this->phase = 0.0;
-    this->frequency = frequency;
-    this->phaseIncrement = (360.0 / sampleRate) * (frequency + this->fine);
-    this->currentValue = 0;
-    this->stepSize = 1.0 / (sampleRate / (frequency + this->fine));
-    
-    cout << "phaseIncrement : " << phaseIncrement << endl;
-    cout << "stepSize : " << stepSize << endl;
+    pmax = 0.5f * sampleRate / (frequency + this->fine);
+    dc = -0.498f / pmax;
     
 }
 

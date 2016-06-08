@@ -131,7 +131,7 @@ MainWindow::MainWindow ()
     osc3PitchSlider->addListener (this);
 
     addAndMakeVisible (osc3FineSlider = new Slider ("osc3FineSlider"));
-    osc3FineSlider->setRange (-2, 2, 0.1);
+    osc3FineSlider->setRange (-2, 2, 0.01);
     osc3FineSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     osc3FineSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     osc3FineSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
@@ -811,7 +811,7 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <SLIDER name="osc3FineSlider" id="95d942fd7fabe58b" memberName="osc3FineSlider"
           virtualName="" explicitFocusOrder="0" pos="88 416 64 64" rotaryslideroutline="66ffffff"
-          min="-2" max="2" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          min="-2" max="2" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="osc3VolumeSlider" id="faa7136819574037" memberName="osc3VolumeSlider"
