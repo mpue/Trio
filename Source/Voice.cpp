@@ -18,9 +18,9 @@ Voice::Voice(float sampleRate) {
     this->playing = false;
     this->ampEnvelope = new ADSR();
 
-    ampEnvelope->setAttackRate(1 * sampleRate);  // 1 second
-    ampEnvelope->setDecayRate(.8 * sampleRate);
-    ampEnvelope->setReleaseRate(5 * sampleRate);
+    ampEnvelope->setAttackRate(0 * sampleRate);  // 1 second
+    ampEnvelope->setDecayRate(0 * sampleRate);
+    ampEnvelope->setReleaseRate(0 * sampleRate);
     ampEnvelope->setSustainLevel(.8);
 }
 
@@ -115,3 +115,11 @@ bool Voice::isPlaying() const {
     return this->playing;
 }
 
+
+float Voice::getSampleRate() {
+    return this->sampleRate;
+}
+
+ADSR* Voice::getAmpEnvelope() {
+    return ampEnvelope;
+}

@@ -105,4 +105,54 @@ void Model::setOsc3Fine(float fine) {
         
 }
 
+float Model::getAmpEnvAttack() {
+    return this->ampEnvAttack;
+}
+
+void Model::setAmpEnvAttack(float attack) {
+    this->ampEnvAttack = attack;
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getAmpEnvelope()->setAttackRate(attack * voices.at(i)->getSampleRate());
+    }
+    
+}
+
+float Model::getAmpEnvDecay() {
+    return this->ampEnvDecay;
+}
+
+void Model::setAmpEnvDecay(float decay) {
+    this->ampEnvDecay = decay;
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getAmpEnvelope()->setDecayRate(decay * voices.at(i)->getSampleRate());
+    }
+    
+}
+
+float Model::getAmpEnvSustain() {
+    return this->ampEnvSustain;
+}
+
+void Model::setAmpEnvSustain(float sustain) {
+    this->ampEnvSustain = sustain;
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getAmpEnvelope()->setSustainLevel(sustain);
+    }
+    
+}
+
+float Model::getAmpEnvRelease() {
+    return this->ampEnvRelease;
+}
+
+void Model::setAmpEnvRelease(float release) {
+    this->ampEnvRelease = release;
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getAmpEnvelope()->setReleaseRate(release * voices.at(i)->getSampleRate());
+    }
+    
+}
+
+
+
 

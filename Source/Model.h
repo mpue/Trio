@@ -37,6 +37,16 @@ public:
     int getOsc3Fine();
     void setOsc3Fine(float fine);
     
+    float getAmpEnvAttack();
+    void setAmpEnvAttack(float attack);
+    float getAmpEnvDecay();
+    void setAmpEnvDecay(float decay);
+    float getAmpEnvSustain();
+    void setAmpEnvSustain(float sustain);
+    float getAmpEnvRelease();
+    void setAmpEnvRelease(float release);
+    
+    
 private:
     
     int osc1Pitch;
@@ -46,6 +56,11 @@ private:
     float osc1Fine;
     float osc2Fine;
     float osc3Fine;
+    
+    float ampEnvAttack;
+    float ampEnvDecay;
+    float ampEnvSustain;
+    float ampEnvRelease;
     
     vector<Voice*> voices;
 };

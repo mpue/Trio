@@ -46,6 +46,9 @@ public:
     void setPending(bool pending);
     bool isPending() const;
 
+    ADSR* getAmpEnvelope();
+
+    float getSampleRate();
     
 private:
     vector<Oszillator*> oscillators;

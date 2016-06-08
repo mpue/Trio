@@ -194,57 +194,57 @@ MainWindow::MainWindow ()
     lfo2AmountSlider->addListener (this);
 
     addAndMakeVisible (filterAttackSlider = new Slider ("filterAttackSlider"));
-    filterAttackSlider->setRange (0, 10, 0);
-    filterAttackSlider->setSliderStyle (Slider::Rotary);
+    filterAttackSlider->setRange (0, 5, 0.1);
+    filterAttackSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterAttackSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterAttackSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     filterAttackSlider->addListener (this);
 
     addAndMakeVisible (filterDecaySlider = new Slider ("filterDecaySlider"));
-    filterDecaySlider->setRange (0, 10, 0);
-    filterDecaySlider->setSliderStyle (Slider::Rotary);
+    filterDecaySlider->setRange (0, 5, 0.1);
+    filterDecaySlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterDecaySlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterDecaySlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     filterDecaySlider->addListener (this);
 
     addAndMakeVisible (filterSustainSlider = new Slider ("filterSustainSlider"));
-    filterSustainSlider->setRange (0, 10, 0);
-    filterSustainSlider->setSliderStyle (Slider::Rotary);
+    filterSustainSlider->setRange (0, 1, 0.1);
+    filterSustainSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterSustainSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterSustainSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     filterSustainSlider->addListener (this);
 
     addAndMakeVisible (filterReleaseSlider = new Slider ("filterReleaseSlider"));
-    filterReleaseSlider->setRange (0, 10, 0);
-    filterReleaseSlider->setSliderStyle (Slider::Rotary);
+    filterReleaseSlider->setRange (0, 5, 0.1);
+    filterReleaseSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterReleaseSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterReleaseSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     filterReleaseSlider->addListener (this);
 
     addAndMakeVisible (ampAttackSlider = new Slider ("ampAttackSlider"));
-    ampAttackSlider->setRange (0, 10, 0);
-    ampAttackSlider->setSliderStyle (Slider::Rotary);
+    ampAttackSlider->setRange (0, 5, 0.1);
+    ampAttackSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     ampAttackSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     ampAttackSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampAttackSlider->addListener (this);
 
     addAndMakeVisible (ampDecaySlider = new Slider ("ampDecaySlider"));
-    ampDecaySlider->setRange (0, 10, 0);
-    ampDecaySlider->setSliderStyle (Slider::Rotary);
+    ampDecaySlider->setRange (0, 5, 0.1);
+    ampDecaySlider->setSliderStyle (Slider::RotaryVerticalDrag);
     ampDecaySlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     ampDecaySlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampDecaySlider->addListener (this);
 
     addAndMakeVisible (ampSustainSlider = new Slider ("ampSustainSlider"));
-    ampSustainSlider->setRange (0, 10, 0);
-    ampSustainSlider->setSliderStyle (Slider::Rotary);
+    ampSustainSlider->setRange (0, 1, 0.02);
+    ampSustainSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     ampSustainSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     ampSustainSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampSustainSlider->addListener (this);
 
     addAndMakeVisible (ampReleaseSlider = new Slider ("ampReleaseSlider"));
-    ampReleaseSlider->setRange (0, 10, 0);
-    ampReleaseSlider->setSliderStyle (Slider::Rotary);
+    ampReleaseSlider->setRange (0, 5, 0.1);
+    ampReleaseSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     ampReleaseSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     ampReleaseSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampReleaseSlider->addListener (this);
@@ -360,6 +360,8 @@ MainWindow::MainWindow ()
 
     //[Constructor] You can add your own custom stuff here..
     osc1PitchSlider->setValue(0);
+    ampSustainSlider->setValue(0.8);
+    filterSustainSlider->setValue(0.8);
     //[/Constructor]
 }
 
@@ -608,21 +610,25 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == ampAttackSlider)
     {
         //[UserSliderCode_ampAttackSlider] -- add your slider handling code here..
+        model->setAmpEnvAttack(ampAttackSlider->getValue());
         //[/UserSliderCode_ampAttackSlider]
     }
     else if (sliderThatWasMoved == ampDecaySlider)
     {
         //[UserSliderCode_ampDecaySlider] -- add your slider handling code here..
+        model->setAmpEnvDecay(ampDecaySlider->getValue());
         //[/UserSliderCode_ampDecaySlider]
     }
     else if (sliderThatWasMoved == ampSustainSlider)
     {
         //[UserSliderCode_ampSustainSlider] -- add your slider handling code here..
+        model->setAmpEnvSustain(ampSustainSlider->getValue());
         //[/UserSliderCode_ampSustainSlider]
     }
     else if (sliderThatWasMoved == ampReleaseSlider)
     {
         //[UserSliderCode_ampReleaseSlider] -- add your slider handling code here..
+        model->setAmpEnvRelease(ampReleaseSlider->getValue());
         //[/UserSliderCode_ampReleaseSlider]
     }
     else if (sliderThatWasMoved == ampVolSlider)
@@ -856,44 +862,44 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <SLIDER name="filterAttackSlider" id="dd143499d0f6a2f0" memberName="filterAttackSlider"
           virtualName="" explicitFocusOrder="0" pos="613 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterDecaySlider" id="33363d9ec7716419" memberName="filterDecaySlider"
           virtualName="" explicitFocusOrder="0" pos="681 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterSustainSlider" id="221683b72a922f05" memberName="filterSustainSlider"
           virtualName="" explicitFocusOrder="0" pos="750 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterReleaseSlider" id="7c537539090ea5d7" memberName="filterReleaseSlider"
           virtualName="" explicitFocusOrder="0" pos="819 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="ampAttackSlider" id="d39e583f4c75014f" memberName="ampAttackSlider"
           virtualName="" explicitFocusOrder="0" pos="613 256 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="ampDecaySlider" id="792535f3bc392ff8" memberName="ampDecaySlider"
           virtualName="" explicitFocusOrder="0" pos="681 256 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="ampSustainSlider" id="427fd5158260d560" memberName="ampSustainSlider"
           virtualName="" explicitFocusOrder="0" pos="750 256 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="ampReleaseSlider" id="d914be54075f55e0" memberName="ampReleaseSlider"
           virtualName="" explicitFocusOrder="0" pos="819 256 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="ampVolSlider" id="8a583b1da0600bb3" memberName="ampVolSlider"
           virtualName="" explicitFocusOrder="0" pos="612 416 64 64" rotaryslideroutline="66fff8f8"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
