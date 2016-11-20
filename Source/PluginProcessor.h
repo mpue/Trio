@@ -111,6 +111,8 @@ private:
     vector<Voice*> getVoices() const;
     int currentProgramNumber;
     
+    ComboBox* programCombo = 0;
+    
 };
 
 

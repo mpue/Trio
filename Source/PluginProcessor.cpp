@@ -156,12 +156,17 @@ void TrioAudioProcessor::setCurrentProgram (int index)
     File preset = File(presetPath+filename);
     
     if (preset.exists()) {
-        XmlElement* xml = XmlDocument(preset).getDocumentElement();
-        ValueTree state = ValueTree::fromXml(*xml);
+        ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
+        ValueTree state = ValueTree::fromXml(*xml.get());
         setState(&state);
+        xml = nullptr;
+        
+        if (this->programCombo != 0) {
+            this->programCombo->setText(name, NotificationType::dontSendNotification);
+        }
+        
+        setSelectedProgram(name);
     }
-    
-    setSelectedProgram(name);
     
 }
 
@@ -454,7 +459,8 @@ void TrioAudioProcessor::setState(ValueTree* state) {
 void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
     if (comboBoxThatHasChanged->getName() == "presetCombo")
     {
-        //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
+        
+        this->programCombo = comboBoxThatHasChanged;
         String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
         String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
         
@@ -468,7 +474,19 @@ void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged)
             xml = nullptr;
         }
         
+        cout << "Program select : " << comboBoxThatHasChanged->getText() << endl;
+        
         setSelectedProgram(comboBoxThatHasChanged->getText());
-
+        this->currentProgramNumber = comboBoxThatHasChanged->getItemId(comboBoxThatHasChanged->getSelectedItemIndex()) - 1;
+        
+        try {
+            this->programNames.at(this->currentProgramNumber);
+        }
+        catch(const std::out_of_range& oor) {
+            this->programNames.push_back(comboBoxThatHasChanged->getText());
+        }
+        
+        updateHostDisplay();
+        
     }
 }
