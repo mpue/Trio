@@ -11,16 +11,24 @@
 #ifndef OSZILLATOR_H_INCLUDED
 #define OSZILLATOR_H_INCLUDED
 
+
 class Oszillator {
-    
+
 public:
+    
+    enum OscMode {
+        SAW,
+        SINE,
+        PULSE
+    };
+    
     Oszillator();
     Oszillator(double sampleRate);
     virtual ~Oszillator();
 
     virtual void setFrequency(double frequency);
     void setPhase(double phase);
-    void setVolume(float volume);
+    virtual void setVolume(float volume);
     
     virtual float process() = 0;
     void setPitch(int pitch);
@@ -28,6 +36,8 @@ public:
     
     virtual void setFine(float fine) = 0;
     virtual float getFine() const = 0;
+    
+    void setMode(OscMode mode);
     
 protected:
     
@@ -37,6 +47,7 @@ protected:
     double sampleRate;
     double phaseIncrement;
     int pitch; // halftones
+    OscMode mode;
 
 };
 

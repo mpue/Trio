@@ -25,6 +25,7 @@
 #include "Model.h"
 #include "PluginProcessor.h"
 #include "PresetWindow.h"
+#include "Oszillator.h"
 //[/Headers]
 
 
@@ -153,6 +154,9 @@ private:
     ScopedPointer<Label> statusLabel;
     Image cachedImage_trio_png_1;
 
+    Oszillator::OscMode mode1;
+    Oszillator::OscMode mode2;
+    Oszillator::OscMode mode3;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)

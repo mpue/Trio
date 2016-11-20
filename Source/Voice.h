@@ -25,7 +25,7 @@ using namespace std;
 class Voice {
     
 public:
-    
+        
     Voice(float sampleRate);
     ~Voice();
     
@@ -63,6 +63,7 @@ private:
     void calculateFrequencyTable();
     bool playing;
     ADSR* ampEnvelope;
+
     
 };
 

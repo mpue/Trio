@@ -293,31 +293,31 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     imageButton->setImages (false, true, true,
                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colours::white,
                             Image(), 1.000f, Colour (0xffff7e00),
-                            Image(), 1.000f, Colour (0x00000000));
+                            Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton3 = new ImageButton ("new button"));
     imageButton3->setButtonText (TRANS("Pulse"));
     imageButton3->addListener (this);
 
     imageButton3->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00ffffff),
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton2 = new ImageButton ("new button"));
     imageButton2->setButtonText (TRANS("Sine"));
     imageButton2->addListener (this);
 
     imageButton2->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00ffffff),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton4 = new ImageButton ("new button"));
     imageButton4->setButtonText (TRANS("Sawtooth"));
     imageButton4->addListener (this);
 
     imageButton4->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton5 = new ImageButton ("new button"));
     imageButton5->setButtonText (TRANS("Pulse"));
     imageButton5->setRadioGroupId (1);
@@ -325,24 +325,24 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
 
     imageButton5->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton6 = new ImageButton ("new button"));
     imageButton6->setButtonText (TRANS("Sine"));
     imageButton6->addListener (this);
 
     imageButton6->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton7 = new ImageButton ("new button"));
     imageButton7->setButtonText (TRANS("Sawtooth"));
     imageButton7->addListener (this);
 
     imageButton7->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton8 = new ImageButton ("new button"));
     imageButton8->setButtonText (TRANS("Pulse"));
     imageButton8->setRadioGroupId (1);
@@ -350,16 +350,16 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
 
     imageButton8->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton9 = new ImageButton ("new button"));
     imageButton9->setButtonText (TRANS("Sine"));
     imageButton9->addListener (this);
 
     imageButton9->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (statusLabel = new Label ("statusLabel",
                                                 TRANS("\n")));
     statusLabel->setFont (Font (15.00f, Font::plain));
@@ -440,7 +440,41 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
         presetCombo->addItem(processor->getProgramNames().at(i), i + 1);
     }
     
-    presetCombo->setSelectedId(1);
+    // presetCombo->setSelectedId(1);
+   
+    imageButton->setRadioGroupId(1);
+    imageButton2->setRadioGroupId(1);
+    imageButton3->setRadioGroupId(1);
+    
+    imageButton->setToggleState(true, NotificationType::sendNotification);
+    
+    imageButton->setClickingTogglesState(true);
+    imageButton2->setClickingTogglesState(true);
+    imageButton3->setClickingTogglesState(true);
+    
+    imageButton4->setRadioGroupId(2);
+    imageButton5->setRadioGroupId(2);
+    imageButton6->setRadioGroupId(2);
+    
+    imageButton4->setToggleState(true, NotificationType::sendNotification);
+    
+    imageButton4->setClickingTogglesState(true);
+    imageButton5->setClickingTogglesState(true);
+    imageButton6->setClickingTogglesState(true);
+    
+    imageButton7->setRadioGroupId(3);
+    imageButton8->setRadioGroupId(3);
+    imageButton9->setRadioGroupId(3);
+    
+    imageButton7->setToggleState(true, NotificationType::sendNotification);
+    
+    imageButton7->setClickingTogglesState(true);
+    imageButton8->setClickingTogglesState(true);
+    imageButton9->setClickingTogglesState(true);
+    
+    mode1 = Oszillator::OscMode::SAW;
+    mode2 = Oszillator::OscMode::SAW;
+    mode3 = Oszillator::OscMode::SAW;
     
     //[/Constructor]
 }
@@ -858,57 +892,76 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
             return;
         }
          */
-
-
-
         
         //[/UserButtonCode_storeButton]
     }
+    
     else if (buttonThatWasClicked == imageButton)
     {
         //[UserButtonCode_imageButton] -- add your button handler code here..
+        mode1 = Oszillator::OscMode::SAW;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton]
-    }
-    else if (buttonThatWasClicked == imageButton3)
-    {
-        //[UserButtonCode_imageButton3] -- add your button handler code here..
-        //[/UserButtonCode_imageButton3]
     }
     else if (buttonThatWasClicked == imageButton2)
     {
         //[UserButtonCode_imageButton2] -- add your button handler code here..
+        mode1 = Oszillator::OscMode::SINE;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton2]
     }
+    else if (buttonThatWasClicked == imageButton3)
+    {
+        //[UserButtonCode_imageButton3] -- add your button handler code here..
+        mode1 = Oszillator::OscMode::PULSE;
+        processor->setupOscillators(mode1,mode2,mode3);
+        //[/UserButtonCode_imageButton3]
+    }
+
     else if (buttonThatWasClicked == imageButton4)
     {
         //[UserButtonCode_imageButton4] -- add your button handler code here..
+        mode2 = Oszillator::OscMode::SAW;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton4]
     }
     else if (buttonThatWasClicked == imageButton5)
     {
         //[UserButtonCode_imageButton5] -- add your button handler code here..
+        mode2 = Oszillator::OscMode::SINE;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton5]
     }
     else if (buttonThatWasClicked == imageButton6)
     {
         //[UserButtonCode_imageButton6] -- add your button handler code here..
+        mode2 = Oszillator::OscMode::PULSE;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton6]
     }
+    
     else if (buttonThatWasClicked == imageButton7)
     {
         //[UserButtonCode_imageButton7] -- add your button handler code here..
+        mode3 = Oszillator::OscMode::SAW;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton7]
     }
     else if (buttonThatWasClicked == imageButton8)
     {
         //[UserButtonCode_imageButton8] -- add your button handler code here..
+        mode3 = Oszillator::OscMode::SINE;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton8]
     }
     else if (buttonThatWasClicked == imageButton9)
     {
         //[UserButtonCode_imageButton9] -- add your button handler code here..
+        mode3 = Oszillator::OscMode::PULSE;
+        processor->setupOscillators(mode1,mode2,mode3);
         //[/UserButtonCode_imageButton9]
     }
+    
 
     //[UserbuttonClicked_Post]
 
@@ -922,7 +975,10 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 
 void MainWindow::visibilityChanged() {
+    cout << "current program :  " <<processor->getCurrentProgram() << endl;
     cout << "MainWindow isVisible : "<< MainWindow::isVisible() << endl;
+    String currentProgram = processor->getProgramName(processor->getCurrentProgram());
+    presetCombo->setText(currentProgram,NotificationType::dontSendNotification);
 }
 
 //[/MiscUserCode]

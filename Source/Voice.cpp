@@ -17,7 +17,7 @@ Voice::Voice(float sampleRate) {
     this->calculateFrequencyTable();
     this->playing = false;
     this->ampEnvelope = new ADSR();
-
+    
     ampEnvelope->setAttackRate(0 * sampleRate);  // 1 second
     ampEnvelope->setDecayRate(0 * sampleRate);
     ampEnvelope->setReleaseRate(0 * sampleRate);
@@ -64,6 +64,7 @@ float Voice::process() {
         
         for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
             Oszillator* o = *it;
+            
             value += o->process();
         }
         

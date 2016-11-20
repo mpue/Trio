@@ -42,3 +42,6 @@ int Oszillator::getPitch() const {
     return this->pitch;
 }
 
+void Oszillator::setMode(OscMode mode) {
+    this->mode = mode;
+}

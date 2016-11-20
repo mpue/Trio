@@ -94,10 +94,7 @@ TrioAudioProcessor::~TrioAudioProcessor()
     this->parameters = nullptr;
     this->filterEnvelope = nullptr;
     
-    for(std::vector<Voice*>::iterator it = voices.begin(); it != voices.end(); ++it) {
-        delete *it;
-    }
-    voices.clear();
+    this->cleanupVoices();
     
 }
 
@@ -205,25 +202,7 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     // WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
     
-    for (int i = 0; i < 127; i++) {
-        Voice* v = new Voice(sampleRate);
-        
-        Sawtooth* osc1 = new Sawtooth(sampleRate);
-        Sawtooth* osc2 = new Sawtooth(sampleRate);
-        Sawtooth* osc3 = new Sawtooth(sampleRate);
-        
-        osc1->setPitch(0);
-        osc2->setPitch(0);
-        osc3->setPitch(0);
-                
-        v->addOszillator(osc1);
-        v->addOszillator(osc2);
-        v->addOszillator(osc3);
-        
-        voices.push_back(v);
-
-    }
-    
+    configureOscillators(Oszillator::OscMode::SAW, Oszillator::OscMode::SAW, Oszillator::OscMode::SAW);
     
     this->model = new Model(voices, getLeftFilter(), getRightFilter(),getFilterEnv(),44100);
     
@@ -232,6 +211,65 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     // voice->addOszillator(whiteNoise);
     
+}
+
+Oszillator* TrioAudioProcessor::createOscillator(Oszillator::OscMode mode) {
+    
+    Oszillator* osc = nullptr;
+    
+    switch (mode) {
+        case Oszillator::OscMode::SAW : {
+            osc = new MultimodeOscillator(sampleRate);
+            osc->setMode(Oszillator::OscMode::SAW);
+            break;
+        }
+        case Oszillator::OscMode::SINE : {
+            osc = new MultimodeOscillator(sampleRate);
+            osc->setMode(Oszillator::OscMode::SINE);
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+    if (osc != nullptr) {
+        osc->setPitch(0);
+    }
+    
+    return osc;
+    
+}
+
+void TrioAudioProcessor::configureOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3) {
+    for (int i = 0; i < 127; i++) {
+        Voice* v = new Voice(sampleRate);
+
+        Oszillator* osc1 = createOscillator(mode1);
+        Oszillator* osc2 = createOscillator(mode2);
+        Oszillator* osc3 = createOscillator(mode3);
+        
+        v->addOszillator(osc1);
+        v->addOszillator(osc2);
+        v->addOszillator(osc3);
+        
+        voices.push_back(v);
+    }
+}
+
+void TrioAudioProcessor::setupOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3) {
+    for (int i = 0; i < voices.size(); i++) {
+        voices.at(i)->getOszillators().at(0)->setMode(mode1);
+        voices.at(i)->getOszillators().at(1)->setMode(mode2);
+        voices.at(i)->getOszillators().at(2)->setMode(mode3);
+    }
+}
+
+void TrioAudioProcessor::cleanupVoices() {
+    for(std::vector<Voice*>::iterator it = voices.begin(); it != voices.end(); ++it) {
+        delete *it;
+    }
+    voices.clear();
 }
 
 void TrioAudioProcessor::releaseResources()
@@ -445,13 +483,13 @@ AudioProcessorValueTreeState* TrioAudioProcessor::getValueTreeState() {
 
 void TrioAudioProcessor::setState(ValueTree* state) {
     for (int i = 0; i < state->getNumChildren();i++) {
-        cout << state->getChild(i).getProperty("id").toString()<< ":" << state->getChild(i).getProperty("value").toString().getFloatValue() << endl;
+        // cout << state->getChild(i).getProperty("id").toString()<< ":" << state->getChild(i).getProperty("value").toString().getFloatValue() << endl;
         String id = state->getChild(i).getProperty("id").toString();
         String value = state->getChild(i).getProperty("value").toString();
         // parameters->getParameter(id)->setValue(value.getFloatValue());
         float nval = this->parameters->getParameterRange(id).convertTo0to1(value.getFloatValue());
         parameters->getParameter(id)->setValueNotifyingHost(nval);
-        cout << " param " << id << "has now value " << parameters->getParameter(id)->getValue() << endl;
+        // cout << " param " << id << "has now value " << parameters->getParameter(id)->getValue() << endl;
     }
     
 }

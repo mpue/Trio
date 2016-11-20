@@ -13,7 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "WhiteNoise.h"
-#include "Sawtooth.h"
+#include "Oszillator.h"
+#include "MultimodeOscillator.h"
 #include "Voice.h"
 #include "ADSR.h"
 #include "Filter.h"
@@ -82,7 +83,13 @@ public:
     vector<String> getProgramNames();
     String getSelectedProgram();
     void setSelectedProgram(String program);
-
+    
+    void configureOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
+    void setupOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
+    Oszillator* createOscillator(Oszillator::OscMode mode);
+    void cleanupVoices();
+    
+    
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrioAudioProcessor)

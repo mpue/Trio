@@ -60,10 +60,6 @@ float Sawtooth::process() {
 
 void Sawtooth::setFrequency(double frequency) {
     
-    cout << "Frequency : "  << frequency << endl;
-    cout << "Fine : " << fine << endl;
-    cout << "Pitch : " << pitch << endl;
-    
     pmax = 0.5f * sampleRate / (frequency + this->fine);
     dc = -0.498f / pmax;
     
