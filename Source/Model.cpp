@@ -17,11 +17,21 @@
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices, IIRFilter* leftFilter, IIRFilter* rightFilter) {
+Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, int sampleRate) {
     this->voices = voices;
     this->leftFilter = leftFilter;
     this->rightFilter = rightFilter;
+    this->filterEnv = filterEnv;
+    this->sampleRate = sampleRate;
+    this->volume = 1.0f;
+    this->filterResonance = 0.1f;
 }
+
+Model::~Model() {
+    cout << "Model destroyed." << endl;
+}
+
+
 
 int Model::getOsc1Pitch() {
     return this->osc1Pitch;
@@ -196,12 +206,76 @@ float Model::getFilterCutoff() {
 
 void Model::setFilterCutoff(float cutoff) {
     this->filterCutoff = cutoff;
-    IIRCoefficients ic  = IIRCoefficients::makeLowPass (voices.at(0)->getSampleRate(), filterCutoff * 1000);
-    leftFilter->setCoefficients(ic);
-    rightFilter->setCoefficients(ic);
+    leftFilter->coefficients(filterCutoff * 1000, filterResonance);
+    rightFilter->coefficients(filterCutoff * 1000, filterResonance);
+}
+
+float Model::getFilterResonance() {
+    return this->filterResonance;
+}
+
+void Model::setFilterResonance(float resonance) {
+    this->filterResonance = resonance;
+    leftFilter->coefficients(filterCutoff * 1000, filterResonance);
+    rightFilter->coefficients(filterCutoff * 1000, filterResonance);
 }
 
 
+float Model::getVolume() {
+    return this->volume;
+}
+
+void Model::setVolume(float volume) {
+    this->volume = volume;
+}
+
+float Model::getFilterEnvAttack() {
+    return this->filterEnvAttack;
+}
+
+void Model::setFilterEnvAttack(float attack) {
+    this->filterEnvAttack = attack;
+    filterEnv->setAttackRate(this->sampleRate * attack);
+}
+
+float Model::getFilterEnvDecay() {
+    return this->filterEnvDecay;
+}
+
+void Model::setFilterEnvDecay(float decay) {
+    this->filterEnvDecay = decay;
+    filterEnv->setDecayRate(this->sampleRate * decay);
+}
+
+float Model::getFilterEnvSustain() {
+    return this->filterEnvSustain;
+}
+
+void Model::setFilterEnvSustain(float sustain) {
+    this->filterEnvSustain = sustain;
+    this->filterEnv->setSustainLevel(this->sampleRate * sustain);
+
+}
+
+float Model::getFilterEnvRelease() {
+    return this->filterEnvRelease;
+}
+
+void Model::setFilterEnvRelease(float release) {
+    this->filterEnvRelease = release;
+    this->filterEnv->setReleaseRate(this->sampleRate * release);
+
+}
+
+float Model::getFilterModAmount() {
+    return this->filterModAmount;
+}
+
+void Model::setFilterModAmount(float amount) {
+    this->filterModAmount = amount;
+    this->leftFilter->setModAmount(amount);
+    this->rightFilter->setModAmount(amount);
+}
 
 
 

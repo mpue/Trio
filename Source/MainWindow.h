@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 4.2.1
+  Created with Projucer version: 4.3.0
 
   ------------------------------------------------------------------------------
 
@@ -23,6 +23,8 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Model.h"
+#include "PluginProcessor.h"
+#include "PresetWindow.h"
 //[/Headers]
 
 
@@ -42,14 +44,14 @@ class MainWindow  : public Component,
 {
 public:
     //==============================================================================
-    MainWindow ();
+    // MainWindow ();
     ~MainWindow();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 
-    void setModel(Model* model);
-
+    MainWindow (TrioAudioProcessor* p);
+    
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -57,6 +59,7 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
+    void visibilityChanged() override;
 
     // Binary resources:
     static const char* trio_png;
@@ -71,7 +74,37 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    Model* model;
+    TrioAudioProcessor *processor;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> volumeAttachement;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc1VolAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc2VolAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc3VolAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc1PitchAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc2PitchAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc3PitchAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc1FineAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc2FineAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc3FineAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterModAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> cutoffAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> resoAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo1RateAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo2RateAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo1ShapeAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo2ShapeAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo1AmountAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo2AmountAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterAttackAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterDecayAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterSustainAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterReleaseAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampAttackAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampDecayAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampSustainAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampReleaseAttachment;
+    
+    PresetWindow* presetPanel;
+    
     //[/UserVariables]
 
     //==============================================================================
@@ -117,6 +150,7 @@ private:
     ScopedPointer<ImageButton> imageButton7;
     ScopedPointer<ImageButton> imageButton8;
     ScopedPointer<ImageButton> imageButton9;
+    ScopedPointer<Label> statusLabel;
     Image cachedImage_trio_png_1;
 
 

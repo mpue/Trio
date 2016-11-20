@@ -16,16 +16,19 @@
 #include "Sawtooth.h"
 #include "Voice.h"
 #include "ADSR.h"
+#include "Filter.h"
+#include "Model.h"
 
 #include <stack>
 #include <vector>
+#include "ADSR.h"
 
 using namespace std;
 
 //==============================================================================
 /**
 */
-class TrioAudioProcessor  : public AudioProcessor
+class TrioAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -37,7 +40,7 @@ public:
     void releaseResources() override;
 
    #ifndef JucePlugin_PreferredChannelConfigurations
-    bool setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet) override;
+    // bool setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet) override;
    #endif
 
     void processBlock (AudioSampleBuffer&, MidiBuffer&) override;
@@ -64,10 +67,59 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    void parameterChanged(const String &parameterID, float newValue) override;
+    
     vector<Voice*> getVoices() const;
 
-    IIRFilter* getLeftFilter();
-    IIRFilter* getRightFilter();
+    Filter* getLeftFilter();
+    Filter* getRightFilter();
+    ADSR* getFilterEnv();
+    Model* getModel();
+    
+    AudioProcessorParameter* volumeParam;
+    
+    AudioProcessorParameter* osc1VolParam;
+    AudioProcessorParameter* osc2VolParam;
+    AudioProcessorParameter* osc3VolParam;
+
+    AudioProcessorParameter* osc1PitchParam;
+    AudioProcessorParameter* osc2PitchParam;
+    AudioProcessorParameter* osc3PitchParam;
+    
+    AudioProcessorParameter* osc1FineParam;
+    AudioProcessorParameter* osc2FineParam;
+    AudioProcessorParameter* osc3FineParam;
+    
+    AudioProcessorParameter* filterModParam;
+    AudioProcessorParameter* cutoffParam;
+    AudioProcessorParameter* resoParam;
+    
+    AudioProcessorParameter* lfo1RateParam;
+    AudioProcessorParameter* lfo2RateParam;
+    
+    AudioProcessorParameter* lfo1ShapeParam;
+    AudioProcessorParameter* lfo2ShapeParam;
+    
+    AudioProcessorParameter* lfo1AmountParam;
+    AudioProcessorParameter* lfo2AmountParam;
+    
+    AudioProcessorParameter* filterAttackParam;
+    AudioProcessorParameter* filterDecayParam;
+    AudioProcessorParameter* filterSustainParam;
+    AudioProcessorParameter* filterReleaseParam;
+    
+    AudioProcessorParameter* ampAttackParam;
+    AudioProcessorParameter* ampDecayParam;
+    AudioProcessorParameter* ampSustainParam;
+    AudioProcessorParameter* ampReleaseParam;
+    
+    int currentProgramNumber;
+    AudioProcessorValueTreeState* getValueTreeState();
+    void setState(ValueTree* state);
+    
+    vector<String> getProgramNames();
+    String getSelectedProgram();
+    void setSelectedProgram(String program);
 
 private:
     //==============================================================================
@@ -78,8 +130,8 @@ private:
     
     int globalPitch;
     
-    IIRFilter* leftFilter;
-    IIRFilter* rightFilter;
+    Filter* leftFilter;
+    Filter* rightFilter;
     
     IIRCoefficients ic;
     
@@ -87,8 +139,13 @@ private:
     
     vector<Voice*> voices;
     int getVoicesPlaying();
+    ADSR* filterEnvelope;
+    Model* model;
     
-
+    AudioProcessorValueTreeState* parameters;
+    
+    vector<String> programNames;
+    String selectedProgram;
     
 };
 

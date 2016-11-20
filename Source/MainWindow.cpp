@@ -1,4 +1,4 @@
-/*
+    /*
   ==============================================================================
 
   This is an automatically generated GUI class created by the Projucer!
@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 4.2.1
+  Created with Projucer version: 4.3.0
 
   ------------------------------------------------------------------------------
 
@@ -21,26 +21,36 @@
 //[/Headers]
 
 #include "MainWindow.h"
+#include "PluginProcessor.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+/*
+MainWindow::MainWindow (AudioProcessor* p) : MainWindow() {
+    this->processor = p;
+}
+ */
+
 //[/MiscUserDefs]
 
 //==============================================================================
-MainWindow::MainWindow ()
-{
+// MainWindow::MainWindow ()
+// {
+
+MainWindow::MainWindow (TrioAudioProcessor* p) {
+    this->processor = p;
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
     addAndMakeVisible (cutoffSlider = new Slider ("cutoffSlider"));
-    cutoffSlider->setRange (0.1, 12, 0.1);
+    cutoffSlider->setRange (0.1, 20, 0.1);
     cutoffSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     cutoffSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     cutoffSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     cutoffSlider->addListener (this);
 
     addAndMakeVisible (resoSlider = new Slider ("resoSlider"));
-    resoSlider->setRange (0, 10, 0);
+    resoSlider->setRange (0.1, 20, 0.1);
     resoSlider->setSliderStyle (Slider::Rotary);
     resoSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     resoSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -145,7 +155,7 @@ MainWindow::MainWindow ()
     osc3VolumeSlider->addListener (this);
 
     addAndMakeVisible (filterModSlider = new Slider ("resoSlider"));
-    filterModSlider->setRange (0, 10, 0);
+    filterModSlider->setRange (0, 20, 0.2);
     filterModSlider->setSliderStyle (Slider::Rotary);
     filterModSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterModSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -166,7 +176,7 @@ MainWindow::MainWindow ()
     lfo1ShapeSlider->addListener (this);
 
     addAndMakeVisible (lfo1AmountSlider = new Slider ("lfo1AmountSlider"));
-    lfo1AmountSlider->setRange (0, 10, 0);
+    lfo1AmountSlider->setRange (0, 1, 0.02);
     lfo1AmountSlider->setSliderStyle (Slider::Rotary);
     lfo1AmountSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1AmountSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -187,7 +197,7 @@ MainWindow::MainWindow ()
     lfo2ShapeSlider->addListener (this);
 
     addAndMakeVisible (lfo2AmountSlider = new Slider ("lfo2AmountSlider"));
-    lfo2AmountSlider->setRange (0, 10, 0);
+    lfo2AmountSlider->setRange (0, 1, 0.02);
     lfo2AmountSlider->setSliderStyle (Slider::Rotary);
     lfo2AmountSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo2AmountSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -249,8 +259,8 @@ MainWindow::MainWindow ()
     ampReleaseSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampReleaseSlider->addListener (this);
 
-    addAndMakeVisible (ampVolSlider = new Slider ("ampVolSlider"));
-    ampVolSlider->setRange (0, 10, 0);
+    addAndMakeVisible(ampVolSlider = new Slider("ampVolSlider"));
+    ampVolSlider->setRange (0, 1, 0.02);
     ampVolSlider->setSliderStyle (Slider::Rotary);
     ampVolSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     ampVolSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -350,6 +360,15 @@ MainWindow::MainWindow ()
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00000000),
                              Image(), 1.000f, Colour (0x00000000),
                              Image(), 1.000f, Colour (0x00000000));
+    addAndMakeVisible (statusLabel = new Label ("statusLabel",
+                                                TRANS("\n")));
+    statusLabel->setFont (Font (15.00f, Font::plain));
+    statusLabel->setJustificationType (Justification::centredLeft);
+    statusLabel->setEditable (false, false, false);
+    statusLabel->setColour (Label::textColourId, Colours::white);
+    statusLabel->setColour (TextEditor::textColourId, Colours::black);
+    statusLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
     cachedImage_trio_png_1 = ImageCache::getFromMemory (trio_png, trio_pngSize);
 
     //[UserPreSize]
@@ -370,6 +389,57 @@ MainWindow::MainWindow ()
 
     cutoffSlider->setValue(12);
 
+    ampVolSlider->setValue(1.0f);
+
+    //presetCombo->addItem("init", 1);
+    //presetCombo->setSelectedItemIndex(0);
+
+    modCombo->setSelectedItemIndex(0);
+    lfo1ModCombo->setSelectedItemIndex(0);
+    lfo2ModCombo->setSelectedItemIndex(0);
+    
+    this->volumeAttachement = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"volume", *this->ampVolSlider);
+    this->osc1VolAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc1vol", *this->osc1VolumeSlider);
+    this->osc2VolAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc2vol", *this->osc2VolumeSlider);
+    this->osc3VolAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc3vol", *this->osc3VolumeSlider);
+    this->osc1PitchAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc1pitch", *this->osc1PitchSlider);
+    this->osc2PitchAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc2pitch", *this->osc2PitchSlider);
+    this->osc3PitchAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc3pitch", *this->osc3PitchSlider);
+    this->osc1FineAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc1fine", *this->osc1FineSlider);
+    this->osc2FineAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc2fine", *this->osc2FineSlider);
+    this->osc3FineAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc3fine", *this->osc3FineSlider);
+    this->filterModAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filtermod", *this->filterModSlider);
+    this->cutoffAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"cutoff", *this->cutoffSlider);
+    this->resoAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"reso", *this->resoSlider);
+    this->lfo1RateAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo1rate", *this->lfo1RateSlider);
+    this->lfo1ShapeAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo1shape", *this->lfo1ShapeSlider);
+    this->lfo1AmountAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo1amount", *this->lfo1AmountSlider);
+    this->lfo2RateAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo2rate", *this->lfo2RateSlider);
+    this->lfo2ShapeAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo2shape", *this->lfo2ShapeSlider);
+    this->lfo2AmountAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo2amount", *this->lfo2AmountSlider);
+    this->filterAttackAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filterattack", *this->filterAttackSlider);
+    this->filterDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filterdecay", *this->filterDecaySlider);
+    this->filterSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filtersustain", *this->filterSustainSlider);
+    this->filterReleaseAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filterrelease", *this->filterReleaseSlider);
+    this->ampAttackAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampattack", *this->ampAttackSlider);
+    this->ampDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampdecay", *this->ampDecaySlider);
+    this->ampSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampsustain", *this->ampSustainSlider);
+    this->ampReleaseAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"amprelease", *this->ampReleaseSlider);
+    
+    int x = getScreenX();
+    int y = getScreenY();
+    
+    presetPanel = new PresetWindow(this->presetCombo.get(), processor->getModel());
+    presetPanel->setBounds(x,y,getWidth(),getHeight());
+
+    addChildComponent(presetPanel);
+    
+    for(int i = 0; i < processor->getProgramNames().size();i++) {
+        presetCombo->addItem(processor->getProgramNames().at(i), i + 1);
+    }
+    
+    presetCombo->setSelectedId(1);
+    
     //[/Constructor]
 }
 
@@ -420,9 +490,39 @@ MainWindow::~MainWindow()
     imageButton7 = nullptr;
     imageButton8 = nullptr;
     imageButton9 = nullptr;
+    statusLabel = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
+    
+    this->volumeAttachement = nullptr;
+    this->osc1VolAttachment = nullptr;
+    this->osc2VolAttachment = nullptr;
+    this->osc3VolAttachment = nullptr;
+    this->osc1PitchAttachment = nullptr;
+    this->osc2PitchAttachment = nullptr;
+    this->osc3PitchAttachment = nullptr;
+    this->osc1FineAttachment = nullptr;
+    this->osc2FineAttachment = nullptr;
+    this->osc3FineAttachment = nullptr;
+    this->filterModAttachment = nullptr;
+    this->cutoffAttachment = nullptr;
+    this->resoAttachment = nullptr;
+    this->lfo1RateAttachment = nullptr;
+    this->lfo1ShapeAttachment = nullptr;
+    this->lfo1AmountAttachment = nullptr;
+    this->lfo2RateAttachment = nullptr;
+    this->lfo2ShapeAttachment = nullptr;
+    this->lfo2AmountAttachment = nullptr;
+    this->filterAttackAttachment = nullptr;
+    this->filterDecayAttachment = nullptr;
+    this->filterSustainAttachment = nullptr;
+    this->filterReleaseAttachment = nullptr;
+    this->ampAttackAttachment = nullptr;
+    this->ampDecayAttachment = nullptr;
+    this->ampSustainAttachment = nullptr;
+    this->ampReleaseAttachment = nullptr;
+    
     //[/Destructor]
 }
 
@@ -490,6 +590,7 @@ void MainWindow::resized()
     imageButton7->setBounds (104, 384, 24, 24);
     imageButton8->setBounds (168, 384, 24, 24);
     imageButton9->setBounds (136, 384, 24, 24);
+    statusLabel->setBounds (720, 480, 150, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -502,71 +603,85 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == cutoffSlider)
     {
         //[UserSliderCode_cutoffSlider] -- add your slider handling code here..
-        model->setFilterCutoff(cutoffSlider->getValue());
+        this->processor->getModel()->setFilterCutoff(cutoffSlider->getValue());
+        statusLabel->setText("Cutoff "  + juce::String(cutoffSlider->getValue() * 1000) + "Hz", juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_cutoffSlider]
     }
     else if (sliderThatWasMoved == resoSlider)
     {
         //[UserSliderCode_resoSlider] -- add your slider handling code here..
+        this->processor->getModel()->setFilterResonance(resoSlider->getValue());
+        statusLabel->setText("Resonance "  + juce::String(resoSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_resoSlider]
     }
     else if (sliderThatWasMoved == osc1PitchSlider)
     {
         //[UserSliderCode_osc1PitchSlider] -- add your slider handling code here..
-        this->model->setOsc1Pitch(osc1PitchSlider->getValue());
+        this->processor->getModel()->setOsc1Pitch(osc1PitchSlider->getValue());
+        statusLabel->setText("Osc 1 Pitch : "  + juce::String(osc1PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc1PitchSlider]
     }
     else if (sliderThatWasMoved == osc1FineSlider)
     {
         //[UserSliderCode_osc1FineSlider] -- add your slider handling code here..
-        this->model->setOsc1Fine(osc1FineSlider->getValue());
+        this->processor->getModel()->setOsc1Fine(osc1FineSlider->getValue());
+        statusLabel->setText("Osc 1 Fine : "  + juce::String(osc1FineSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc1FineSlider]
     }
     else if (sliderThatWasMoved == osc1VolumeSlider)
     {
         //[UserSliderCode_osc1VolumeSlider] -- add your slider handling code here..
-        this->model->setOsc1Volume(osc1VolumeSlider->getValue());
+        this->processor->getModel()->setOsc1Volume(osc1VolumeSlider->getValue());
+        statusLabel->setText("Osc 1 Volume : "  + juce::String(osc1VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc1VolumeSlider]
     }
     else if (sliderThatWasMoved == osc2PitchSlider)
     {
         //[UserSliderCode_osc2PitchSlider] -- add your slider handling code here..
-        this->model->setOsc2Pitch(osc2PitchSlider->getValue());
+        this->processor->getModel()->setOsc2Pitch(osc2PitchSlider->getValue());
+        statusLabel->setText("Osc 2 Pitch : "  + juce::String(osc2PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc2PitchSlider]
     }
     else if (sliderThatWasMoved == osc2FineSlider)
     {
         //[UserSliderCode_osc2FineSlider] -- add your slider handling code here..
-        this->model->setOsc2Fine(osc2FineSlider->getValue());
+        this->processor->getModel()->setOsc2Fine(osc2FineSlider->getValue());
+        statusLabel->setText("Osc 2 Fine : "  + juce::String(osc2FineSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc2FineSlider]
     }
     else if (sliderThatWasMoved == osc2VolumeSlider)
     {
         //[UserSliderCode_osc2VolumeSlider] -- add your slider handling code here..
-        this->model->setOsc2Volume(osc2VolumeSlider->getValue());
+        this->processor->getModel()->setOsc2Volume(osc2VolumeSlider->getValue());
+        statusLabel->setText("Osc 2 Volume : "  + juce::String(osc2VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc2VolumeSlider]
     }
     else if (sliderThatWasMoved == osc3PitchSlider)
     {
         //[UserSliderCode_osc3PitchSlider] -- add your slider handling code here..
-        this->model->setOsc3Pitch(osc3PitchSlider->getValue());
+        this->processor->getModel()->setOsc3Pitch(osc3PitchSlider->getValue());
+        statusLabel->setText("Osc 3 Pitch : "  + juce::String(osc3PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc3PitchSlider]
     }
     else if (sliderThatWasMoved == osc3FineSlider)
     {
         //[UserSliderCode_osc3FineSlider] -- add your slider handling code here..
-        this->model->setOsc3Fine(osc3FineSlider->getValue());
+        this->processor->getModel()->setOsc3Fine(osc3FineSlider->getValue());
+        statusLabel->setText("Osc 3 Fine : "  + juce::String(osc3FineSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc3FineSlider]
     }
     else if (sliderThatWasMoved == osc3VolumeSlider)
     {
         //[UserSliderCode_osc3VolumeSlider] -- add your slider handling code here..
-        this->model->setOsc3Volume(osc3VolumeSlider->getValue());
+        this->processor->getModel()->setOsc3Volume(osc3VolumeSlider->getValue());
+        statusLabel->setText("Osc 3 Volume : "  + juce::String(osc3VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc3VolumeSlider]
     }
     else if (sliderThatWasMoved == filterModSlider)
     {
         //[UserSliderCode_filterModSlider] -- add your slider handling code here..
+        this->processor->getModel()->setFilterModAmount(filterModSlider->getValue());
+        statusLabel->setText("Filter mod : "  + juce::String(filterModSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterModSlider]
     }
     else if (sliderThatWasMoved == lfo1RateSlider)
@@ -602,50 +717,64 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == filterAttackSlider)
     {
         //[UserSliderCode_filterAttackSlider] -- add your slider handling code here..
+        this->processor->getModel()->setFilterEnvAttack(filterAttackSlider->getValue());
+        statusLabel->setText("Filter attack : "  + juce::String(filterAttackSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterAttackSlider]
     }
     else if (sliderThatWasMoved == filterDecaySlider)
     {
         //[UserSliderCode_filterDecaySlider] -- add your slider handling code here..
+        this->processor->getModel()->setFilterEnvDecay(filterDecaySlider->getValue());
+        statusLabel->setText("Filter decay : "  + juce::String(filterDecaySlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterDecaySlider]
     }
     else if (sliderThatWasMoved == filterSustainSlider)
     {
         //[UserSliderCode_filterSustainSlider] -- add your slider handling code here..
+        this->processor->getModel()->setFilterEnvSustain(filterSustainSlider->getValue());
+        statusLabel->setText("Filter sustain : "  + juce::String(filterSustainSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterSustainSlider]
     }
     else if (sliderThatWasMoved == filterReleaseSlider)
     {
         //[UserSliderCode_filterReleaseSlider] -- add your slider handling code here..
+        this->processor->getModel()->setFilterEnvRelease(filterReleaseSlider->getValue());
+        statusLabel->setText("Filter release : "  + juce::String(filterReleaseSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterReleaseSlider]
     }
     else if (sliderThatWasMoved == ampAttackSlider)
     {
         //[UserSliderCode_ampAttackSlider] -- add your slider handling code here..
-        model->setAmpEnvAttack(ampAttackSlider->getValue());
+        this->processor->getModel()->setAmpEnvAttack(ampAttackSlider->getValue());
+        statusLabel->setText("Amp attack : "  + juce::String(ampAttackSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampAttackSlider]
     }
     else if (sliderThatWasMoved == ampDecaySlider)
     {
         //[UserSliderCode_ampDecaySlider] -- add your slider handling code here..
-        model->setAmpEnvDecay(ampDecaySlider->getValue());
+        this->processor->getModel()->setAmpEnvDecay(ampDecaySlider->getValue());
+        statusLabel->setText("Amp decay : "  + juce::String(ampDecaySlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampDecaySlider]
     }
     else if (sliderThatWasMoved == ampSustainSlider)
     {
         //[UserSliderCode_ampSustainSlider] -- add your slider handling code here..
-        model->setAmpEnvSustain(ampSustainSlider->getValue());
+        this->processor->getModel()->setAmpEnvSustain(ampSustainSlider->getValue());
+        statusLabel->setText("Amp sustain : "  + juce::String(ampSustainSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampSustainSlider]
     }
     else if (sliderThatWasMoved == ampReleaseSlider)
     {
         //[UserSliderCode_ampReleaseSlider] -- add your slider handling code here..
-        model->setAmpEnvRelease(ampReleaseSlider->getValue());
+        this->processor->getModel()->setAmpEnvRelease(ampReleaseSlider->getValue());
+        statusLabel->setText("Amp release : "  + juce::String(ampReleaseSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampReleaseSlider]
     }
     else if (sliderThatWasMoved == ampVolSlider)
     {
         //[UserSliderCode_ampVolSlider] -- add your slider handling code here..
+        this->processor->getModel()->setVolume(ampVolSlider->getValue());
+        statusLabel->setText("Amp volume : "  + juce::String(ampVolSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampVolSlider]
     }
 
@@ -676,6 +805,20 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     else if (comboBoxThatHasChanged == presetCombo)
     {
         //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
+        String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+        String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+        
+        String filename = presetCombo->getText() + ".xml";
+        File preset = File(presetPath+filename);
+        
+        if (preset.exists()) {
+            XmlElement* xml = XmlDocument(preset).getDocumentElement();
+            ValueTree state = ValueTree::fromXml(*xml);
+            processor->setState(&state);
+        }
+
+        processor->setSelectedProgram(presetCombo->getText());
+        
         //[/UserComboBoxCode_presetCombo]
     }
 
@@ -691,6 +834,28 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     if (buttonThatWasClicked == storeButton)
     {
         //[UserButtonCode_storeButton] -- add your button handler code here..
+        ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
+        presetPanel->setData(xml);
+        presetPanel->setVisible(true);
+        
+        /*
+        juce::AlertWindow *alert = new juce::AlertWindow("Save current preset","Please enter a name for the preset",AlertWindow::AlertIconType::QuestionIcon);
+        alert->addButton("Ok", 0);
+        alert->addButton("Cancel", 1);
+        alert->addTextEditor("name", "");
+        alert->setBounds(x,y,getWidth(), getHeight());
+        int returnValue = alert->runModalLoop();
+        
+        alert->removeFromDesktop();
+        
+        if (returnValue == 1) {
+            return;
+        }
+         */
+
+
+
+        
         //[/UserButtonCode_storeButton]
     }
     else if (buttonThatWasClicked == imageButton)
@@ -740,6 +905,8 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     }
 
     //[UserbuttonClicked_Post]
+
+    
     //[/UserbuttonClicked_Post]
 }
 
@@ -747,8 +914,9 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
-void MainWindow::setModel(Model* model) {
-    this->model = model;
+
+void MainWindow::visibilityChanged() {
+    cout << "MainWindow isVisible : "<< MainWindow::isVisible() << endl;
 }
 
 //[/MiscUserCode]
@@ -839,9 +1007,9 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="resoSlider" id="9160d334c6170269" memberName="filterModSlider"
           virtualName="" explicitFocusOrder="0" pos="480 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo1RateSlider" id="b826c2541264d4fa" memberName="lfo1RateSlider"
           virtualName="" explicitFocusOrder="0" pos="296 256 67 64" rotaryslideroutline="66fff8f8"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
@@ -854,9 +1022,9 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <SLIDER name="lfo1AmountSlider" id="d652f9f030b1a4ca" memberName="lfo1AmountSlider"
           virtualName="" explicitFocusOrder="0" pos="480 256 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo2RateSlider" id="e181558ceae467cc" memberName="lfo2RateSlider"
           virtualName="" explicitFocusOrder="0" pos="296 416 67 64" rotaryslideroutline="66fff8f8"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
@@ -869,9 +1037,9 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <SLIDER name="lfo2AmountSlider" id="d5b558442927d2fc" memberName="lfo2AmountSlider"
           virtualName="" explicitFocusOrder="0" pos="480 416 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterAttackSlider" id="dd143499d0f6a2f0" memberName="filterAttackSlider"
           virtualName="" explicitFocusOrder="0" pos="613 96 64 64" rotaryslideroutline="66fff8f8"
           min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
@@ -914,9 +1082,9 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="ampVolSlider" id="8a583b1da0600bb3" memberName="ampVolSlider"
           virtualName="" explicitFocusOrder="0" pos="612 416 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <LABEL name="presetLabel" id="6eb6d730fbf311e6" memberName="presetLabel"
          virtualName="" explicitFocusOrder="0" pos="376 16 56 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Preset" editableSingleClick="0"
@@ -982,6 +1150,11 @@ BEGIN_JUCER_METADATA
                resourceNormal="oscillator_sine_48_png" opacityNormal="1" colourNormal="0"
                resourceOver="" opacityOver="1" colourOver="0" resourceDown=""
                opacityDown="1" colourDown="0"/>
+  <LABEL name="statusLabel" id="f241e45e174945c6" memberName="statusLabel"
+         virtualName="" explicitFocusOrder="0" pos="720 480 150 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="&#10;" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

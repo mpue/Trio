@@ -12,6 +12,9 @@
 #define MODEL_H_INCLUDED
 
 #include "Voice.h"
+#include "Filter.h"
+#include "ADSR.h"
+
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include <vector>
@@ -21,8 +24,9 @@ using namespace std;
 class Model {
     
 public:
-    
-    Model(vector<Voice*> voices, IIRFilter* leftFilter, IIRFilter* rightFilter);
+
+    Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, int sampleRate);
+    ~Model();
     
     int getOsc1Pitch();
     void setOsc1Pitch(int pitch);
@@ -54,12 +58,34 @@ public:
     float getAmpEnvRelease();
     void setAmpEnvRelease(float release);
     
+    float getFilterEnvAttack();
+    void setFilterEnvAttack(float attack);
+    float getFilterEnvDecay();
+    void setFilterEnvDecay(float decay);
+    float getFilterEnvSustain();
+    void setFilterEnvSustain(float sustain);
+    float getFilterEnvRelease();
+    void setFilterEnvRelease(float release);
+    
     float getFilterCutoff();
     void setFilterCutoff(float cutoff);
     
+    float getFilterResonance();
+    void setFilterResonance(float resonance);
+    
+    float getFilterModAmount();
+    void setFilterModAmount(float amount);
+    
+    float getVolume();
+    void setVolume(float volume);
+
+    
 private:
     
+    float volume;
+    
     float filterCutoff;
+    float filterResonance;
     
     int osc1Pitch;
     int osc2Pitch;
@@ -78,9 +104,19 @@ private:
     float ampEnvSustain;
     float ampEnvRelease;
     
+    float filterEnvAttack;
+    float filterEnvDecay;
+    float filterEnvSustain;
+    float filterEnvRelease;
+    float filterModAmount;
+    
     vector<Voice*> voices;
-    IIRFilter* leftFilter;
-    IIRFilter* rightFilter;
+    Filter* leftFilter;
+    Filter* rightFilter;
+    ADSR* filterEnv;
+    int sampleRate;
+    
+
     
 };
 

@@ -10,23 +10,107 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "LowPassFilter.h"
+#include "Filter.h"
 
 #include <iostream>
 #include "math.h"
+#include "ADSR.h"
 
 using namespace std;
 
 //==============================================================================
 TrioAudioProcessor::TrioAudioProcessor()
 {
+    cout << File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName() << endl;
     globalPitch = 0;
-    leftFilter = new IIRFilter();
-    rightFilter = new IIRFilter();
+    currentProgramNumber = 0;
+    leftFilter = new LowPassFilter();
+    rightFilter = new LowPassFilter();
     filterCutoff = 12000.0f;
+    filterEnvelope = new ADSR();
+    leftFilter->setModulator(filterEnvelope);
+    rightFilter->setModulator(filterEnvelope);
+    this->parameters = new AudioProcessorValueTreeState(*this,nullptr);
+    this->volumeParam = parameters->createAndAddParameter("volume", "Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    this->osc1VolParam = parameters->createAndAddParameter("osc1vol", "Osc 1 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    this->osc2VolParam = parameters->createAndAddParameter("osc2vol", "Osc 2 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    this->osc3VolParam = parameters->createAndAddParameter("osc3vol", "Osc 3 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    this->osc1PitchParam = parameters->createAndAddParameter("osc1pitch", "Osc 1 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
+    this->osc2PitchParam = parameters->createAndAddParameter("osc2pitch", "Osc 2 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
+    this->osc3PitchParam = parameters->createAndAddParameter("osc3pitch", "Osc 3 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
+    this->osc1FineParam = parameters->createAndAddParameter("osc1fine", "Osc 1 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+    this->osc2FineParam = parameters->createAndAddParameter("osc2fine", "Osc 2 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+    this->osc3FineParam = parameters->createAndAddParameter("osc3fine", "Osc 3 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+    this->filterModParam = parameters->createAndAddParameter("filtermod", "Filter Env Mod", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    this->cutoffParam = parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
+    this->resoParam = parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr);
+    this->lfo1RateParam = parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    this->lfo2RateParam = parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    this->lfo1ShapeParam = parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    this->lfo2ShapeParam = parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    this->lfo1AmountParam = parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    this->lfo2AmountParam = parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    this->filterAttackParam = parameters->createAndAddParameter("filterattack", "Filter attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    this->filterDecayParam = parameters->createAndAddParameter("filterdecay", "Filter decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    this->filterSustainParam = parameters->createAndAddParameter("filtersustain", "Filter sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    this->filterReleaseParam = parameters->createAndAddParameter("filterrelease", "Filter release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    this->ampAttackParam = parameters->createAndAddParameter("ampattack", "Amp attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    this->ampDecayParam = parameters->createAndAddParameter("ampdecay", "Amp decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    this->ampSustainParam = parameters->createAndAddParameter("ampsustain", "Amp sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    this->ampReleaseParam = parameters->createAndAddParameter("amprelease", "Amp release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->state = ValueTree (Identifier ("default"));
+    
+    String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+    String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+    
+    File presets = File(presetPath);
+    
+    if(presets.exists() && presets.isDirectory()) {
+        DirectoryIterator* iter = new DirectoryIterator(presets, false);
+        while(iter->next()) {
+            cout << "Found preset : " << iter->getFile().getFileNameWithoutExtension() << endl;
+            programNames.push_back(iter->getFile().getFileNameWithoutExtension());
+        }
+        iter = nullptr;
+        
+    }
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
 {
+    this->parameters = nullptr;
+    this->volumeParam = nullptr;
+    this->osc1VolParam = nullptr;
+    this->osc2VolParam = nullptr;
+    this->osc3VolParam = nullptr;
+    this->osc1PitchParam = nullptr;
+    this->osc2PitchParam = nullptr;
+    this->osc3PitchParam = nullptr;
+    this->osc1FineParam = nullptr;
+    this->osc2FineParam = nullptr;
+    this->osc3FineParam = nullptr;
+    this->filterModParam = nullptr;
+    this->cutoffParam = nullptr;
+    this->resoParam = nullptr;
+    this->lfo1RateParam = nullptr;
+    this->lfo2RateParam = nullptr;
+    this->lfo1ShapeParam = nullptr;
+    this->lfo2ShapeParam = nullptr;
+    this->lfo1AmountParam = nullptr;
+    this->lfo2AmountParam = nullptr;
+    this->filterAttackParam = nullptr;
+    this->filterDecayParam = nullptr;
+    this->filterSustainParam = nullptr;
+    this->filterReleaseParam = nullptr;
+    this->ampAttackParam = nullptr;
+    this->ampDecayParam = nullptr;
+    this->ampSustainParam = nullptr;
+    this->ampReleaseParam = nullptr;
+    
+    delete this->leftFilter;
+    delete this->rightFilter;
 }
 
 //==============================================================================
@@ -60,35 +144,73 @@ double TrioAudioProcessor::getTailLengthSeconds() const
 
 int TrioAudioProcessor::getNumPrograms()
 {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
+    int size = programNames.size();
+    return size;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
 int TrioAudioProcessor::getCurrentProgram()
 {
-    return 0;
+    return this->currentProgramNumber;
 }
 
 void TrioAudioProcessor::setCurrentProgram (int index)
 {
+    
+    String name = programNames.at(index);
+    
+    this->currentProgramNumber = index;
+    
+    String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+    String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+    
+    String filename = name + ".xml";
+    File preset = File(presetPath+filename);
+    
+    if (preset.exists()) {
+        XmlElement* xml = XmlDocument(preset).getDocumentElement();
+        ValueTree state = ValueTree::fromXml(*xml);
+        setState(&state);
+    }
+    
+    setSelectedProgram(name);
+    
 }
 
 const String TrioAudioProcessor::getProgramName (int index)
 {
-    return String();
+    return getProgramNames().at(index);
 }
 
 void TrioAudioProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
+vector<String> TrioAudioProcessor::getProgramNames() {
+    return this->programNames;
+}
+
+String TrioAudioProcessor::getSelectedProgram() {
+    return this->selectedProgram;
+}
+
+void TrioAudioProcessor::setSelectedProgram(juce::String program) {
+    this->selectedProgram = program;
+}
+
 //==============================================================================
 void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    cout << "PrepareToPlay" << endl;
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
-        
-    WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
+    
+    filterEnvelope->setAttackRate(0 * sampleRate);  // 1 second
+    filterEnvelope->setDecayRate(0 * sampleRate);
+    filterEnvelope->setReleaseRate(0 * sampleRate);
+    filterEnvelope->setSustainLevel(.8);
+    
+    // WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
     
     for (int i = 0; i < 127; i++) {
         Voice* v = new Voice(sampleRate);
@@ -109,10 +231,11 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
     }
     
-    ic = IIRCoefficients::makeLowPass (sampleRate, filterCutoff );
     
-    leftFilter->setCoefficients(ic);
-    rightFilter->setCoefficients(ic);
+    this->model = new Model(voices, getLeftFilter(), getRightFilter(),getFilterEnv(),44100);
+    
+    leftFilter->coefficients(filterCutoff, 0.1f );
+    rightFilter->coefficients(filterCutoff, 0.1f);
     
     // voice->addOszillator(whiteNoise);
     
@@ -123,7 +246,7 @@ void TrioAudioProcessor::releaseResources()
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
-
+/*
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool TrioAudioProcessor::setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet)
 {
@@ -148,7 +271,7 @@ bool TrioAudioProcessor::setPreferredBusArrangement (bool isInput, int bus, cons
     return AudioProcessor::setPreferredBusArrangement (isInput, bus, preferredSet);
 }
 #endif
-
+*/
 void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     MidiMessage m;
@@ -158,18 +281,27 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     {
         if (m.isNoteOn())
         {
+            if (getVoicesPlaying() == 0) {
+                filterEnvelope->gate(true);
+            }
             Note* note = new Note();
             cout << "Note on " << m.getNoteNumber() << ", " << "velocity : " << static_cast<int>(m.getVelocity()) << endl;
+            cout << "Volume : " << model->getVolume() << endl;
             note->setMidiNote(m.getNoteNumber());
             note->setVelocity(m.getVelocity());
             voices.at(m.getNoteNumber())->setNote(note);
             voices.at(m.getNoteNumber())->setPlaying(true);
+            
+ 
           
         }
         else if (m.isNoteOff())
         {
             cout << "Note off " << m.getNoteNumber() << endl;
             voices.at(m.getNoteNumber())->setPlaying(false);
+            if (getVoicesPlaying() == 0) {
+                filterEnvelope->gate(false);
+            }
             
         }
         else if (m.isAftertouch())
@@ -195,9 +327,12 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         }
         
     }
-
-    float* const left = buffer.getWritePointer(0);
-    float* const right = buffer.getWritePointer(1);
+    
+    float* leftIn = (float*)buffer.getReadPointer(0);
+    float* rightIn = (float*)buffer.getReadPointer(1);
+    
+    float* const leftOut = buffer.getWritePointer(0);
+    float* const rightOut = buffer.getWritePointer(1);
     
     for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
         
@@ -209,15 +344,28 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             // }
         }
         
-        left[sample] = value;
-        right[sample] = value;
+        leftOut[sample] = value * model->getVolume();
+        rightOut[sample] = value * model->getVolume();
+        
+        
+        // cout << "Value : " << value << endl;
+        
+        // leftFilter->process (&leftIn[sample], &leftOut[sample]);
+        // rightFilter->process(&rightIn[sample], &rightOut[sample]);
+
+        if(filterEnvelope->getState() != ADSR::env_idle) {
+            filterEnvelope->process();
+        }
+        else {
+            filterEnvelope->reset();
+        }
         
     }
-
     
-    leftFilter->processSamples (left, buffer.getNumSamples());
-    rightFilter->processSamples (right, buffer.getNumSamples());
+    // buffer.applyGain(model->getVolume());
     
+    leftFilter->process(leftOut,0,buffer.getNumSamples());
+    rightFilter->process(rightOut, 0,buffer.getNumSamples());
     
 }
 
@@ -233,23 +381,33 @@ AudioProcessorEditor* TrioAudioProcessor::createEditor()
 }
 
 //==============================================================================
-void TrioAudioProcessor::getStateInformation (MemoryBlock& destData)
+void TrioAudioProcessor::getStateInformation (MemoryBlock& destData) 
 {
+    cout << "getStateInformation" << endl;
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    ScopedPointer<XmlElement> xml (parameters->state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void TrioAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+    cout << "setStateInformation" << endl;
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    if (xmlState != nullptr)
+        if (xmlState->hasTagName (parameters->state.getType()))
+            parameters->state = ValueTree::fromXml (*xmlState);
+    
 }
 
 //==============================================================================
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
+    cout << "createPluginFilter" << endl;
     return new TrioAudioProcessor();
 }
 
@@ -264,16 +422,43 @@ int TrioAudioProcessor::getVoicesPlaying() {
     return num;
 }
 
+void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float newValue) {
+    cout << "Parameter " << parameterID << " changed to " << newValue << endl;
+}
+
 vector<Voice*> TrioAudioProcessor::getVoices() const {
     return this->voices;
 }
 
-IIRFilter* TrioAudioProcessor::getLeftFilter() {
+Filter* TrioAudioProcessor::getLeftFilter() {
     return leftFilter;
 }
 
-IIRFilter* TrioAudioProcessor::getRightFilter() {
+Filter* TrioAudioProcessor::getRightFilter() {
     return rightFilter;
 }
 
+ADSR* TrioAudioProcessor::getFilterEnv() {
+    return this->filterEnvelope;
+}
 
+Model* TrioAudioProcessor::getModel() {
+    return this->model;
+}
+
+AudioProcessorValueTreeState* TrioAudioProcessor::getValueTreeState() {
+    return this->parameters;
+}
+
+void TrioAudioProcessor::setState(ValueTree* state) {
+    for (int i = 0; i < state->getNumChildren();i++) {
+        cout << state->getChild(i).getProperty("id").toString()<< ":" << state->getChild(i).getProperty("value").toString().getFloatValue() << endl;
+        String id = state->getChild(i).getProperty("id").toString();
+        String value = state->getChild(i).getProperty("value").toString();
+        // parameters->getParameter(id)->setValue(value.getFloatValue());
+        float nval = this->parameters->getParameterRange(id).convertTo0to1(value.getFloatValue());
+        parameters->getParameter(id)->setValueNotifyingHost(nval);
+        cout << " param " << id << "has now value " << parameters->getParameter(id)->getValue() << endl;
+    }
+    
+}

@@ -13,6 +13,7 @@
 #include "MainWindow.h"
 
 
+
 //==============================================================================
 TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
@@ -23,10 +24,7 @@ TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
     // editor's size to whatever you need it to be.
     setSize (910, 600);
     
-    model = new Model(p.getVoices(), p.getLeftFilter(), p.getRightFilter());
-    
-    window = new MainWindow();
-    window->setModel(model);
+    window = new MainWindow(&p);
     addAndMakeVisible(window);
 }
 
@@ -46,3 +44,5 @@ void TrioAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
+
+

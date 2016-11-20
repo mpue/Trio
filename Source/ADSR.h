@@ -20,11 +20,12 @@
 #define ADRS_h
 
 #include <iostream>
+#include "Modulator.h"
 
 using namespace std;
 
 
-class ADSR {
+class ADSR : public Modulator{
 public:
 	ADSR(void);
 	~ADSR(void);
