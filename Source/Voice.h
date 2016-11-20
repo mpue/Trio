@@ -18,6 +18,8 @@
 #include "Note.h"
 #include "ADSR.h"
 
+#include "../JuceLibraryCode/JuceHeader.h"
+
 using namespace std;
 
 class Voice {

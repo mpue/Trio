@@ -22,6 +22,8 @@
 #include <iostream>
 #include "Modulator.h"
 
+#include "../JuceLibraryCode/JuceHeader.h"
+
 using namespace std;
 
 
@@ -66,6 +68,7 @@ protected:
     float releaseBase;
  
     float calcCoef(float rate, float targetRatio);
+    
 };
 
 inline float ADSR::process() {

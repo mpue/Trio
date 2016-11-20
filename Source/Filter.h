@@ -25,6 +25,7 @@ public:
     virtual void setModAmount(float amount) = 0;
 
     
+    
 };
 
 

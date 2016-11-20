@@ -25,7 +25,12 @@ Voice::Voice(float sampleRate) {
 }
 
 Voice::~Voice() {
+    delete this->ampEnvelope;
     
+    for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
+        delete *it;
+    }
+    oscillators.clear();
 }
 
 void Voice::setNote(Note* note) {

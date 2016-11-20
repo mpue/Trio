@@ -22,7 +22,6 @@ using namespace std;
 //==============================================================================
 TrioAudioProcessor::TrioAudioProcessor()
 {
-    cout << File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName() << endl;
     globalPitch = 0;
     currentProgramNumber = 0;
     leftFilter = new LowPassFilter();
@@ -31,34 +30,44 @@ TrioAudioProcessor::TrioAudioProcessor()
     filterEnvelope = new ADSR();
     leftFilter->setModulator(filterEnvelope);
     rightFilter->setModulator(filterEnvelope);
+    
     this->parameters = new AudioProcessorValueTreeState(*this,nullptr);
-    this->volumeParam = parameters->createAndAddParameter("volume", "Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
-    this->osc1VolParam = parameters->createAndAddParameter("osc1vol", "Osc 1 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
-    this->osc2VolParam = parameters->createAndAddParameter("osc2vol", "Osc 2 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
-    this->osc3VolParam = parameters->createAndAddParameter("osc3vol", "Osc 3 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
-    this->osc1PitchParam = parameters->createAndAddParameter("osc1pitch", "Osc 1 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
-    this->osc2PitchParam = parameters->createAndAddParameter("osc2pitch", "Osc 2 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
-    this->osc3PitchParam = parameters->createAndAddParameter("osc3pitch", "Osc 3 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
-    this->osc1FineParam = parameters->createAndAddParameter("osc1fine", "Osc 1 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
-    this->osc2FineParam = parameters->createAndAddParameter("osc2fine", "Osc 2 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
-    this->osc3FineParam = parameters->createAndAddParameter("osc3fine", "Osc 3 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
-    this->filterModParam = parameters->createAndAddParameter("filtermod", "Filter Env Mod", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    this->cutoffParam = parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
-    this->resoParam = parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr);
-    this->lfo1RateParam = parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    this->lfo2RateParam = parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    this->lfo1ShapeParam = parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
-    this->lfo2ShapeParam = parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
-    this->lfo1AmountParam = parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    this->lfo2AmountParam = parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    this->filterAttackParam = parameters->createAndAddParameter("filterattack", "Filter attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    this->filterDecayParam = parameters->createAndAddParameter("filterdecay", "Filter decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    this->filterSustainParam = parameters->createAndAddParameter("filtersustain", "Filter sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    this->filterReleaseParam = parameters->createAndAddParameter("filterrelease", "Filter release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    this->ampAttackParam = parameters->createAndAddParameter("ampattack", "Amp attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    this->ampDecayParam = parameters->createAndAddParameter("ampdecay", "Amp decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    this->ampSustainParam = parameters->createAndAddParameter("ampsustain", "Amp sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    this->ampReleaseParam = parameters->createAndAddParameter("amprelease", "Amp release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("volume", "Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("osc1vol", "Osc 1 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc2vol", "Osc 2 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc3vol", "Osc 3 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("osc1pitch", "Osc 1 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc2pitch", "Osc 2 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc3pitch", "Osc 3 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("osc1fine", "Osc 1 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc2fine", "Osc 2 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc3fine", "Osc 3 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("filtermod", "Filter Env Mod", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("filterattack", "Filter attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("filterdecay", "Filter decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("filtersustain", "Filter sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("filterrelease", "Filter release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("ampattack", "Amp attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("ampdecay", "Amp decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("ampsustain", "Amp sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("amprelease", "Amp release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
     
     parameters->state = ValueTree (Identifier ("default"));
     
@@ -68,7 +77,7 @@ TrioAudioProcessor::TrioAudioProcessor()
     File presets = File(presetPath);
     
     if(presets.exists() && presets.isDirectory()) {
-        DirectoryIterator* iter = new DirectoryIterator(presets, false);
+        ScopedPointer<DirectoryIterator> iter = new DirectoryIterator(presets, false);
         while(iter->next()) {
             cout << "Found preset : " << iter->getFile().getFileNameWithoutExtension() << endl;
             programNames.push_back(iter->getFile().getFileNameWithoutExtension());
@@ -80,37 +89,16 @@ TrioAudioProcessor::TrioAudioProcessor()
 
 TrioAudioProcessor::~TrioAudioProcessor()
 {
+    this->leftFilter = nullptr;
+    this->rightFilter = nullptr;
     this->parameters = nullptr;
-    this->volumeParam = nullptr;
-    this->osc1VolParam = nullptr;
-    this->osc2VolParam = nullptr;
-    this->osc3VolParam = nullptr;
-    this->osc1PitchParam = nullptr;
-    this->osc2PitchParam = nullptr;
-    this->osc3PitchParam = nullptr;
-    this->osc1FineParam = nullptr;
-    this->osc2FineParam = nullptr;
-    this->osc3FineParam = nullptr;
-    this->filterModParam = nullptr;
-    this->cutoffParam = nullptr;
-    this->resoParam = nullptr;
-    this->lfo1RateParam = nullptr;
-    this->lfo2RateParam = nullptr;
-    this->lfo1ShapeParam = nullptr;
-    this->lfo2ShapeParam = nullptr;
-    this->lfo1AmountParam = nullptr;
-    this->lfo2AmountParam = nullptr;
-    this->filterAttackParam = nullptr;
-    this->filterDecayParam = nullptr;
-    this->filterSustainParam = nullptr;
-    this->filterReleaseParam = nullptr;
-    this->ampAttackParam = nullptr;
-    this->ampDecayParam = nullptr;
-    this->ampSustainParam = nullptr;
-    this->ampReleaseParam = nullptr;
+    this->filterEnvelope = nullptr;
     
-    delete this->leftFilter;
-    delete this->rightFilter;
+    for(std::vector<Voice*>::iterator it = voices.begin(); it != voices.end(); ++it) {
+        delete *it;
+    }
+    voices.clear();
+    
 }
 
 //==============================================================================
@@ -461,4 +449,26 @@ void TrioAudioProcessor::setState(ValueTree* state) {
         cout << " param " << id << "has now value " << parameters->getParameter(id)->getValue() << endl;
     }
     
+}
+
+void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
+    if (comboBoxThatHasChanged->getName() == "presetCombo")
+    {
+        //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
+        String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+        String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+        
+        String filename = comboBoxThatHasChanged->getText() + ".xml";
+        File preset = File(presetPath+filename);
+        
+        if (preset.exists()) {
+            ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
+            ValueTree state = ValueTree::fromXml(*xml.get());
+            setState(&state);
+            xml = nullptr;
+        }
+        
+        setSelectedProgram(comboBoxThatHasChanged->getText());
+
+    }
 }

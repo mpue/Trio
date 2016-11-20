@@ -27,11 +27,12 @@ public:
     virtual ~LowPassFilter();
     
 private:
-    IIRFilter* filter;
+    ScopedPointer<IIRFilter> filter;
     Modulator* modulator;
     float frequency;
     float modAmount;
     float resonance;
+    JUCE_LEAK_DETECTOR(LowPassFilter);
 
 };
 

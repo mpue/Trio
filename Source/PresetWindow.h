@@ -22,9 +22,10 @@ public:
     void buttonClicked (Button* buttonThatWasClicked) override;
     void setData(ScopedPointer<XmlElement> xml);
 private:
-    TextButton* closeButton;
-    TextButton* cancelButton;
-    TextEditor* textEditor;
+    ScopedPointer<Label> label;
+    ScopedPointer<TextButton> closeButton;
+    ScopedPointer<TextButton> cancelButton;
+    ScopedPointer<TextEditor> textEditor;
     ComboBox* presetBox;
     ScopedPointer<XmlElement> xml;
     Model* model;

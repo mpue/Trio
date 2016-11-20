@@ -103,7 +103,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampSustainAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampReleaseAttachment;
     
-    PresetWindow* presetPanel;
+    ScopedPointer<PresetWindow> presetPanel;
     
     //[/UserVariables]
 

@@ -16,7 +16,7 @@ LowPassFilter::LowPassFilter() {
 }
 
 LowPassFilter::~LowPassFilter() {
-    delete this->filter;
+    this->filter = nullptr;
 }
 
 

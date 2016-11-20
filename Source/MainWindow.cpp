@@ -393,7 +393,9 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
 
     //presetCombo->addItem("init", 1);
     //presetCombo->setSelectedItemIndex(0);
-
+    
+    presetCombo->addListener(processor);
+    
     modCombo->setSelectedItemIndex(0);
     lfo1ModCombo->setSelectedItemIndex(0);
     lfo2ModCombo->setSelectedItemIndex(0);
@@ -522,6 +524,8 @@ MainWindow::~MainWindow()
     this->ampDecayAttachment = nullptr;
     this->ampSustainAttachment = nullptr;
     this->ampReleaseAttachment = nullptr;
+    this->presetPanel = nullptr;
+    
     
     //[/Destructor]
 }
@@ -802,6 +806,7 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         //[UserComboBoxCode_modCombo] -- add your combo box handling code here..
         //[/UserComboBoxCode_modCombo]
     }
+    /*
     else if (comboBoxThatHasChanged == presetCombo)
     {
         //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
@@ -821,7 +826,8 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         
         //[/UserComboBoxCode_presetCombo]
     }
-
+     */
+     
     //[UsercomboBoxChanged_Post]
     //[/UsercomboBoxChanged_Post]
 }

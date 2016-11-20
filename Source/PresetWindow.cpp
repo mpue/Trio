@@ -12,11 +12,14 @@ PresetWindow::PresetWindow(ComboBox* presetBox, Model* model) {
     
     this->presetBox = presetBox;
     this->model = model;
-    Label* label = new Label("nameLabel","Enter a name");
+    label = new Label("nameLabel","Enter a name");
     label->setBounds(50,50,200, 25);
     label->setColour(Label::textColourId, Colours::white);
     addAndMakeVisible(label);
     this->textEditor = new TextEditor("name");
+    this->textEditor->setMultiLine(false);
+    this->textEditor->setScrollbarsShown(false);
+    
     textEditor->setColour(TextEditor::backgroundColourId, Colours::white);
     textEditor->setColour(TextEditor::textColourId, Colours::black);
     textEditor->setBounds(150,50,200, 25);
@@ -33,7 +36,10 @@ PresetWindow::PresetWindow(ComboBox* presetBox, Model* model) {
 }
 
 PresetWindow::~PresetWindow() {
-    
+    this->label = nullptr;
+    this->textEditor = nullptr;
+    this->closeButton = nullptr;
+    this->cancelButton = nullptr;
 }
 
 void PresetWindow::resized() {
