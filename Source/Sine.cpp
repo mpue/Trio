@@ -18,23 +18,26 @@ Sine::Sine(float sampleRate) : Oszillator(sampleRate) {
     this->phase = 0;
 }
 
+float Sine::getOutput() {
+    return this->value;
+}
+
 float Sine::process() {
     
     phase += step;
-    
-    float value = (float)(sin(phase) * this->volume);
-    return value;
+
+    this->value = (float)(sin(phase) * this->volume);
+    return this->value;
 }
 
 void Sine::setFrequency(double frequency) {
     this->frequency = frequency;
     this->step = ((frequency + (double)this->fine) * 2 * M_PI / sampleRate);
-    std::cout.precision(16);
-    std::cout << 360.0f / this->step << std::endl;
 }
 
 void Sine::setFine(float fine) {
     this->fine = fine;
+    this->step = ((frequency + (double)this->fine) * 2 * M_PI / sampleRate);
 }
 
 float Sine::getFine() const {

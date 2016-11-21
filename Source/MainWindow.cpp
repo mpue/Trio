@@ -162,7 +162,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     filterModSlider->addListener (this);
 
     addAndMakeVisible (lfo1RateSlider = new Slider ("lfo1RateSlider"));
-    lfo1RateSlider->setRange (0, 10, 0);
+    lfo1RateSlider->setRange (1, 100, 1);
     lfo1RateSlider->setSliderStyle (Slider::Rotary);
     lfo1RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -176,7 +176,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     lfo1ShapeSlider->addListener (this);
 
     addAndMakeVisible (lfo1AmountSlider = new Slider ("lfo1AmountSlider"));
-    lfo1AmountSlider->setRange (0, 1, 0.02);
+    lfo1AmountSlider->setRange (0, 10, 0.1);
     lfo1AmountSlider->setSliderStyle (Slider::Rotary);
     lfo1AmountSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1AmountSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -768,6 +768,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == lfo1RateSlider)
     {
         //[UserSliderCode_lfo1RateSlider] -- add your slider handling code here..
+        this->processor->getModel()->setLfo1Rate(lfo1RateSlider->getValue());
         //[/UserSliderCode_lfo1RateSlider]
     }
     else if (sliderThatWasMoved == lfo1ShapeSlider)
@@ -778,6 +779,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == lfo1AmountSlider)
     {
         //[UserSliderCode_lfo1AmountSlider] -- add your slider handling code here..
+        this->processor->getModel()->setLfo1Amount(lfo1AmountSlider->getValue());
         //[/UserSliderCode_lfo1AmountSlider]
     }
     else if (sliderThatWasMoved == lfo2RateSlider)

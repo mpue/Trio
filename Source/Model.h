@@ -14,6 +14,8 @@
 #include "Voice.h"
 #include "Filter.h"
 #include "ADSR.h"
+#include "Oszillator.h"
+#include "Sine.h"
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
@@ -25,7 +27,7 @@ class Model {
     
 public:
 
-    Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, int sampleRate);
+    Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv,Sine* lfo1,int sampleRate);
     ~Model();
     
     int getOsc1Pitch();
@@ -79,6 +81,12 @@ public:
     float getVolume();
     void setVolume(float volume);
 
+    float getLfo1Amount();
+    void setLfo1Amount(float amount);
+ 
+    float getLfo1Rate();
+    void setLfo1Rate(float rate);
+    
     
 private:
     
@@ -114,9 +122,11 @@ private:
     Filter* leftFilter;
     Filter* rightFilter;
     ADSR* filterEnv;
+    Sine* lfo1;
     int sampleRate;
     
-
+    float lfo1Rate;
+    float lfo1Amount;
     
 };
 

@@ -49,6 +49,7 @@ protected:
     int pitch; // halftones
     OscMode mode;
 
+
 };
 
 

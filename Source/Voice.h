@@ -15,6 +15,7 @@
 
 #include "Oszillator.h"
 #include "Sawtooth.h"
+#include "Modulator.h"
 #include "Note.h"
 #include "ADSR.h"
 
@@ -48,6 +49,8 @@ public:
     void setPending(bool pending);
     bool isPending() const;
 
+    void setModulator(Modulator* modulator);
+    
     ADSR* getAmpEnvelope();
 
     float getSampleRate();
@@ -63,6 +66,7 @@ private:
     void calculateFrequencyTable();
     bool playing;
     ADSR* ampEnvelope;
+    Modulator* modulator;
 
     
 };

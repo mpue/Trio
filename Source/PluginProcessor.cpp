@@ -54,14 +54,14 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
     parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr);
     
-    parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.0f,100.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.0f,100.0f), 0.0f, nullptr, nullptr);
     
     parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
     
-    parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr);
     
     parameters->createAndAddParameter("filterattack", "Filter attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("filterdecay", "Filter decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
@@ -208,7 +208,9 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     configureOscillators(Oszillator::OscMode::SAW, Oszillator::OscMode::SAW, Oszillator::OscMode::SAW);
     
-    this->model = new Model(voices, getLeftFilter(), getRightFilter(),getFilterEnv(),44100);
+    lfo1 = new Sine(sampleRate);
+    
+    this->model = new Model(voices, getLeftFilter(), getRightFilter(),getFilterEnv(), lfo1 ,44100);
     
     leftFilter->coefficients(filterCutoff, 0.1f );
     rightFilter->coefficients(filterCutoff, 0.1f);
@@ -257,6 +259,8 @@ void TrioAudioProcessor::configureOscillators(Oszillator::OscMode mode1, Oszilla
         v->addOszillator(osc2);
         v->addOszillator(osc3);
         
+        // v->setModulator(lfo1);
+        
         voices.push_back(v);
     }
 }
@@ -266,6 +270,7 @@ void TrioAudioProcessor::setupOscillators(Oszillator::OscMode mode1, Oszillator:
         voices.at(i)->getOszillators().at(0)->setMode(mode1);
         voices.at(i)->getOszillators().at(1)->setMode(mode2);
         voices.at(i)->getOszillators().at(2)->setMode(mode3);
+        voices.at(i)->setModulator(lfo1);
     }
 }
 
@@ -395,6 +400,10 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             filterEnvelope->reset();
         }
         
+    }
+    
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getOszillators().at(0)->setFine(lfo1->process() * 10);
     }
     
     // buffer.applyGain(model->getVolume());

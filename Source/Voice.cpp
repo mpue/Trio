@@ -17,6 +17,7 @@ Voice::Voice(float sampleRate) {
     this->calculateFrequencyTable();
     this->playing = false;
     this->ampEnvelope = new ADSR();
+    this->modulator = 0;
     
     ampEnvelope->setAttackRate(0 * sampleRate);  // 1 second
     ampEnvelope->setDecayRate(0 * sampleRate);
@@ -60,11 +61,11 @@ float Voice::process() {
     float value = 0;
     
     if(ampEnvelope->getState() != ADSR::env_idle) {
+        
         float amplitude = (1.0f / (float) 127) * this->velocity;
         
         for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
             Oszillator* o = *it;
-            
             value += o->process();
         }
         
@@ -74,7 +75,11 @@ float Voice::process() {
     else {
         ampEnvelope->reset();
     }
-    
+
+    if (modulator != 0) {
+        
+    }
+
     return value;
     
 }
@@ -128,4 +133,8 @@ float Voice::getSampleRate() {
 
 ADSR* Voice::getAmpEnvelope() {
     return ampEnvelope;
+}
+
+void Voice::setModulator(Modulator* modulator) {
+    this->modulator = modulator;
 }

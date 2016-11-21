@@ -11,18 +11,20 @@
 #include "Voice.h"
 #include "Model.h"
 #include "Oszillator.h"
+#include "Sine.h"
 
 #include <vector>
 #include <iostream>
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, int sampleRate) {
+Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, Sine* lfo1, int sampleRate) {
     this->voices = voices;
     this->leftFilter = leftFilter;
     this->rightFilter = rightFilter;
     this->filterEnv = filterEnv;
     this->sampleRate = sampleRate;
+    this->lfo1 = lfo1;
     this->volume = 1.0f;
     this->filterResonance = 0.1f;
 }
@@ -277,6 +279,16 @@ void Model::setFilterModAmount(float amount) {
     this->rightFilter->setModAmount(amount);
 }
 
+float Model::getLfo1Rate() {
+    return lfo1Rate;
+}
 
+void Model::setLfo1Rate(float rate) {
+    this->lfo1Rate = rate;
+    lfo1->setFrequency(rate);
+}
 
-
+void Model::setLfo1Amount(float amount) {
+    this->lfo1Amount = amount;
+    lfo1->setVolume(amount);
+}

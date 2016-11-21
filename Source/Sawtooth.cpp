@@ -59,7 +59,7 @@ float Sawtooth::process() {
 }
 
 void Sawtooth::setFrequency(double frequency) {
-    
+    this->frequency = frequency;
     pmax = 0.5f * sampleRate / (frequency + this->fine);
     dc = -0.498f / pmax;
     
@@ -67,6 +67,7 @@ void Sawtooth::setFrequency(double frequency) {
 
 void Sawtooth::setFine(float fine) {
     this->fine = fine;
+    setFrequency(frequency);
 }
 
 float Sawtooth::getFine() const {

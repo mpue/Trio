@@ -75,7 +75,7 @@ public:
     Filter* getLeftFilter();
     Filter* getRightFilter();
     ADSR* getFilterEnv();
-    Model* getModel();   
+    Model* getModel();
     
     AudioProcessorValueTreeState* getValueTreeState();
     void setState(ValueTree* state);
@@ -110,6 +110,7 @@ private:
     int getVoicesPlaying();
     ScopedPointer<ADSR> filterEnvelope;
     Model* model;
+    Sine* lfo1;
     
     ScopedPointer<AudioProcessorValueTreeState> parameters;
     
