@@ -41,7 +41,8 @@
 class MainWindow  : public Component,
                     public SliderListener,
                     public ComboBoxListener,
-                    public ButtonListener
+                    public ButtonListener,
+                    public AudioProcessorListener
 {
 public:
     //==============================================================================
@@ -52,6 +53,11 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
 
     MainWindow (TrioAudioProcessor* p);
+    virtual void audioProcessorParameterChanged (AudioProcessor* processor,
+                                                 int parameterIndex,
+                                                 float newValue) override;
+    
+    inline virtual void audioProcessorChanged (AudioProcessor* processor) override {};
     
     //[/UserMethods]
 

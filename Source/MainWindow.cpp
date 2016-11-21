@@ -446,7 +446,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     imageButton2->setRadioGroupId(1);
     imageButton3->setRadioGroupId(1);
     
-    imageButton->setToggleState(true, NotificationType::sendNotification);
+    imageButton->setToggleState(true, NotificationType::dontSendNotification);
     
     imageButton->setClickingTogglesState(true);
     imageButton2->setClickingTogglesState(true);
@@ -456,7 +456,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     imageButton5->setRadioGroupId(2);
     imageButton6->setRadioGroupId(2);
     
-    imageButton4->setToggleState(true, NotificationType::sendNotification);
+    imageButton4->setToggleState(true, NotificationType::dontSendNotification);
     
     imageButton4->setClickingTogglesState(true);
     imageButton5->setClickingTogglesState(true);
@@ -466,7 +466,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     imageButton8->setRadioGroupId(3);
     imageButton9->setRadioGroupId(3);
     
-    imageButton7->setToggleState(true, NotificationType::sendNotification);
+    imageButton7->setToggleState(true, NotificationType::dontSendNotification);
     
     imageButton7->setClickingTogglesState(true);
     imageButton8->setClickingTogglesState(true);
@@ -475,6 +475,49 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     mode1 = Oszillator::OscMode::SAW;
     mode2 = Oszillator::OscMode::SAW;
     mode3 = Oszillator::OscMode::SAW;
+    
+    
+    float val = processor->getValueTreeState()->getParameter("osc1shape")->getValue() ;
+    float nval = processor->getValueTreeState()->getParameterRange("osc1shape").convertFrom0to1(val);
+    
+    if (nval == 0) {
+        imageButton->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    else if (nval == 1) {
+        imageButton2->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    else if (nval == 2) {
+        imageButton3->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    
+    
+    val = processor->getValueTreeState()->getParameter("osc2shape")->getValue() ;
+    nval = processor->getValueTreeState()->getParameterRange("osc2shape").convertFrom0to1(val);
+    
+    if (nval == 0) {
+        imageButton4->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    else if (nval == 1) {
+        imageButton5->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    else if (nval == 2) {
+        imageButton6->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    
+    val = processor->getValueTreeState()->getParameter("osc3shape")->getValue() ;
+    nval = processor->getValueTreeState()->getParameterRange("osc3shape").convertFrom0to1(val);
+    
+    if (nval == 0) {
+        imageButton7->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    else if (nval == 1) {
+        imageButton8->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    else if (nval == 2) {
+        imageButton9->setToggleState(true, NotificationType::dontSendNotification);
+    }
+    
+    processor->addListener(this);
     
     //[/Constructor]
 }
@@ -559,7 +602,7 @@ MainWindow::~MainWindow()
     this->ampSustainAttachment = nullptr;
     this->ampReleaseAttachment = nullptr;
     this->presetPanel = nullptr;
-    
+    processor->removeListener(this);
     
     //[/Destructor]
 }
@@ -901,6 +944,11 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_imageButton] -- add your button handler code here..
         mode1 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc1shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
+        
         //[/UserButtonCode_imageButton]
     }
     else if (buttonThatWasClicked == imageButton2)
@@ -908,6 +956,10 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_imageButton2] -- add your button handler code here..
         mode1 = Oszillator::OscMode::SINE;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc1shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton2]
     }
     else if (buttonThatWasClicked == imageButton3)
@@ -915,50 +967,88 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_imageButton3] -- add your button handler code here..
         mode1 = Oszillator::OscMode::PULSE;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc1shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(2.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
+         
         //[/UserButtonCode_imageButton3]
     }
 
     else if (buttonThatWasClicked == imageButton4)
     {
         //[UserButtonCode_imageButton4] -- add your button handler code here..
+        cout << "imageButton4" << endl;
         mode2 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc2shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton4]
     }
     else if (buttonThatWasClicked == imageButton5)
     {
         //[UserButtonCode_imageButton5] -- add your button handler code here..
-        mode2 = Oszillator::OscMode::SINE;
+        cout << "imageButton5" << endl;
+        mode2 = Oszillator::OscMode::PULSE;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc2shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(2.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton5]
     }
     else if (buttonThatWasClicked == imageButton6)
     {
         //[UserButtonCode_imageButton6] -- add your button handler code here..
-        mode2 = Oszillator::OscMode::PULSE;
+        cout << "imageButton6" << endl;
+        mode2 = Oszillator::OscMode::SINE;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc2shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton6]
     }
     
     else if (buttonThatWasClicked == imageButton7)
     {
         //[UserButtonCode_imageButton7] -- add your button handler code here..
+        cout << "imageButton7" << endl;
+        
         mode3 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc3shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton7]
     }
     else if (buttonThatWasClicked == imageButton8)
     {
         //[UserButtonCode_imageButton8] -- add your button handler code here..
-        mode3 = Oszillator::OscMode::SINE;
+        cout << "imageButton8" << endl;
+    
+        mode3 = Oszillator::OscMode::PULSE;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc3shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(2.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton8]
     }
     else if (buttonThatWasClicked == imageButton9)
     {
         //[UserButtonCode_imageButton9] -- add your button handler code here..
-        mode3 = Oszillator::OscMode::PULSE;
+        cout << "imageButton9" << endl;
+        
+        mode3 = Oszillator::OscMode::SINE;
         processor->setupOscillators(mode1,mode2,mode3);
+        
+        String id = "osc3shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton9]
     }
     
@@ -975,10 +1065,63 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 
 void MainWindow::visibilityChanged() {
-    cout << "current program :  " <<processor->getCurrentProgram() << endl;
-    cout << "MainWindow isVisible : "<< MainWindow::isVisible() << endl;
     String currentProgram = processor->getProgramName(processor->getCurrentProgram());
     presetCombo->setText(currentProgram,NotificationType::dontSendNotification);
+}
+
+void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int parameterIndex, float newValue) {
+    
+    cout << "Parameter " << parameterIndex << " changed to " << newValue << endl;
+    
+    String id = processor->getParameterID(parameterIndex);
+
+    float value = processor->getParameter(parameterIndex);
+    float nval = this->processor->getValueTreeState()->getParameterRange(id).convertFrom0to1(value);
+    
+    if (id == "osc1shape") {
+        imageButton ->setToggleState(false, NotificationType::dontSendNotification);
+        imageButton2->setToggleState(false, NotificationType::dontSendNotification);
+        imageButton3->setToggleState(false, NotificationType::dontSendNotification);
+
+        if (nval == 0.0f) {
+            imageButton->setToggleState(true, NotificationType::dontSendNotification);
+        }
+        else if (nval == 1.0f) {
+            imageButton2->setToggleState(true, NotificationType::dontSendNotification);
+        }
+        else if (nval == 2.0f) {
+            imageButton3->setToggleState(true, NotificationType::dontSendNotification);
+        }
+    }
+    else if (id == "osc2shape") {
+        imageButton4->setToggleState(false, NotificationType::dontSendNotification);
+        imageButton5->setToggleState(false, NotificationType::dontSendNotification);
+        imageButton6->setToggleState(false, NotificationType::dontSendNotification);
+        if (nval == 0.0f) {
+            imageButton4->setToggleState(true, NotificationType::dontSendNotification);
+        }
+        else if (nval == 1.0f) {
+            imageButton6->setToggleState(true, NotificationType::dontSendNotification);
+        }
+        else if (nval == 2.0f) {
+            imageButton5->setToggleState(true, NotificationType::dontSendNotification);
+        }
+    }
+    else if (id == "osc3shape") {
+        imageButton7->setToggleState(false, NotificationType::dontSendNotification);
+        imageButton8->setToggleState(false, NotificationType::dontSendNotification);
+        imageButton9->setToggleState(false, NotificationType::dontSendNotification);
+        if (nval == 0.0f) {
+            imageButton7->setToggleState(true, NotificationType::dontSendNotification);
+        }
+        else if (nval == 1.0f) {
+            imageButton9->setToggleState(true, NotificationType::dontSendNotification);
+        }
+        else if (nval == 2.0f) {
+            imageButton8->setToggleState(true, NotificationType::dontSendNotification);
+        }
+    }
+    
 }
 
 //[/MiscUserCode]

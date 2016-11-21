@@ -45,6 +45,10 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("osc1fine", "Osc 1 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("osc2fine", "Osc 2 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("osc3fine", "Osc 3 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+
+    parameters->createAndAddParameter("osc1shape", "Osc 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc2shape", "Osc 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc3shape", "Osc 3 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
     
     parameters->createAndAddParameter("filtermod", "Filter Env Mod", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
@@ -482,6 +486,11 @@ AudioProcessorValueTreeState* TrioAudioProcessor::getValueTreeState() {
 }
 
 void TrioAudioProcessor::setState(ValueTree* state) {
+    
+    Oszillator::OscMode mode1 = Oszillator::OscMode::SAW;
+    Oszillator::OscMode mode2 = Oszillator::OscMode::SAW;
+    Oszillator::OscMode mode3 = Oszillator::OscMode::SAW;
+    
     for (int i = 0; i < state->getNumChildren();i++) {
         // cout << state->getChild(i).getProperty("id").toString()<< ":" << state->getChild(i).getProperty("value").toString().getFloatValue() << endl;
         String id = state->getChild(i).getProperty("id").toString();
@@ -489,8 +498,45 @@ void TrioAudioProcessor::setState(ValueTree* state) {
         // parameters->getParameter(id)->setValue(value.getFloatValue());
         float nval = this->parameters->getParameterRange(id).convertTo0to1(value.getFloatValue());
         parameters->getParameter(id)->setValueNotifyingHost(nval);
-        // cout << " param " << id << "has now value " << parameters->getParameter(id)->getValue() << endl;
+        cout << " param " << id << "has now value " << nval << endl;
+    
+        
+        if (id == "osc1shape") {
+            if (nval == 0.0f) {
+                mode1 = Oszillator::OscMode::SAW;
+            }
+            else if (nval == 0.5f) {
+                mode1 = Oszillator::OscMode::SINE;
+            }
+            else if (nval == 1.0f) {
+                mode1 = Oszillator::OscMode::PULSE;
+            }
+        }
+        else if (id == "osc2shape") {
+            if (nval == 0.0f) {
+                mode2 = Oszillator::OscMode::SAW;
+            }
+            else if (nval == 0.5f) {
+                mode2 = Oszillator::OscMode::SINE;
+            }
+            else if (nval == 1.0f) {
+                mode2 = Oszillator::OscMode::PULSE;
+            }
+        }
+        else if (id == "osc3shape") {
+            if (nval == 0.0f) {
+                mode3 = Oszillator::OscMode::SAW;
+            }
+            else if (nval == 0.5f) {
+                mode3 = Oszillator::OscMode::SINE;
+            }
+            else if (nval == 1.0f) {
+                mode3 = Oszillator::OscMode::PULSE;
+            }
+        }
     }
+    
+    setupOscillators(mode1, mode2, mode3);
     
 }
 
