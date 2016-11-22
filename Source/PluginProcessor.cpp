@@ -73,6 +73,11 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("ampsustain", "Amp sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("amprelease", "Amp release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
     
+    parameters->createAndAddParameter("modsource", "Mod source", String(), NormalisableRange<float>(1.0f,4.0f), 1.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("mod1target", "Mod 1 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("mod2target", "Mod 2 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr);
+    
+    
     parameters->state = ValueTree (Identifier ("default"));
     
     String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
@@ -89,6 +94,44 @@ TrioAudioProcessor::TrioAudioProcessor()
         iter = nullptr;
         
     }
+    
+    parameters->addParameterListener("volume", this);
+    parameters->addParameterListener("osc1vol", this);
+    parameters->addParameterListener("osc2vol", this);
+    parameters->addParameterListener("osc3vol", this);
+    parameters->addParameterListener("osc1pitch", this);
+    parameters->addParameterListener("osc2pitch", this);
+    parameters->addParameterListener("osc3pitch", this);
+    parameters->addParameterListener("osc1fine", this);
+    parameters->addParameterListener("osc2fine", this);
+    parameters->addParameterListener("osc3fine", this);
+    parameters->addParameterListener("osc1shape", this);
+    parameters->addParameterListener("osc2shape", this);
+    parameters->addParameterListener("osc3shape", this);
+    parameters->addParameterListener("filtermod", this);
+    parameters->addParameterListener("cutoff", this);
+    parameters->addParameterListener("reso", this);
+    parameters->addParameterListener("lfo1rate", this);
+    parameters->addParameterListener("lfo2rate", this);
+    parameters->addParameterListener("lfo1shape", this);
+    parameters->addParameterListener("lfo2shape", this);
+    parameters->addParameterListener("lfo1rate", this);
+    parameters->addParameterListener("lfo2rate", this);
+    parameters->addParameterListener("lfo1amount", this);
+    parameters->addParameterListener("lfo2amount", this);
+    parameters->addParameterListener("filterattack", this);
+    parameters->addParameterListener("filterdecay", this);
+    parameters->addParameterListener("filtersustain", this);
+    parameters->addParameterListener("filterrelease", this);
+    parameters->addParameterListener("ampattack", this);
+    parameters->addParameterListener("ampdecay", this);
+    parameters->addParameterListener("ampsustain", this);
+    parameters->addParameterListener("amprelease", this);
+    parameters->addParameterListener("modsource", this);
+    parameters->addParameterListener("amprelease", this);
+    parameters->addParameterListener("modsource", this);
+    parameters->addParameterListener("mod1target", this);
+    parameters->addParameterListener("mod2target", this);
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -209,8 +252,9 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     configureOscillators(Oszillator::OscMode::SAW, Oszillator::OscMode::SAW, Oszillator::OscMode::SAW);
     
     lfo1 = new Sine(sampleRate);
+    lfo2 = new Sine(sampleRate);
     
-    this->model = new Model(voices, getLeftFilter(), getRightFilter(),getFilterEnv(), lfo1 ,44100);
+    this->model = new Model(voices, getLeftFilter(), getRightFilter(),getFilterEnv(), lfo1, lfo2, 44100);
     
     leftFilter->coefficients(filterCutoff, 0.1f );
     rightFilter->coefficients(filterCutoff, 0.1f);
@@ -365,6 +409,9 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             }
 
         }
+        else if (m.isController()) {
+            cout << "Control change : "<< m.getControllerNumber() << " : " << m.getControllerValue() << endl;
+        }
         
     }
     
@@ -402,10 +449,95 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         
     }
     
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(0)->setFine(lfo1->process() * 10);
+    // is there at least one modulation target?
+    if(model->getModsource() > 1) {
+        
+        // LFO 1
+        if (model->getModsource() == 2) {
+            // Osc 1 pitch
+            if (model->getMod1Target() == 2) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(0)->setFine(lfo1->process() * 10);
+                }
+            }
+            // Osc 2 pitch
+            else if (model->getMod1Target() == 3) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(1)->setFine(lfo1->process() * 10);
+                }
+            }
+            // Osc 1 pitch
+            else if (model->getMod1Target() == 4) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(2)->setFine(lfo1->process() * 10);
+                }
+            }
+            
+        }
+        // LFO 2
+        else if (model->getModsource() == 3) {
+            // Osc 1 pitch
+            if (model->getMod2Target() == 2) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(0)->setFine(lfo2->process() * 10);
+                }
+            }
+            // Osc 2 pitch
+            else if (model->getMod2Target() == 3) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(1)->setFine(lfo2->process() * 10);
+                }
+            }
+            // Osc 3 pitch
+            else if (model->getMod2Target() == 4) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(2)->setFine(lfo2->process() * 10);
+                }
+            }
+        }
+        // LFO 1+2
+        else if (model->getModsource() == 4) {
+            
+            // Osc 1 pitch
+            if (model->getMod1Target() == 2) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(0)->setFine(lfo1->process() * 10);
+                }
+            }
+            // Osc 2 pitch
+            else if (model->getMod1Target() == 3) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(1)->setFine(lfo1->process() * 10);
+                }
+            }
+            // Osc 3 pitch
+            else if (model->getMod1Target() == 4) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(2)->setFine(lfo1->process() * 10);
+                }
+            }
+            
+            // Osc 1 pitch
+            if (model->getMod1Target() == 2) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(0)->setFine(lfo2->process() * 10);
+                }
+            }
+            // Osc 2 pitch
+            else if (model->getMod1Target() == 3) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(1)->setFine(lfo2->process() * 10);
+                }
+            }
+            // Osc 3 pitch
+            else if (model->getMod1Target() == 4) {
+                for (int i = 0; i < voices.size();i++) {
+                    voices.at(i)->getOszillators().at(2)->setFine(lfo2->process() * 10);
+                }
+            }
+        }
     }
-    
+
     // buffer.applyGain(model->getVolume());
     
     leftFilter->process(leftOut,0,buffer.getNumSamples());
@@ -468,6 +600,94 @@ int TrioAudioProcessor::getVoicesPlaying() {
 
 void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float newValue) {
     cout << "Parameter " << parameterID << " changed to " << newValue << endl;
+    
+    if (parameterID == "volume") {
+        model->setVolume(newValue);
+    }
+    if (parameterID == "osc1vol") {
+        model->setOsc1Volume(newValue);
+    }
+    if (parameterID == "osc2vol") {
+        model->setOsc2Volume(newValue);
+    }
+    if (parameterID == "osc3vol") {
+        model->setOsc3Volume(newValue);
+    }
+    if (parameterID == "osc1pitch") {
+        model->setOsc1Pitch(newValue);
+    }
+    if (parameterID == "osc2pitch") {
+        model->setOsc2Pitch(newValue);
+    }
+    if (parameterID == "osc3pitch") {
+        model->setOsc2Pitch(newValue);
+    }
+    if (parameterID == "osc1shape") {
+    }
+    if (parameterID == "osc2shape") {
+    }
+    if (parameterID == "osc3shape") {
+    }
+    if (parameterID == "filtermod") {
+        model->setFilterModAmount(newValue);
+    }
+    if (parameterID == "cutoff") {
+        model->setFilterCutoff(newValue);
+    }
+    if (parameterID == "reso") {
+        model->setFilterResonance(newValue);
+    }
+    if (parameterID == "lfo1rate") {
+        model->setLfo1Rate(newValue);
+    }
+    if (parameterID == "lfo2rate") {
+
+    }
+    if (parameterID == "lfo1shape") {
+
+    }
+    if (parameterID == "lfo2shape") {
+        
+    }
+    if (parameterID == "lfo1amount") {
+        model->setLfo1Amount(newValue);
+    }
+    if (parameterID == "lfo2amount") {
+        
+    }
+    if (parameterID == "filterattack") {
+        model->setFilterEnvAttack(newValue);
+    }
+    if (parameterID == "filterdecay") {
+        model->setFilterEnvDecay(newValue);
+    }
+    if (parameterID == "filtersustain") {
+        model->setFilterEnvSustain(newValue);
+    }
+    if (parameterID == "filterrelease") {
+        model->setFilterEnvRelease(newValue);
+    }
+    if (parameterID == "ampattack") {
+        model->setAmpEnvAttack(newValue);
+    }
+    if (parameterID == "ampdecay") {
+        model->setAmpEnvDecay(newValue);
+    }
+    if (parameterID == "ampsustain") {
+        model->setAmpEnvSustain(newValue);
+    }
+    if (parameterID == "amprelease") {
+        model->setAmpEnvRelease(newValue);
+    }
+    if (parameterID == "modsource") {
+        model->setModsource(newValue);
+    }
+    if (parameterID == "mod1target") {
+        model->setMod1Target(newValue);
+    }
+     if (parameterID == "mod2target") {
+        model->setMod2Target(newValue);
+    }
 }
 
 vector<Voice*> TrioAudioProcessor::getVoices() const {
@@ -543,6 +763,9 @@ void TrioAudioProcessor::setState(ValueTree* state) {
                 mode3 = Oszillator::OscMode::PULSE;
             }
         }
+        else if (id == "modsource") {
+            
+        }
     }
     
     setupOscillators(mode1, mode2, mode3);
@@ -581,5 +804,24 @@ void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged)
         
         updateHostDisplay();
         
+    }
+}
+
+void TrioAudioProcessor::selectFilterModulator(TrioAudioProcessor::ModulatorType type) {
+    switch(type) {
+        case ENV :
+            leftFilter->setModulator(filterEnvelope);
+            rightFilter->setModulator(filterEnvelope);
+            break;
+        case LFO1:
+            leftFilter->setModulator(lfo1);
+            rightFilter->setModulator(lfo1);
+            break;
+        case LFO2:
+            leftFilter->setModulator(lfo2);
+            rightFilter->setModulator(lfo2);
+            break;
+        default:
+            break;
     }
 }

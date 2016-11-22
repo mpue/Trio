@@ -109,6 +109,9 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampDecayAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampSustainAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampReleaseAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> modSourceAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod1TargetAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod2TargetAttachment;
     
     ScopedPointer<PresetWindow> presetPanel;
     

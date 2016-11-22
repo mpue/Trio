@@ -427,7 +427,11 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     this->ampDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampdecay", *this->ampDecaySlider);
     this->ampSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampsustain", *this->ampSustainSlider);
     this->ampReleaseAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"amprelease", *this->ampReleaseSlider);
-    
+    /*
+    this->modSourceAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"modsource", *this->modCombo);
+    this->mod1TargetAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"mod1target", *this->lfo1ModCombo);
+    this->mod2TargetAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"mod2target", *this->lfo2ModCombo);
+    */
     int x = getScreenX();
     int y = getScreenY();
     
@@ -517,6 +521,21 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
         imageButton9->setToggleState(true, NotificationType::dontSendNotification);
     }
     
+    val = processor->getValueTreeState()->getParameter("modsource")->getValue() ;
+    nval = processor->getValueTreeState()->getParameterRange("modsource").convertFrom0to1(val);
+    
+    modCombo->setSelectedId(nval);
+    
+    val = processor->getValueTreeState()->getParameter("mod1target")->getValue() ;
+    nval = processor->getValueTreeState()->getParameterRange("mod1target").convertFrom0to1(val);
+    
+    lfo1ModCombo->setSelectedId(nval);
+    
+    val = processor->getValueTreeState()->getParameter("mod2target")->getValue() ;
+    nval = processor->getValueTreeState()->getParameterRange("mod2target").convertFrom0to1(val);
+    
+    lfo2ModCombo->setSelectedId(nval);
+    
     processor->addListener(this);
     
     //[/Constructor]
@@ -602,6 +621,11 @@ MainWindow::~MainWindow()
     this->ampSustainAttachment = nullptr;
     this->ampReleaseAttachment = nullptr;
     this->presetPanel = nullptr;
+    /*
+    this->modSourceAttachment = nullptr;
+    this->mod1TargetAttachment = nullptr;
+    this->mod2TargetAttachment = nullptr;
+    */
     processor->removeListener(this);
     
     //[/Destructor]
@@ -873,39 +897,69 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == lfo1ModCombo)
     {
         //[UserComboBoxCode_lfo1ModCombo] -- add your combo box handling code here..
+        float nval = processor->getValueTreeState()->getParameterRange("mod1target").convertTo0to1(lfo1ModCombo->getSelectedIdAsValue().toString().getFloatValue());
+        processor->getValueTreeState()->getParameter("mod1target")->setValueNotifyingHost(nval);
+        this->processor->getModel()->setMod1Target(nval);
+        
+        for (int i = 0; i < lfo2ModCombo->getNumItems();i++) {
+            lfo2ModCombo->setItemEnabled(lfo2ModCombo->getItemId(i),true);
+        }
+        
+        if (modCombo->getSelectedId() == 4)
+            lfo2ModCombo->setItemEnabled(lfo1ModCombo->getSelectedId(), false);
+        
+        if (lfo1ModCombo->getSelectedId() == 1) {
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
+        }
+        
+        
         //[/UserComboBoxCode_lfo1ModCombo]
     }
     else if (comboBoxThatHasChanged == lfo2ModCombo)
     {
         //[UserComboBoxCode_lfo2ModCombo] -- add your combo box handling code here..
+        float nval = processor->getValueTreeState()->getParameterRange("mod2target").convertTo0to1(lfo2ModCombo->getSelectedIdAsValue().toString().getFloatValue());
+        processor->getValueTreeState()->getParameter("mod2target")->setValueNotifyingHost(nval);
+        this->processor->getModel()->setMod2Target(nval);
+        
+        for (int i = 0; i < lfo1ModCombo->getNumItems();i++) {
+            lfo1ModCombo->setItemEnabled(lfo1ModCombo->getItemId(i),true);
+        }
+        
+        if (modCombo->getSelectedId() == 4)
+            lfo1ModCombo->setItemEnabled(lfo2ModCombo->getSelectedId(), false);
+        
+        if (lfo2ModCombo->getSelectedId() == 1) {
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
+        }
+        
         //[/UserComboBoxCode_lfo2ModCombo]
     }
     else if (comboBoxThatHasChanged == modCombo)
     {
         //[UserComboBoxCode_modCombo] -- add your combo box handling code here..
+        float nval = processor->getValueTreeState()->getParameterRange("modsource").convertTo0to1(modCombo->getSelectedIdAsValue().toString().getFloatValue());
+        processor->getValueTreeState()->getParameter("modsource")->setValueNotifyingHost(nval);
+        this->processor->getModel()->setModsource(nval);
+        if (modCombo->getSelectedId() == 1) {
+            lfo1ModCombo->setEnabled(false);
+            lfo2ModCombo->setEnabled(false);
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
+        }
+        else if (modCombo->getSelectedId() == 2) {
+            lfo1ModCombo->setEnabled(true);
+            lfo2ModCombo->setEnabled(false);
+        }
+        else if (modCombo->getSelectedId() == 3) {
+            lfo1ModCombo->setEnabled(false);
+            lfo2ModCombo->setEnabled(true);
+        }
+        else if (modCombo->getSelectedId() == 4) {
+            lfo1ModCombo->setEnabled(true);
+            lfo2ModCombo->setEnabled(true);
+        }
         //[/UserComboBoxCode_modCombo]
     }
-    /*
-    else if (comboBoxThatHasChanged == presetCombo)
-    {
-        //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
-        String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
-        String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
-        
-        String filename = presetCombo->getText() + ".xml";
-        File preset = File(presetPath+filename);
-        
-        if (preset.exists()) {
-            XmlElement* xml = XmlDocument(preset).getDocumentElement();
-            ValueTree state = ValueTree::fromXml(*xml);
-            processor->setState(&state);
-        }
-
-        processor->setSelectedProgram(presetCombo->getText());
-        
-        //[/UserComboBoxCode_presetCombo]
-    }
-     */
      
     //[UsercomboBoxChanged_Post]
     //[/UsercomboBoxChanged_Post]
@@ -1073,7 +1127,7 @@ void MainWindow::visibilityChanged() {
 
 void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int parameterIndex, float newValue) {
     
-    cout << "Parameter " << parameterIndex << " changed to " << newValue << endl;
+    // cout << "Parameter " << parameterIndex << " changed to " << newValue << endl;
     
     String id = processor->getParameterID(parameterIndex);
 
@@ -1122,6 +1176,15 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
         else if (nval == 2.0f) {
             imageButton8->setToggleState(true, NotificationType::dontSendNotification);
         }
+    }
+    else if (id == "modsource") {
+        modCombo->setSelectedId(nval);
+    }
+    else if (id == "mod1target") {
+        lfo1ModCombo->setSelectedId(nval);
+    }
+    else if (id == "mod2target") {
+        lfo2ModCombo->setSelectedId(nval);
     }
     
 }

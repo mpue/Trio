@@ -27,7 +27,7 @@ class Model {
     
 public:
 
-    Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv,Sine* lfo1,int sampleRate);
+    Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv,Sine* lfo1, Sine* lfo2, int sampleRate);
     ~Model();
     
     int getOsc1Pitch();
@@ -87,6 +87,14 @@ public:
     float getLfo1Rate();
     void setLfo1Rate(float rate);
     
+    int getModsource();
+    void setModsource(int source);
+    
+    int getMod1Target();
+    void setMod1Target(int target);
+   
+    int getMod2Target();
+    void setMod2Target(int target);
     
 private:
     
@@ -123,11 +131,15 @@ private:
     Filter* rightFilter;
     ADSR* filterEnv;
     Sine* lfo1;
+    Sine* lfo2;
     int sampleRate;
     
     float lfo1Rate;
     float lfo1Amount;
     
+    int modsource;
+    int mod1target;
+    int mod2target;
 };
 
 

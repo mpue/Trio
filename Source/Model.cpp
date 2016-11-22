@@ -18,13 +18,14 @@
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, Sine* lfo1, int sampleRate) {
+Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, Sine* lfo1, Sine* lfo2, int sampleRate) {
     this->voices = voices;
     this->leftFilter = leftFilter;
     this->rightFilter = rightFilter;
     this->filterEnv = filterEnv;
     this->sampleRate = sampleRate;
     this->lfo1 = lfo1;
+    this->lfo2 = lfo2;
     this->volume = 1.0f;
     this->filterResonance = 0.1f;
 }
@@ -32,8 +33,6 @@ Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADS
 Model::~Model() {
     cout << "Model destroyed." << endl;
 }
-
-
 
 int Model::getOsc1Pitch() {
     return this->osc1Pitch;
@@ -292,3 +291,28 @@ void Model::setLfo1Amount(float amount) {
     this->lfo1Amount = amount;
     lfo1->setVolume(amount);
 }
+
+void Model::setModsource(int source) {
+    this->modsource = source;
+}
+
+int Model::getModsource() {
+    return this->modsource;
+}
+
+void Model::setMod1Target(int target) {
+    this->mod1target = target;
+}
+
+int Model::getMod1Target() {
+    return this->mod1target;
+}
+
+void Model::setMod2Target(int target) {
+    this->mod1target = target;
+}
+
+int Model::getMod2Target() {
+    return this->mod2target;
+}
+

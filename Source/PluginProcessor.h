@@ -32,6 +32,13 @@ using namespace std;
 class TrioAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener, public ComboBox::Listener
 {
 public:
+    
+    enum ModulatorType {
+        ENV,
+        LFO1,
+        LFO2
+    };
+    
     //==============================================================================
     TrioAudioProcessor();
     ~TrioAudioProcessor();
@@ -84,6 +91,8 @@ public:
     String getSelectedProgram();
     void setSelectedProgram(String program);
     
+    void selectFilterModulator(ModulatorType type);
+    
     void configureOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
     void setupOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
     Oszillator* createOscillator(Oszillator::OscMode mode);
@@ -111,6 +120,7 @@ private:
     ScopedPointer<ADSR> filterEnvelope;
     Model* model;
     Sine* lfo1;
+    Sine* lfo2;
     
     ScopedPointer<AudioProcessorValueTreeState> parameters;
     
