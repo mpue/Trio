@@ -41,9 +41,10 @@ void LowPassFilter::coefficients(float frequency, float resonance) {
 
 void LowPassFilter::process(float *in, float *out, int numSamples) {
     
+    float f = frequency;
+    
     if (this->modulator != 0) {
     
-        float f = frequency;
         
         if (ADSR* env = dynamic_cast<ADSR*>(this->modulator)) {
         
@@ -56,7 +57,8 @@ void LowPassFilter::process(float *in, float *out, int numSamples) {
             
         }
         else {
-            f =  this->frequency * (modulator->getOutput() * this->modAmount);
+            f =  this->frequency + (modulator->getOutput() * this->modAmount * 1000);
+            // modulator->process();
         }
 
         if (f <= 0) {

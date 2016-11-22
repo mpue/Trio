@@ -162,7 +162,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     filterModSlider->addListener (this);
 
     addAndMakeVisible (lfo1RateSlider = new Slider ("lfo1RateSlider"));
-    lfo1RateSlider->setRange (1, 100, 1);
+    lfo1RateSlider->setRange (0.1, 10, 0.1);
     lfo1RateSlider->setSliderStyle (Slider::Rotary);
     lfo1RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -183,7 +183,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     lfo1AmountSlider->addListener (this);
 
     addAndMakeVisible (lfo2RateSlider = new Slider ("lfo2RateSlider"));
-    lfo2RateSlider->setRange (0, 10, 0);
+    lfo2RateSlider->setRange (0.1, 10, 0.1);
     lfo2RateSlider->setSliderStyle (Slider::Rotary);
     lfo2RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo2RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -809,6 +809,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == lfo2RateSlider)
     {
         //[UserSliderCode_lfo2RateSlider] -- add your slider handling code here..
+        this->processor->getModel()->setLfo2Rate(lfo2RateSlider->getValue());
         //[/UserSliderCode_lfo2RateSlider]
     }
     else if (sliderThatWasMoved == lfo2ShapeSlider)
@@ -819,6 +820,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == lfo2AmountSlider)
     {
         //[UserSliderCode_lfo2AmountSlider] -- add your slider handling code here..
+        this->processor->getModel()->setLfo2Amount(lfo2AmountSlider->getValue());
         //[/UserSliderCode_lfo2AmountSlider]
     }
     else if (sliderThatWasMoved == filterAttackSlider)
@@ -899,7 +901,7 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         //[UserComboBoxCode_lfo1ModCombo] -- add your combo box handling code here..
         float nval = processor->getValueTreeState()->getParameterRange("mod1target").convertTo0to1(lfo1ModCombo->getSelectedIdAsValue().toString().getFloatValue());
         processor->getValueTreeState()->getParameter("mod1target")->setValueNotifyingHost(nval);
-        this->processor->getModel()->setMod1Target(nval);
+        this->processor->getModel()->setMod1Target(lfo1ModCombo->getSelectedId());
         
         for (int i = 0; i < lfo2ModCombo->getNumItems();i++) {
             lfo2ModCombo->setItemEnabled(lfo2ModCombo->getItemId(i),true);
@@ -907,6 +909,10 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         
         if (modCombo->getSelectedId() == 4)
             lfo2ModCombo->setItemEnabled(lfo1ModCombo->getSelectedId(), false);
+        
+        if (!lfo1ModCombo->isEnabled()) {
+            return;
+        }
         
         if (lfo1ModCombo->getSelectedId() == 1) {
             processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
@@ -920,7 +926,7 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         //[UserComboBoxCode_lfo2ModCombo] -- add your combo box handling code here..
         float nval = processor->getValueTreeState()->getParameterRange("mod2target").convertTo0to1(lfo2ModCombo->getSelectedIdAsValue().toString().getFloatValue());
         processor->getValueTreeState()->getParameter("mod2target")->setValueNotifyingHost(nval);
-        this->processor->getModel()->setMod2Target(nval);
+        this->processor->getModel()->setMod2Target(lfo2ModCombo->getSelectedId());
         
         for (int i = 0; i < lfo1ModCombo->getNumItems();i++) {
             lfo1ModCombo->setItemEnabled(lfo1ModCombo->getItemId(i),true);
@@ -929,8 +935,12 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         if (modCombo->getSelectedId() == 4)
             lfo1ModCombo->setItemEnabled(lfo2ModCombo->getSelectedId(), false);
         
+        if (!lfo2ModCombo->isEnabled()) {
+            return;
+        }
+        
         if (lfo2ModCombo->getSelectedId() == 1) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO2);
         }
         
         //[/UserComboBoxCode_lfo2ModCombo]
@@ -940,7 +950,7 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         //[UserComboBoxCode_modCombo] -- add your combo box handling code here..
         float nval = processor->getValueTreeState()->getParameterRange("modsource").convertTo0to1(modCombo->getSelectedIdAsValue().toString().getFloatValue());
         processor->getValueTreeState()->getParameter("modsource")->setValueNotifyingHost(nval);
-        this->processor->getModel()->setModsource(nval);
+        this->processor->getModel()->setModsource(modCombo->getSelectedId());
         if (modCombo->getSelectedId() == 1) {
             lfo1ModCombo->setEnabled(false);
             lfo2ModCombo->setEnabled(false);

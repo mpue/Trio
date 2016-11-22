@@ -287,9 +287,31 @@ void Model::setLfo1Rate(float rate) {
     lfo1->setFrequency(rate);
 }
 
+float Model::getLfo1Amount() {
+    return this->lfo1Amount;
+}
+
 void Model::setLfo1Amount(float amount) {
     this->lfo1Amount = amount;
     lfo1->setVolume(amount);
+}
+
+float Model::getLfo2Rate() {
+    return lfo2Rate;
+}
+
+void Model::setLfo2Rate(float rate) {
+    this->lfo2Rate = rate;
+    lfo2->setFrequency(rate);
+}
+
+float Model::getLfo2Amount() {
+    return this->lfo2Amount;
+}
+
+void Model::setLfo2Amount(float amount) {
+    this->lfo2Amount = amount;
+    lfo2->setVolume(amount);
 }
 
 void Model::setModsource(int source) {
@@ -309,7 +331,7 @@ int Model::getMod1Target() {
 }
 
 void Model::setMod2Target(int target) {
-    this->mod1target = target;
+    this->mod2target = target;
 }
 
 int Model::getMod2Target() {

@@ -87,6 +87,12 @@ public:
     float getLfo1Rate();
     void setLfo1Rate(float rate);
     
+    float getLfo2Amount();
+    void setLfo2Amount(float amount);
+    
+    float getLfo2Rate();
+    void setLfo2Rate(float rate);
+    
     int getModsource();
     void setModsource(int source);
     
@@ -136,6 +142,9 @@ private:
     
     float lfo1Rate;
     float lfo1Amount;
+    
+    float lfo2Rate;
+    float lfo2Amount;
     
     int modsource;
     int mod1target;

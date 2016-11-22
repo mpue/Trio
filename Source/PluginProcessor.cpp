@@ -54,8 +54,8 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
     parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr);
     
-    parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.0f,100.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.0f,100.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr);
     
     parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
@@ -447,6 +447,17 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             filterEnvelope->reset();
         }
         
+        if (model->getModsource() == 2) {
+            lfo1->process();
+        }
+        else if (model->getModsource() == 3) {
+            lfo2->process();
+        }
+        else if (model->getModsource() == 4) {
+            lfo1->process();
+            lfo2->process();
+        }
+        
     }
     
     // is there at least one modulation target?
@@ -455,19 +466,19 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         // LFO 1
         if (model->getModsource() == 2) {
             // Osc 1 pitch
-            if (model->getMod1Target() == 2) {
+            if (model->getMod1Target() == 3) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(0)->setFine(lfo1->process() * 10);
                 }
             }
             // Osc 2 pitch
-            else if (model->getMod1Target() == 3) {
+            else if (model->getMod1Target() == 4) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(1)->setFine(lfo1->process() * 10);
                 }
             }
             // Osc 1 pitch
-            else if (model->getMod1Target() == 4) {
+            else if (model->getMod1Target() == 5) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(2)->setFine(lfo1->process() * 10);
                 }
@@ -477,19 +488,19 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         // LFO 2
         else if (model->getModsource() == 3) {
             // Osc 1 pitch
-            if (model->getMod2Target() == 2) {
+            if (model->getMod2Target() == 3) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(0)->setFine(lfo2->process() * 10);
                 }
             }
             // Osc 2 pitch
-            else if (model->getMod2Target() == 3) {
+            else if (model->getMod2Target() == 4) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(1)->setFine(lfo2->process() * 10);
                 }
             }
             // Osc 3 pitch
-            else if (model->getMod2Target() == 4) {
+            else if (model->getMod2Target() == 5) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(2)->setFine(lfo2->process() * 10);
                 }
@@ -499,38 +510,38 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         else if (model->getModsource() == 4) {
             
             // Osc 1 pitch
-            if (model->getMod1Target() == 2) {
+            if (model->getMod1Target() == 3) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(0)->setFine(lfo1->process() * 10);
                 }
             }
             // Osc 2 pitch
-            else if (model->getMod1Target() == 3) {
+            else if (model->getMod1Target() == 4) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(1)->setFine(lfo1->process() * 10);
                 }
             }
             // Osc 3 pitch
-            else if (model->getMod1Target() == 4) {
+            else if (model->getMod1Target() == 5) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(2)->setFine(lfo1->process() * 10);
                 }
             }
             
             // Osc 1 pitch
-            if (model->getMod1Target() == 2) {
+            if (model->getMod2Target() == 3) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(0)->setFine(lfo2->process() * 10);
                 }
             }
             // Osc 2 pitch
-            else if (model->getMod1Target() == 3) {
+            else if (model->getMod2Target() == 4) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(1)->setFine(lfo2->process() * 10);
                 }
             }
             // Osc 3 pitch
-            else if (model->getMod1Target() == 4) {
+            else if (model->getMod2Target() == 5) {
                 for (int i = 0; i < voices.size();i++) {
                     voices.at(i)->getOszillators().at(2)->setFine(lfo2->process() * 10);
                 }
@@ -641,7 +652,7 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
         model->setLfo1Rate(newValue);
     }
     if (parameterID == "lfo2rate") {
-
+        model->setLfo2Rate(newValue);
     }
     if (parameterID == "lfo1shape") {
 
@@ -653,7 +664,7 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
         model->setLfo1Amount(newValue);
     }
     if (parameterID == "lfo2amount") {
-        
+        model->setLfo2Amount(newValue);
     }
     if (parameterID == "filterattack") {
         model->setFilterEnvAttack(newValue);
