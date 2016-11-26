@@ -163,6 +163,8 @@ private:
     ScopedPointer<ImageButton> imageButton8;
     ScopedPointer<ImageButton> imageButton9;
     ScopedPointer<Label> statusLabel;
+    ScopedPointer<TextEditor> infoText;
+    ScopedPointer<Label> infoLabel;
     Image cachedImage_trio_png_1;
 
 

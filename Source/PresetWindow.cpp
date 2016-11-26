@@ -14,14 +14,11 @@ PresetWindow::PresetWindow(ComboBox* presetBox, Model* model) {
     this->model = model;
     label = new Label("nameLabel","Enter a name");
     label->setBounds(50,50,200, 25);
-    label->setColour(Label::textColourId, Colours::white);
+    label->setColour(Label::textColourId, Colours::darkorange);
     addAndMakeVisible(label);
     this->textEditor = new TextEditor("name");
     this->textEditor->setMultiLine(false);
     this->textEditor->setScrollbarsShown(false);
-    
-    textEditor->setColour(TextEditor::backgroundColourId, Colours::white);
-    textEditor->setColour(TextEditor::textColourId, Colours::black);
     textEditor->setBounds(150,50,200, 25);
     addAndMakeVisible(textEditor);
     closeButton = new TextButton("Save","Save");
@@ -40,6 +37,13 @@ PresetWindow::~PresetWindow() {
     this->textEditor = nullptr;
     this->closeButton = nullptr;
     this->cancelButton = nullptr;
+}
+
+void PresetWindow::visibilityChanged() {
+    if (isVisible()) {
+        this->textEditor->setWantsKeyboardFocus(true);
+        this->textEditor->grabKeyboardFocus();
+    }
 }
 
 void PresetWindow::resized() {

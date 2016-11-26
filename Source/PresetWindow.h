@@ -21,6 +21,7 @@ public:
     void resized() override;
     void buttonClicked (Button* buttonThatWasClicked) override;
     void setData(ScopedPointer<XmlElement> xml);
+    void visibilityChanged() override;
 private:
     ScopedPointer<Label> label;
     ScopedPointer<TextButton> closeButton;
