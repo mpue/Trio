@@ -1,4 +1,4 @@
-    /*
+/*
   ==============================================================================
 
   This is an automatically generated GUI class created by the Projucer!
@@ -21,7 +21,6 @@
 //[/Headers]
 
 #include "MainWindow.h"
-#include "PluginProcessor.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
@@ -34,23 +33,21 @@ MainWindow::MainWindow (AudioProcessor* p) : MainWindow() {
 //[/MiscUserDefs]
 
 //==============================================================================
-// MainWindow::MainWindow ()
-// {
-
-MainWindow::MainWindow (TrioAudioProcessor* p) {
-    this->processor = p;
+MainWindow::MainWindow (TrioAudioProcessor* p)
+{
     //[Constructor_pre] You can add your own custom stuff here..
+    this->processor = p;
     //[/Constructor_pre]
 
     addAndMakeVisible (cutoffSlider = new Slider ("cutoffSlider"));
-    cutoffSlider->setRange (0.1, 20, 0.1);
+    cutoffSlider->setRange (0.1, 12, 0.1);
     cutoffSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     cutoffSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     cutoffSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     cutoffSlider->addListener (this);
 
     addAndMakeVisible (resoSlider = new Slider ("resoSlider"));
-    resoSlider->setRange (0.1, 20, 0.1);
+    resoSlider->setRange (0, 10, 0);
     resoSlider->setSliderStyle (Slider::Rotary);
     resoSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     resoSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -155,14 +152,14 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     osc3VolumeSlider->addListener (this);
 
     addAndMakeVisible (filterModSlider = new Slider ("resoSlider"));
-    filterModSlider->setRange (0, 20, 0.2);
+    filterModSlider->setRange (0, 1, 0.02);
     filterModSlider->setSliderStyle (Slider::Rotary);
     filterModSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterModSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     filterModSlider->addListener (this);
 
     addAndMakeVisible (lfo1RateSlider = new Slider ("lfo1RateSlider"));
-    lfo1RateSlider->setRange (0.1, 10, 0.1);
+    lfo1RateSlider->setRange (0, 10, 0);
     lfo1RateSlider->setSliderStyle (Slider::Rotary);
     lfo1RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -176,14 +173,14 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     lfo1ShapeSlider->addListener (this);
 
     addAndMakeVisible (lfo1AmountSlider = new Slider ("lfo1AmountSlider"));
-    lfo1AmountSlider->setRange (0, 10, 0.1);
+    lfo1AmountSlider->setRange (0, 1, 0.02);
     lfo1AmountSlider->setSliderStyle (Slider::Rotary);
     lfo1AmountSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1AmountSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     lfo1AmountSlider->addListener (this);
 
     addAndMakeVisible (lfo2RateSlider = new Slider ("lfo2RateSlider"));
-    lfo2RateSlider->setRange (0.1, 10, 0.1);
+    lfo2RateSlider->setRange (0, 10, 0);
     lfo2RateSlider->setSliderStyle (Slider::Rotary);
     lfo2RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo2RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -259,7 +256,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     ampReleaseSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampReleaseSlider->addListener (this);
 
-    addAndMakeVisible(ampVolSlider = new Slider("ampVolSlider"));
+    addAndMakeVisible (ampVolSlider = new Slider ("ampVolSlider"));
     ampVolSlider->setRange (0, 1, 0.02);
     ampVolSlider->setSliderStyle (Slider::Rotary);
     ampVolSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -293,31 +290,31 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     imageButton->setImages (false, true, true,
                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colours::white,
                             Image(), 1.000f, Colour (0xffff7e00),
-                            Image(), 1.000f, Colour (0xffff7e00));
+                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton3 = new ImageButton ("new button"));
     imageButton3->setButtonText (TRANS("Pulse"));
     imageButton3->addListener (this);
 
     imageButton3->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00ffffff),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton2 = new ImageButton ("new button"));
     imageButton2->setButtonText (TRANS("Sine"));
     imageButton2->addListener (this);
 
     imageButton2->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00ffffff),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             Image(), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton4 = new ImageButton ("new button"));
     imageButton4->setButtonText (TRANS("Sawtooth"));
     imageButton4->addListener (this);
 
     imageButton4->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             Image(), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton5 = new ImageButton ("new button"));
     imageButton5->setButtonText (TRANS("Pulse"));
     imageButton5->setRadioGroupId (1);
@@ -325,24 +322,24 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
 
     imageButton5->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton6 = new ImageButton ("new button"));
     imageButton6->setButtonText (TRANS("Sine"));
     imageButton6->addListener (this);
 
     imageButton6->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             Image(), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton7 = new ImageButton ("new button"));
     imageButton7->setButtonText (TRANS("Sawtooth"));
     imageButton7->addListener (this);
 
     imageButton7->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             Image(), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton8 = new ImageButton ("new button"));
     imageButton8->setButtonText (TRANS("Pulse"));
     imageButton8->setRadioGroupId (1);
@@ -350,16 +347,16 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
 
     imageButton8->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (imageButton9 = new ImageButton ("new button"));
     imageButton9->setButtonText (TRANS("Sine"));
     imageButton9->addListener (this);
 
     imageButton9->setImages (false, true, true,
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0xffff7e00),
-                             Image(), 1.000f, Colour (0xffff7e00));
+                             Image(), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (statusLabel = new Label ("statusLabel",
                                                 TRANS("\n")));
     statusLabel->setFont (Font (15.00f, Font::plain));
@@ -393,13 +390,13 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
 
     //presetCombo->addItem("init", 1);
     //presetCombo->setSelectedItemIndex(0);
-    
+
     presetCombo->addListener(processor);
-    
+
     modCombo->setSelectedItemIndex(0);
     lfo1ModCombo->setSelectedItemIndex(0);
     lfo2ModCombo->setSelectedItemIndex(0);
-    
+
     this->volumeAttachement = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"volume", *this->ampVolSlider);
     this->osc1VolAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc1vol", *this->osc1VolumeSlider);
     this->osc2VolAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc2vol", *this->osc2VolumeSlider);
@@ -434,56 +431,56 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     */
     int x = getScreenX();
     int y = getScreenY();
-    
+
     presetPanel = new PresetWindow(this->presetCombo.get(), processor->getModel());
     presetPanel->setBounds(x,y,getWidth(),getHeight());
 
     addChildComponent(presetPanel);
-    
+
     for(int i = 0; i < processor->getProgramNames().size();i++) {
         presetCombo->addItem(processor->getProgramNames().at(i), i + 1);
     }
-    
+
     // presetCombo->setSelectedId(1);
-   
+
     imageButton->setRadioGroupId(1);
     imageButton2->setRadioGroupId(1);
     imageButton3->setRadioGroupId(1);
-    
+
     imageButton->setToggleState(true, NotificationType::dontSendNotification);
-    
+
     imageButton->setClickingTogglesState(true);
     imageButton2->setClickingTogglesState(true);
     imageButton3->setClickingTogglesState(true);
-    
+
     imageButton4->setRadioGroupId(2);
     imageButton5->setRadioGroupId(2);
     imageButton6->setRadioGroupId(2);
-    
+
     imageButton4->setToggleState(true, NotificationType::dontSendNotification);
-    
+
     imageButton4->setClickingTogglesState(true);
     imageButton5->setClickingTogglesState(true);
     imageButton6->setClickingTogglesState(true);
-    
+
     imageButton7->setRadioGroupId(3);
     imageButton8->setRadioGroupId(3);
     imageButton9->setRadioGroupId(3);
-    
+
     imageButton7->setToggleState(true, NotificationType::dontSendNotification);
-    
+
     imageButton7->setClickingTogglesState(true);
     imageButton8->setClickingTogglesState(true);
     imageButton9->setClickingTogglesState(true);
-    
+
     mode1 = Oszillator::OscMode::SAW;
     mode2 = Oszillator::OscMode::SAW;
     mode3 = Oszillator::OscMode::SAW;
-    
-    
+
+
     float val = processor->getValueTreeState()->getParameter("osc1shape")->getValue() ;
     float nval = processor->getValueTreeState()->getParameterRange("osc1shape").convertFrom0to1(val);
-    
+
     if (nval == 0) {
         imageButton->setToggleState(true, NotificationType::dontSendNotification);
     }
@@ -493,11 +490,11 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     else if (nval == 2) {
         imageButton3->setToggleState(true, NotificationType::dontSendNotification);
     }
-    
-    
+
+
     val = processor->getValueTreeState()->getParameter("osc2shape")->getValue() ;
     nval = processor->getValueTreeState()->getParameterRange("osc2shape").convertFrom0to1(val);
-    
+
     if (nval == 0) {
         imageButton4->setToggleState(true, NotificationType::dontSendNotification);
     }
@@ -507,10 +504,10 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     else if (nval == 2) {
         imageButton5->setToggleState(true, NotificationType::dontSendNotification);
     }
-    
+
     val = processor->getValueTreeState()->getParameter("osc3shape")->getValue() ;
     nval = processor->getValueTreeState()->getParameterRange("osc3shape").convertFrom0to1(val);
-    
+
     if (nval == 0) {
         imageButton7->setToggleState(true, NotificationType::dontSendNotification);
     }
@@ -520,24 +517,24 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
     else if (nval == 2) {
         imageButton8->setToggleState(true, NotificationType::dontSendNotification);
     }
-    
+
     val = processor->getValueTreeState()->getParameter("modsource")->getValue() ;
     nval = processor->getValueTreeState()->getParameterRange("modsource").convertFrom0to1(val);
-    
+
     modCombo->setSelectedId(nval);
-    
+
     val = processor->getValueTreeState()->getParameter("mod1target")->getValue() ;
     nval = processor->getValueTreeState()->getParameterRange("mod1target").convertFrom0to1(val);
-    
+
     lfo1ModCombo->setSelectedId(nval);
-    
+
     val = processor->getValueTreeState()->getParameter("mod2target")->getValue() ;
     nval = processor->getValueTreeState()->getParameterRange("mod2target").convertFrom0to1(val);
-    
+
     lfo2ModCombo->setSelectedId(nval);
-    
+
     processor->addListener(this);
-    
+
     //[/Constructor]
 }
 
@@ -592,7 +589,7 @@ MainWindow::~MainWindow()
 
 
     //[Destructor]. You can add your own custom destruction code here..
-    
+
     this->volumeAttachement = nullptr;
     this->osc1VolAttachment = nullptr;
     this->osc2VolAttachment = nullptr;
@@ -627,7 +624,7 @@ MainWindow::~MainWindow()
     this->mod2TargetAttachment = nullptr;
     */
     processor->removeListener(this);
-    
+
     //[/Destructor]
 }
 
@@ -902,23 +899,23 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         float nval = processor->getValueTreeState()->getParameterRange("mod1target").convertTo0to1(lfo1ModCombo->getSelectedIdAsValue().toString().getFloatValue());
         processor->getValueTreeState()->getParameter("mod1target")->setValueNotifyingHost(nval);
         this->processor->getModel()->setMod1Target(lfo1ModCombo->getSelectedId());
-        
+
         for (int i = 0; i < lfo2ModCombo->getNumItems();i++) {
             lfo2ModCombo->setItemEnabled(lfo2ModCombo->getItemId(i),true);
         }
-        
+
         if (modCombo->getSelectedId() == 4)
             lfo2ModCombo->setItemEnabled(lfo1ModCombo->getSelectedId(), false);
-        
+
         if (!lfo1ModCombo->isEnabled()) {
             return;
         }
-        
+
         if (lfo1ModCombo->getSelectedId() == 1) {
             processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
         }
-        
-        
+
+
         //[/UserComboBoxCode_lfo1ModCombo]
     }
     else if (comboBoxThatHasChanged == lfo2ModCombo)
@@ -927,22 +924,22 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         float nval = processor->getValueTreeState()->getParameterRange("mod2target").convertTo0to1(lfo2ModCombo->getSelectedIdAsValue().toString().getFloatValue());
         processor->getValueTreeState()->getParameter("mod2target")->setValueNotifyingHost(nval);
         this->processor->getModel()->setMod2Target(lfo2ModCombo->getSelectedId());
-        
+
         for (int i = 0; i < lfo1ModCombo->getNumItems();i++) {
             lfo1ModCombo->setItemEnabled(lfo1ModCombo->getItemId(i),true);
         }
-        
+
         if (modCombo->getSelectedId() == 4)
             lfo1ModCombo->setItemEnabled(lfo2ModCombo->getSelectedId(), false);
-        
+
         if (!lfo2ModCombo->isEnabled()) {
             return;
         }
-        
+
         if (lfo2ModCombo->getSelectedId() == 1) {
             processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO2);
         }
-        
+
         //[/UserComboBoxCode_lfo2ModCombo]
     }
     else if (comboBoxThatHasChanged == modCombo)
@@ -970,7 +967,12 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         }
         //[/UserComboBoxCode_modCombo]
     }
-     
+    else if (comboBoxThatHasChanged == presetCombo)
+    {
+        //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
+        //[/UserComboBoxCode_presetCombo]
+    }
+
     //[UsercomboBoxChanged_Post]
     //[/UsercomboBoxChanged_Post]
 }
@@ -986,7 +988,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
         presetPanel->setData(xml);
         presetPanel->setVisible(true);
-        
+
         /*
         juce::AlertWindow *alert = new juce::AlertWindow("Save current preset","Please enter a name for the preset",AlertWindow::AlertIconType::QuestionIcon);
         alert->addButton("Ok", 0);
@@ -994,60 +996,58 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         alert->addTextEditor("name", "");
         alert->setBounds(x,y,getWidth(), getHeight());
         int returnValue = alert->runModalLoop();
-        
+
         alert->removeFromDesktop();
-        
+
         if (returnValue == 1) {
             return;
         }
          */
-        
+
         //[/UserButtonCode_storeButton]
     }
-    
     else if (buttonThatWasClicked == imageButton)
     {
         //[UserButtonCode_imageButton] -- add your button handler code here..
         mode1 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc1shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
-        
+
         //[/UserButtonCode_imageButton]
-    }
-    else if (buttonThatWasClicked == imageButton2)
-    {
-        //[UserButtonCode_imageButton2] -- add your button handler code here..
-        mode1 = Oszillator::OscMode::SINE;
-        processor->setupOscillators(mode1,mode2,mode3);
-        
-        String id = "osc1shape";
-        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
-        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
-        //[/UserButtonCode_imageButton2]
     }
     else if (buttonThatWasClicked == imageButton3)
     {
         //[UserButtonCode_imageButton3] -- add your button handler code here..
         mode1 = Oszillator::OscMode::PULSE;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc1shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(2.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
-         
+
         //[/UserButtonCode_imageButton3]
     }
+    else if (buttonThatWasClicked == imageButton2)
+    {
+        //[UserButtonCode_imageButton2] -- add your button handler code here..
+        mode1 = Oszillator::OscMode::SINE;
+        processor->setupOscillators(mode1,mode2,mode3);
 
+        String id = "osc1shape";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
+        //[/UserButtonCode_imageButton2]
+    }
     else if (buttonThatWasClicked == imageButton4)
     {
         //[UserButtonCode_imageButton4] -- add your button handler code here..
         cout << "imageButton4" << endl;
         mode2 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc2shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
@@ -1059,7 +1059,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         cout << "imageButton5" << endl;
         mode2 = Oszillator::OscMode::PULSE;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc2shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(2.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
@@ -1071,21 +1071,20 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         cout << "imageButton6" << endl;
         mode2 = Oszillator::OscMode::SINE;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc2shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton6]
     }
-    
     else if (buttonThatWasClicked == imageButton7)
     {
         //[UserButtonCode_imageButton7] -- add your button handler code here..
         cout << "imageButton7" << endl;
-        
+
         mode3 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc3shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
@@ -1095,10 +1094,10 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_imageButton8] -- add your button handler code here..
         cout << "imageButton8" << endl;
-    
+
         mode3 = Oszillator::OscMode::PULSE;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc3shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(2.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
@@ -1108,20 +1107,19 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_imageButton9] -- add your button handler code here..
         cout << "imageButton9" << endl;
-        
+
         mode3 = Oszillator::OscMode::SINE;
         processor->setupOscillators(mode1,mode2,mode3);
-        
+
         String id = "osc3shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton9]
     }
-    
 
     //[UserbuttonClicked_Post]
 
-    
+
     //[/UserbuttonClicked_Post]
 }
 
@@ -1136,14 +1134,14 @@ void MainWindow::visibilityChanged() {
 }
 
 void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int parameterIndex, float newValue) {
-    
+
     // cout << "Parameter " << parameterIndex << " changed to " << newValue << endl;
-    
+
     String id = processor->getParameterID(parameterIndex);
 
     float value = processor->getParameter(parameterIndex);
     float nval = this->processor->getValueTreeState()->getParameterRange(id).convertFrom0to1(value);
-    
+
     if (id == "osc1shape") {
         imageButton ->setToggleState(false, NotificationType::dontSendNotification);
         imageButton2->setToggleState(false, NotificationType::dontSendNotification);
@@ -1196,7 +1194,7 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
     else if (id == "mod2target") {
         lfo2ModCombo->setSelectedId(nval);
     }
-    
+
 }
 
 //[/MiscUserCode]
@@ -1212,7 +1210,8 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
+                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener"
+                 constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">
   <BACKGROUND backgroundColour="ff747474">

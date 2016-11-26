@@ -40,25 +40,24 @@
 */
 class MainWindow  : public Component,
                     public SliderListener,
-                    public ComboBoxListener,
                     public ButtonListener,
+                    public ComboBoxListener,
                     public AudioProcessorListener
 {
 public:
     //==============================================================================
-    // MainWindow ();
+    MainWindow (TrioAudioProcessor* p);
     ~MainWindow();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 
-    MainWindow (TrioAudioProcessor* p);
     virtual void audioProcessorParameterChanged (AudioProcessor* processor,
                                                  int parameterIndex,
                                                  float newValue) override;
-    
+
     inline virtual void audioProcessorChanged (AudioProcessor* processor) override {};
-    
+    void visibilityChanged() override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -66,7 +65,6 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
-    void visibilityChanged() override;
 
     // Binary resources:
     static const char* trio_png;
@@ -112,9 +110,9 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> modSourceAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod1TargetAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod2TargetAttachment;
-    
+
     ScopedPointer<PresetWindow> presetPanel;
-    
+
     Oszillator::OscMode mode1;
     Oszillator::OscMode mode2;
     Oszillator::OscMode mode3;
@@ -166,7 +164,6 @@ private:
     ScopedPointer<ImageButton> imageButton9;
     ScopedPointer<Label> statusLabel;
     Image cachedImage_trio_png_1;
-
 
 
     //==============================================================================
