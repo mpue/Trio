@@ -133,6 +133,17 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->addParameterListener("mod1target", this);
     parameters->addParameterListener("mod2target", this);
     
+    reverbParams.damping = 0.5;
+    reverbParams.dryLevel = 0.5;
+    reverbParams.freezeMode = 0.3;
+    reverbParams.roomSize = 0.5;
+    reverbParams.wetLevel = 0.5;
+    reverbParams.width = 0.5;
+    
+    reverb = new Reverb();
+    reverb->setParameters(reverbParams);
+    
+    distortion = new Distortion();
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -141,6 +152,8 @@ TrioAudioProcessor::~TrioAudioProcessor()
     this->rightFilter = nullptr;
     this->parameters = nullptr;
     this->filterEnvelope = nullptr;
+    this->reverb = nullptr;
+    this->distortion = nullptr;
     
     this->cleanupVoices();
     
@@ -469,6 +482,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             lfo2->process();
         }
         
+        distortion->processSample(leftOut[sample]);
     }
     
     // is there at least one modulation target?
@@ -565,6 +579,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     leftFilter->process(leftOut,0,buffer.getNumSamples());
     rightFilter->process(rightOut, 0,buffer.getNumSamples());
     
+    reverb->processStereo(leftOut, rightOut, buffer.getNumSamples());
 }
 
 //==============================================================================

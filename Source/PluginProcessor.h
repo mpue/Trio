@@ -23,6 +23,7 @@
 #include <stack>
 #include <vector>
 #include "ADSR.h"
+#include "Distortion.h"
 
 using namespace std;
 
@@ -83,6 +84,9 @@ public:
     Filter* getRightFilter();
     ADSR* getFilterEnv();
     Model* getModel();
+    ScopedPointer<Reverb> reverb;
+    ScopedPointer<Distortion> distortion;
+    Reverb::Parameters reverbParams;    
     
     AudioProcessorValueTreeState* getValueTreeState();
     void setState(ValueTree* state, bool notify);
