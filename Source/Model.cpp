@@ -83,6 +83,7 @@ int Model::getOsc1Fine() {
 }
 
 void Model::setOsc1Fine(float fine) {
+    cout << "Osc 1 fine : " << fine << endl;
     this->osc1Fine = fine;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(0)->setFine(fine);
@@ -96,6 +97,7 @@ int Model::getOsc2Fine() {
 }
 
 void Model::setOsc2Fine(float fine) {
+    cout << "Osc 2 fine : " << fine << endl;
     this->osc2Fine = fine;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(1)->setFine(fine);
@@ -109,6 +111,7 @@ int Model::getOsc3Fine() {
 }
 
 void Model::setOsc3Fine(float fine) {
+    cout << "Osc 3 fine : " << fine << endl;
     this->osc3Fine = fine;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(2)->setFine(fine);
