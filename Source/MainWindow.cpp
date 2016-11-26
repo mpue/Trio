@@ -502,10 +502,10 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
         imageButton4->setToggleState(true, NotificationType::dontSendNotification);
     }
     else if (nval == 1) {
-        imageButton5->setToggleState(true, NotificationType::dontSendNotification);
+        imageButton6->setToggleState(true, NotificationType::dontSendNotification);
     }
     else if (nval == 2) {
-        imageButton6->setToggleState(true, NotificationType::dontSendNotification);
+        imageButton5->setToggleState(true, NotificationType::dontSendNotification);
     }
     
     val = processor->getValueTreeState()->getParameter("osc3shape")->getValue() ;
@@ -515,10 +515,10 @@ MainWindow::MainWindow (TrioAudioProcessor* p) {
         imageButton7->setToggleState(true, NotificationType::dontSendNotification);
     }
     else if (nval == 1) {
-        imageButton8->setToggleState(true, NotificationType::dontSendNotification);
+        imageButton9->setToggleState(true, NotificationType::dontSendNotification);
     }
     else if (nval == 2) {
-        imageButton9->setToggleState(true, NotificationType::dontSendNotification);
+        imageButton8->setToggleState(true, NotificationType::dontSendNotification);
     }
     
     val = processor->getValueTreeState()->getParameter("modsource")->getValue() ;

@@ -14,6 +14,7 @@
 #include "Oszillator.h"
 #include "Sine.h"
 #include "Sawtooth.h"
+#include "Pulse.h"
 
 class MultimodeOscillator : public Oszillator{
     
@@ -31,6 +32,7 @@ private:
     float fine;
     Sawtooth* saw;
     Sine* sine;
+    Pulse* pulse;
 };
 
 #endif /* MultimodeOscillator_hpp */

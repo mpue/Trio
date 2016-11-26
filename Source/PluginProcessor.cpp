@@ -132,6 +132,7 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->addParameterListener("modsource", this);
     parameters->addParameterListener("mod1target", this);
     parameters->addParameterListener("mod2target", this);
+    
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -188,6 +189,7 @@ int TrioAudioProcessor::getCurrentProgram()
 
 void TrioAudioProcessor::setCurrentProgram (int index)
 {
+    Logger::getCurrentLogger()->writeToLog("setting current program to "+String(index));
     
     String name = programNames.at(index);
     
@@ -202,7 +204,7 @@ void TrioAudioProcessor::setCurrentProgram (int index)
     if (preset.exists()) {
         ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
         ValueTree state = ValueTree::fromXml(*xml.get());
-        setState(&state);
+        setState(&state, true);
         xml = nullptr;
         
         if (this->programCombo != 0) {
@@ -365,9 +367,13 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     {
         if (m.isNoteOn())
         {
+            /*
             if (getVoicesPlaying() == 0) {
                 filterEnvelope->gate(true);
             }
+            */
+            filterEnvelope->gate(true);
+            
             Note* note = new Note();
             cout << "Note on " << m.getNoteNumber() << ", " << "velocity : " << static_cast<int>(m.getVelocity()) << endl;
             cout << "Volume : " << model->getVolume() << endl;
@@ -383,9 +389,14 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         {
             cout << "Note off " << m.getNoteNumber() << endl;
             voices.at(m.getNoteNumber())->setPlaying(false);
+            
+            filterEnvelope->gate(false);
+                        
+            /*
             if (getVoicesPlaying() == 0) {
                 filterEnvelope->gate(false);
             }
+            */
             
         }
         else if (m.isAftertouch())
@@ -631,13 +642,25 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
         model->setOsc2Pitch(newValue);
     }
     if (parameterID == "osc3pitch") {
+        model->setOsc3Pitch(newValue);
+    }
+    if (parameterID == "osc1pitch") {
+        model->setOsc1Pitch(newValue);
+    }
+    if (parameterID == "osc2pitch") {
         model->setOsc2Pitch(newValue);
     }
-    if (parameterID == "osc1shape") {
+    if (parameterID == "osc3pitch") {
+        model->setOsc3Pitch(newValue);
     }
-    if (parameterID == "osc2shape") {
+    if (parameterID == "osc1fine") {
+        model->setOsc1Fine(newValue);
     }
-    if (parameterID == "osc3shape") {
+    if (parameterID == "osc2fine") {
+        model->setOsc2Fine(newValue);
+    }
+    if (parameterID == "osc3fine") {
+        model->setOsc3Fine(newValue);
     }
     if (parameterID == "filtermod") {
         model->setFilterModAmount(newValue);
@@ -725,7 +748,7 @@ AudioProcessorValueTreeState* TrioAudioProcessor::getValueTreeState() {
     return this->parameters;
 }
 
-void TrioAudioProcessor::setState(ValueTree* state) {
+void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
     
     Oszillator::OscMode mode1 = Oszillator::OscMode::SAW;
     Oszillator::OscMode mode2 = Oszillator::OscMode::SAW;
@@ -737,8 +760,10 @@ void TrioAudioProcessor::setState(ValueTree* state) {
         String value = state->getChild(i).getProperty("value").toString();
         // parameters->getParameter(id)->setValue(value.getFloatValue());
         float nval = this->parameters->getParameterRange(id).convertTo0to1(value.getFloatValue());
+        
         parameters->getParameter(id)->setValueNotifyingHost(nval);
-        cout << " param " << id << "has now value " << nval << endl;
+        
+        cout << "setState : " << " param " << id << "has now value " << nval << endl;
     
         
         if (id == "osc1shape") {
@@ -797,7 +822,7 @@ void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged)
         if (preset.exists()) {
             ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
             ValueTree state = ValueTree::fromXml(*xml.get());
-            setState(&state);
+            setState(&state, true);
             xml = nullptr;
         }
         

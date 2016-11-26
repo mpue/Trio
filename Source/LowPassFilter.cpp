@@ -11,12 +11,14 @@
 #include "ADSR.h"
 
 LowPassFilter::LowPassFilter() {
-    this->filter = new IIRFilter();
+    this->filter1 = new IIRFilter();
+    this->filter2 = new IIRFilter();
     this->modulator = 0;
 }
 
 LowPassFilter::~LowPassFilter() {
-    this->filter = nullptr;
+    this->filter1 = nullptr;
+    this->filter2 = nullptr;
 }
 
 
@@ -35,8 +37,9 @@ void LowPassFilter::coefficients(float frequency, float resonance) {
     }
      */
     
-    IIRCoefficients ic  = IIRCoefficients::makeLowPass (44100, frequency, resonance);
-    filter->setCoefficients(ic);
+    IIRCoefficients ic1  = IIRCoefficients::makeLowPass (44100, frequency, resonance);
+    filter1->setCoefficients(ic1);
+    filter2->setCoefficients(ic1);
 }
 
 void LowPassFilter::process(float *in, float *out, int numSamples) {
@@ -68,12 +71,15 @@ void LowPassFilter::process(float *in, float *out, int numSamples) {
             f = 22000;
         }
 
-        IIRCoefficients ic  = IIRCoefficients::makeLowPass (44100, f, this->resonance);
-        filter->setCoefficients(ic);
-        
+        IIRCoefficients ic1  = IIRCoefficients::makeLowPass (44100, f, this->resonance);
+
+        filter1->setCoefficients(ic1);
+        filter2->setCoefficients(ic1);
     }
 
-    this->filter->processSamples(in,numSamples);
+    this->filter1->processSamples(in,numSamples);
+    // in -= numSamples;
+    // this->filter2->processSamples(in,numSamples);
 }
 
 void LowPassFilter::setModulator(Modulator* mod) {

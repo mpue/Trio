@@ -85,7 +85,7 @@ public:
     Model* getModel();
     
     AudioProcessorValueTreeState* getValueTreeState();
-    void setState(ValueTree* state);
+    void setState(ValueTree* state, bool notify);
     
     vector<String> getProgramNames();
     String getSelectedProgram();
