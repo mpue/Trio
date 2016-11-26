@@ -26,6 +26,7 @@
 #include "PluginProcessor.h"
 #include "PresetDialog.h"
 #include "Oszillator.h"
+#include "FXPanel.h"
 //[/Headers]
 
 
@@ -110,8 +111,9 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> modSourceAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod1TargetAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod2TargetAttachment;
-
+    
     ScopedPointer<PresetDialog> presetPanel;
+    ScopedPointer<FXPanel> fxPanel;
 
     Oszillator::OscMode mode1;
     Oszillator::OscMode mode2;

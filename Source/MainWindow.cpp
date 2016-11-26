@@ -457,7 +457,17 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     presetPanel = new PresetDialog(this->presetCombo.get(), processor->getModel());
     presetPanel->setBounds(x,y,getWidth(),getHeight());
 
+    this->fxPanel = new FXPanel(processor);
+    fxPanel->setBounds(x,y,getWidth(),getHeight());
+
+    addChildComponent(fxPanel);
     addChildComponent(presetPanel);
+
+    fxButton->setBroughtToFrontOnMouseClick(true);
+    storeButton->toFront(false);
+    browseButton->toFront(false);
+    setupButton->toFront(false);
+    presetCombo->toFront(false);
 
     for(int i = 0; i < processor->getProgramNames().size();i++) {
         presetCombo->addItem(processor->getProgramNames().at(i), i + 1);
@@ -1188,6 +1198,16 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == fxButton)
     {
         //[UserButtonCode_fxButton] -- add your button handler code here..
+
+        if (fxPanel->isVisible()) {
+            fxPanel->setVisible(false);
+            fxButton->setButtonText("FX");
+        }
+        else {
+            fxPanel->setVisible(true);
+            fxButton->setButtonText("Main");
+
+        }
         //[/UserButtonCode_fxButton]
     }
 

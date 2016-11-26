@@ -77,6 +77,13 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("mod1target", "Mod 1 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr);
     parameters->createAndAddParameter("mod2target", "Mod 2 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr);
     
+    parameters->createAndAddParameter("fxreverb_enabled", "Reverb enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_damping", "Reverb : Damping", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_drylevel", "Reverb : Dry level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_wetlevel", "Reverb : Wet level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_freeze", "Reverb : Freeze level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_size", "Reverb : Room size", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_width", "Reverb : Width", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     
     parameters->state = ValueTree (Identifier ("default"));
     
@@ -132,16 +139,25 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->addParameterListener("modsource", this);
     parameters->addParameterListener("mod1target", this);
     parameters->addParameterListener("mod2target", this);
+    parameters->addParameterListener("fxreverb_enabled", this);
+    parameters->addParameterListener("fxreverb_damping", this);
+    parameters->addParameterListener("fxreverb_drylevel", this);
+    parameters->addParameterListener("fxreverb_wetlevel", this);
+    parameters->addParameterListener("fxreverb_freeze", this);
+    parameters->addParameterListener("fxreverb_size", this);
+    parameters->addParameterListener("fxreverb_width", this);
     
-    reverbParams.damping = 0.5;
-    reverbParams.dryLevel = 0.5;
-    reverbParams.freezeMode = 0.3;
-    reverbParams.roomSize = 0.5;
-    reverbParams.wetLevel = 0.5;
-    reverbParams.width = 0.5;
+    reverbParams.damping = 0.0;
+    reverbParams.dryLevel = 0.0;
+    reverbParams.freezeMode = 0.0;
+    reverbParams.roomSize = 0.0;
+    reverbParams.wetLevel = 0.0;
+    reverbParams.width = 0.0;
     
     reverb = new Reverb();
     reverb->setParameters(reverbParams);
+    
+    fxReverbEnabled = false;
     
     distortion = new Distortion();
 }
@@ -157,6 +173,10 @@ TrioAudioProcessor::~TrioAudioProcessor()
     
     this->cleanupVoices();
     
+}
+
+Reverb* TrioAudioProcessor::getReverb() {
+    return reverb;
 }
 
 //==============================================================================
@@ -457,12 +477,6 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         
         leftOut[sample] = value * model->getVolume();
         rightOut[sample] = value * model->getVolume();
-        
-        
-        // cout << "Value : " << value << endl;
-        
-        // leftFilter->process (&leftIn[sample], &leftOut[sample]);
-        // rightFilter->process(&rightIn[sample], &rightOut[sample]);
 
         if(filterEnvelope->getState() != ADSR::env_idle) {
             filterEnvelope->process();
@@ -579,7 +593,9 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     leftFilter->process(leftOut,0,buffer.getNumSamples());
     rightFilter->process(rightOut, 0,buffer.getNumSamples());
     
-    reverb->processStereo(leftOut, rightOut, buffer.getNumSamples());
+    if (this->fxReverbEnabled) {
+        reverb->processStereo(leftOut, rightOut, buffer.getNumSamples());
+    }
 }
 
 //==============================================================================
@@ -734,9 +750,44 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
     if (parameterID == "mod1target") {
         model->setMod1Target(newValue);
     }
-     if (parameterID == "mod2target") {
+    if (parameterID == "mod2target") {
         model->setMod2Target(newValue);
     }
+    if (parameterID == "fxreverb_enabled") {
+        
+        if (newValue > 0) {
+            this->fxReverbEnabled = true;
+        }
+        else {
+           this->fxReverbEnabled = false ;
+        }
+
+    }
+    if (parameterID == "fxreverb_damping") {
+        reverbParams.damping = newValue;
+    }
+    if (parameterID == "fxreverb_drylevel") {
+        reverbParams.dryLevel = newValue;
+    }
+    if (parameterID == "fxreverb_wetlevel") {
+        reverbParams.wetLevel = newValue;
+    }
+    if (parameterID == "fxreverb_freeze") {
+        reverbParams.freezeMode = newValue;
+    }
+    if (parameterID == "fxreverb_size") {
+        reverbParams.roomSize = newValue;
+    }
+    if (parameterID == "fxreverb_width") {
+        reverbParams.width = newValue;
+    }
+    
+    this->reverb->setParameters(reverbParams);
+    
+}
+
+void TrioAudioProcessor::setFxReverbEnabled(bool enabled) {
+    this->fxReverbEnabled = enabled;
 }
 
 vector<Voice*> TrioAudioProcessor::getVoices() const {
@@ -772,11 +823,20 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
     for (int i = 0; i < state->getNumChildren();i++) {
         // cout << state->getChild(i).getProperty("id").toString()<< ":" << state->getChild(i).getProperty("value").toString().getFloatValue() << endl;
         String id = state->getChild(i).getProperty("id").toString();
+
+        AudioProcessorParameter* p = parameters->getParameter(id);
+        
+        if (nullptr == p)
+            continue;
+        
         String value = state->getChild(i).getProperty("value").toString();
         // parameters->getParameter(id)->setValue(value.getFloatValue());
         float nval = this->parameters->getParameterRange(id).convertTo0to1(value.getFloatValue());
         
+       
         parameters->getParameter(id)->setValueNotifyingHost(nval);
+        
+        
         
         cout << "setState : " << " param " << id << "has now value " << nval << endl;
     

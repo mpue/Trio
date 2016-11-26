@@ -90,6 +90,7 @@ public:
     
     AudioProcessorValueTreeState* getValueTreeState();
     void setState(ValueTree* state, bool notify);
+    Reverb* getReverb();
     
     vector<String> getProgramNames();
     String getSelectedProgram();
@@ -101,6 +102,8 @@ public:
     void setupOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
     Oszillator* createOscillator(Oszillator::OscMode mode);
     void cleanupVoices();
+    
+    void setFxReverbEnabled(bool enabled);
     
     
 private:
@@ -134,6 +137,8 @@ private:
     int currentProgramNumber;
     
     ComboBox* programCombo = 0;
+    
+    bool fxReverbEnabled;
     
 };
 
