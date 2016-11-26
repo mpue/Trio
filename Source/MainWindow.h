@@ -24,7 +24,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Model.h"
 #include "PluginProcessor.h"
-#include "PresetWindow.h"
+#include "PresetDialog.h"
 #include "Oszillator.h"
 //[/Headers]
 
@@ -111,7 +111,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod1TargetAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod2TargetAttachment;
 
-    ScopedPointer<PresetWindow> presetPanel;
+    ScopedPointer<PresetDialog> presetPanel;
 
     Oszillator::OscMode mode1;
     Oszillator::OscMode mode2;
@@ -150,7 +150,6 @@ private:
     ScopedPointer<Slider> ampSustainSlider;
     ScopedPointer<Slider> ampReleaseSlider;
     ScopedPointer<Slider> ampVolSlider;
-    ScopedPointer<Label> presetLabel;
     ScopedPointer<ComboBox> presetCombo;
     ScopedPointer<TextButton> storeButton;
     ScopedPointer<ImageButton> imageButton;
@@ -165,6 +164,9 @@ private:
     ScopedPointer<Label> statusLabel;
     ScopedPointer<TextEditor> infoText;
     ScopedPointer<Label> infoLabel;
+    ScopedPointer<TextButton> browseButton;
+    ScopedPointer<TextButton> setupButton;
+    ScopedPointer<TextButton> fxButton;
     Image cachedImage_trio_png_1;
 
 

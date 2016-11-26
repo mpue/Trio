@@ -264,15 +264,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     ampVolSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampVolSlider->addListener (this);
 
-    addAndMakeVisible (presetLabel = new Label ("presetLabel",
-                                                TRANS("Preset")));
-    presetLabel->setFont (Font (15.00f, Font::plain));
-    presetLabel->setJustificationType (Justification::centredLeft);
-    presetLabel->setEditable (false, false, false);
-    presetLabel->setColour (Label::textColourId, Colours::white);
-    presetLabel->setColour (TextEditor::textColourId, Colours::black);
-    presetLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
     addAndMakeVisible (presetCombo = new ComboBox ("presetCombo"));
     presetCombo->setEditableText (false);
     presetCombo->setJustificationType (Justification::centredLeft);
@@ -290,74 +281,74 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     imageButton->setImages (false, true, true,
                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colours::white,
-                            Image(), 1.000f, Colour (0xffff7e00),
-                            Image(), 1.000f, Colour (0x00000000));
+                            ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0xffff7e00),
+                            Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton3 = new ImageButton ("new button"));
     imageButton3->setButtonText (TRANS("Pulse"));
     imageButton3->addListener (this);
 
     imageButton3->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00ffffff),
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton2 = new ImageButton ("new button"));
     imageButton2->setButtonText (TRANS("Sine"));
     imageButton2->addListener (this);
 
     imageButton2->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00ffffff),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton4 = new ImageButton ("new button"));
     imageButton4->setButtonText (TRANS("Sawtooth"));
     imageButton4->addListener (this);
 
     imageButton4->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton5 = new ImageButton ("new button"));
     imageButton5->setButtonText (TRANS("Pulse"));
     imageButton5->setRadioGroupId (1);
     imageButton5->addListener (this);
 
     imageButton5->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton6 = new ImageButton ("new button"));
     imageButton6->setButtonText (TRANS("Sine"));
     imageButton6->addListener (this);
 
     imageButton6->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton7 = new ImageButton ("new button"));
     imageButton7->setButtonText (TRANS("Sawtooth"));
     imageButton7->addListener (this);
 
     imageButton7->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_saw_48_png, oscillator_saw_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton8 = new ImageButton ("new button"));
     imageButton8->setButtonText (TRANS("Pulse"));
     imageButton8->setRadioGroupId (1);
     imageButton8->addListener (this);
 
     imageButton8->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_square_48_png, oscillator_square_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (imageButton9 = new ImageButton ("new button"));
     imageButton9->setButtonText (TRANS("Sine"));
     imageButton9->addListener (this);
 
     imageButton9->setImages (false, true, true,
-                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colour (0x00000000));
+                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colours::white,
+                             ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0xffff7e00),
+                             Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (statusLabel = new Label ("statusLabel",
                                                 TRANS("\n")));
     statusLabel->setFont (Font (15.00f, Font::plain));
@@ -370,10 +361,10 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     addAndMakeVisible (infoText = new TextEditor ("infoText"));
     infoText->setMultiLine (false);
     infoText->setReturnKeyStartsNewLine (false);
-    infoText->setReadOnly (false);
-    infoText->setScrollbarsShown (true);
-    infoText->setCaretVisible (true);
-    infoText->setPopupMenuEnabled (true);
+    infoText->setReadOnly (true);
+    infoText->setScrollbarsShown (false);
+    infoText->setCaretVisible (false);
+    infoText->setPopupMenuEnabled (false);
     infoText->setText (String());
 
     addAndMakeVisible (infoLabel = new Label ("infoLabel",
@@ -384,6 +375,18 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     infoLabel->setColour (Label::textColourId, Colours::white);
     infoLabel->setColour (TextEditor::textColourId, Colours::black);
     infoLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (browseButton = new TextButton ("browseButton"));
+    browseButton->setButtonText (TRANS("Browser"));
+    browseButton->addListener (this);
+
+    addAndMakeVisible (setupButton = new TextButton ("setupButton"));
+    setupButton->setButtonText (TRANS("Setup"));
+    setupButton->addListener (this);
+
+    addAndMakeVisible (fxButton = new TextButton ("fxButton"));
+    fxButton->setButtonText (TRANS("FX"));
+    fxButton->addListener (this);
 
     cachedImage_trio_png_1 = ImageCache::getFromMemory (trio_png, trio_pngSize);
 
@@ -451,7 +454,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     int x = getScreenX();
     int y = getScreenY();
 
-    presetPanel = new PresetWindow(this->presetCombo.get(), processor->getModel());
+    presetPanel = new PresetDialog(this->presetCombo.get(), processor->getModel());
     presetPanel->setBounds(x,y,getWidth(),getHeight());
 
     addChildComponent(presetPanel);
@@ -516,7 +519,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     imageButton9->setClickingTogglesState(true);
 
     // infoText->setEnabled(false);
-    
+
     mode1 = Oszillator::OscMode::SAW;
     mode2 = Oszillator::OscMode::SAW;
     mode3 = Oszillator::OscMode::SAW;
@@ -617,7 +620,6 @@ MainWindow::~MainWindow()
     ampSustainSlider = nullptr;
     ampReleaseSlider = nullptr;
     ampVolSlider = nullptr;
-    presetLabel = nullptr;
     presetCombo = nullptr;
     storeButton = nullptr;
     imageButton = nullptr;
@@ -632,6 +634,9 @@ MainWindow::~MainWindow()
     statusLabel = nullptr;
     infoText = nullptr;
     infoLabel = nullptr;
+    browseButton = nullptr;
+    setupButton = nullptr;
+    fxButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -726,9 +731,8 @@ void MainWindow::resized()
     ampSustainSlider->setBounds (750, 256, 64, 64);
     ampReleaseSlider->setBounds (819, 256, 64, 64);
     ampVolSlider->setBounds (612, 416, 64, 64);
-    presetLabel->setBounds (376, 16, 56, 24);
     presetCombo->setBounds (600, 16, 296, 24);
-    storeButton->setBounds (432, 16, 150, 24);
+    storeButton->setBounds (286, 16, 64, 24);
     imageButton->setBounds (96, 64, 24, 24);
     imageButton3->setBounds (160, 64, 24, 24);
     imageButton2->setBounds (128, 64, 24, 24);
@@ -741,6 +745,9 @@ void MainWindow::resized()
     statusLabel->setBounds (720, 480, 150, 24);
     infoText->setBounds (688, 476, 198, 24);
     infoLabel->setBounds (688, 448, 64, 24);
+    browseButton->setBounds (441, 16, 64, 24);
+    setupButton->setBounds (516, 16, 64, 24);
+    fxButton->setBounds (364, 16, 64, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1168,6 +1175,21 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_imageButton9]
     }
+    else if (buttonThatWasClicked == browseButton)
+    {
+        //[UserButtonCode_browseButton] -- add your button handler code here..
+        //[/UserButtonCode_browseButton]
+    }
+    else if (buttonThatWasClicked == setupButton)
+    {
+        //[UserButtonCode_setupButton] -- add your button handler code here..
+        //[/UserButtonCode_setupButton]
+    }
+    else if (buttonThatWasClicked == fxButton)
+    {
+        //[UserButtonCode_fxButton] -- add your button handler code here..
+        //[/UserButtonCode_fxButton]
+    }
 
     //[UserbuttonClicked_Post]
 
@@ -1416,71 +1438,66 @@ BEGIN_JUCER_METADATA
           min="0" max="1" int="0.020000000000000000416" style="Rotary"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
-  <LABEL name="presetLabel" id="6eb6d730fbf311e6" memberName="presetLabel"
-         virtualName="" explicitFocusOrder="0" pos="376 16 56 24" textCol="ffffffff"
-         edTextCol="ff000000" edBkgCol="0" labelText="Preset" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="33"/>
   <COMBOBOX name="presetCombo" id="dd92602a91bc7ca9" memberName="presetCombo"
             virtualName="" explicitFocusOrder="0" pos="600 16 296 24" editable="0"
             layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TEXTBUTTON name="storeButton" id="7f02553932604ec2" memberName="storeButton"
-              virtualName="" explicitFocusOrder="0" pos="432 16 150 24" buttonText="Store"
+              virtualName="" explicitFocusOrder="0" pos="286 16 64 24" buttonText="Store"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <IMAGEBUTTON name="new button" id="ee7a53baa21af566" memberName="imageButton"
                virtualName="" explicitFocusOrder="0" pos="96 64 24 24" buttonText="Sawtooth"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="oscillator_saw_48_png" opacityNormal="1" colourNormal="ffffffff"
-               resourceOver="" opacityOver="1" colourOver="ffff7e00" resourceDown=""
-               opacityDown="1" colourDown="0"/>
+               resourceOver="oscillator_saw_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="a214c8a1de4a68cd" memberName="imageButton3"
                virtualName="" explicitFocusOrder="0" pos="160 64 24 24" buttonText="Pulse"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="oscillator_square_48_png" opacityNormal="1" colourNormal="ffffff"
-               resourceOver="oscillator_square_48_png" opacityOver="1" colourOver="0"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_square_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_square_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="8c20ca18b3a9d2d7" memberName="imageButton2"
                virtualName="" explicitFocusOrder="0" pos="128 64 24 24" buttonText="Sine"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="oscillator_sine_48_png" opacityNormal="1" colourNormal="ffffff"
-               resourceOver="" opacityOver="1" colourOver="0" resourceDown=""
-               opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_sine_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_sine_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="ef82a979049e8fee" memberName="imageButton4"
                virtualName="" explicitFocusOrder="0" pos="104 224 24 24" buttonText="Sawtooth"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="oscillator_saw_48_png" opacityNormal="1" colourNormal="0"
-               resourceOver="" opacityOver="1" colourOver="0" resourceDown=""
-               opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_saw_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_saw_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="8aea33fc6afd4750" memberName="imageButton5"
                virtualName="" explicitFocusOrder="0" pos="168 224 24 24" buttonText="Pulse"
                connectedEdges="0" needsCallback="1" radioGroupId="1" keepProportions="1"
-               resourceNormal="oscillator_square_48_png" opacityNormal="1" colourNormal="0"
-               resourceOver="oscillator_square_48_png" opacityOver="1" colourOver="0"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_square_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_square_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="28fc3adc877116d8" memberName="imageButton6"
                virtualName="" explicitFocusOrder="0" pos="136 224 24 24" buttonText="Sine"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="oscillator_sine_48_png" opacityNormal="1" colourNormal="0"
-               resourceOver="" opacityOver="1" colourOver="0" resourceDown=""
-               opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_sine_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_sine_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="9d8aa1824f425f4a" memberName="imageButton7"
                virtualName="" explicitFocusOrder="0" pos="104 384 24 24" buttonText="Sawtooth"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="oscillator_saw_48_png" opacityNormal="1" colourNormal="0"
-               resourceOver="" opacityOver="1" colourOver="0" resourceDown=""
-               opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_saw_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_saw_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="c70ee3eb5acde81b" memberName="imageButton8"
                virtualName="" explicitFocusOrder="0" pos="168 384 24 24" buttonText="Pulse"
                connectedEdges="0" needsCallback="1" radioGroupId="1" keepProportions="1"
-               resourceNormal="oscillator_square_48_png" opacityNormal="1" colourNormal="0"
-               resourceOver="oscillator_square_48_png" opacityOver="1" colourOver="0"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_square_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_square_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <IMAGEBUTTON name="new button" id="557c43e2f39f8df6" memberName="imageButton9"
                virtualName="" explicitFocusOrder="0" pos="136 384 24 24" buttonText="Sine"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="oscillator_sine_48_png" opacityNormal="1" colourNormal="0"
-               resourceOver="" opacityOver="1" colourOver="0" resourceDown=""
-               opacityDown="1" colourDown="0"/>
+               resourceNormal="oscillator_sine_48_png" opacityNormal="1" colourNormal="ffffffff"
+               resourceOver="oscillator_sine_48_png" opacityOver="1" colourOver="ffff7e00"
+               resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <LABEL name="statusLabel" id="f241e45e174945c6" memberName="statusLabel"
          virtualName="" explicitFocusOrder="0" pos="720 480 150 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="&#10;" editableSingleClick="0"
@@ -1488,12 +1505,21 @@ BEGIN_JUCER_METADATA
          fontsize="15" bold="0" italic="0" justification="33"/>
   <TEXTEDITOR name="infoText" id="1fabb7f74106637c" memberName="infoText" virtualName=""
               explicitFocusOrder="0" pos="688 476 198 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="1" scrollbars="0" caret="0" popupmenu="0"/>
   <LABEL name="infoLabel" id="f4ead94012368f89" memberName="infoLabel"
          virtualName="" explicitFocusOrder="0" pos="688 448 64 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Status&#10;" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
+  <TEXTBUTTON name="browseButton" id="f48c01fdd9a33988" memberName="browseButton"
+              virtualName="" explicitFocusOrder="0" pos="441 16 64 24" buttonText="Browser"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <TEXTBUTTON name="setupButton" id="2f8adecb1d3124d2" memberName="setupButton"
+              virtualName="" explicitFocusOrder="0" pos="516 16 64 24" buttonText="Setup"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <TEXTBUTTON name="fxButton" id="8928dfb414abfd9e" memberName="fxButton" virtualName=""
+              explicitFocusOrder="0" pos="364 16 64 24" buttonText="FX" connectedEdges="0"
+              needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
