@@ -47,15 +47,13 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
     void setData(ScopedPointer<XmlElement> xml);
     void visibilityChanged() override;
+    void setVisible (bool shouldBeVisible) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
-    // Binary resources:
-    static const char* sizehelper_png;
-    static const int sizehelper_pngSize;
 
 
 private:

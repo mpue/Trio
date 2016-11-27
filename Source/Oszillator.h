@@ -19,7 +19,8 @@ public:
     enum OscMode {
         SAW,
         SINE,
-        PULSE
+        PULSE,
+        NOISE
     };
     
     Oszillator();

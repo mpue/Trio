@@ -76,6 +76,8 @@ public:
     static const int oscillator_sine_48_pngSize;
     static const char* oscillator_square_48_png;
     static const int oscillator_square_48_pngSize;
+    static const char* oscillator_noise_48_png;
+    static const int oscillator_noise_48_pngSize;
 
 
 private:
@@ -111,13 +113,14 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> modSourceAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod1TargetAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod2TargetAttachment;
-    
+
     ScopedPointer<PresetDialog> presetPanel;
     ScopedPointer<FXPanel> fxPanel;
 
     Oszillator::OscMode mode1;
     Oszillator::OscMode mode2;
     Oszillator::OscMode mode3;
+    ScopedPointer<ComponentAnimator> animator;
 
     //[/UserVariables]
 
@@ -169,6 +172,7 @@ private:
     ScopedPointer<TextButton> browseButton;
     ScopedPointer<TextButton> setupButton;
     ScopedPointer<TextButton> fxButton;
+    ScopedPointer<ImageButton> noiseButton;
     Image cachedImage_trio_png_1;
 
 

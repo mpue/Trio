@@ -18,6 +18,7 @@ MultimodeOscillator::MultimodeOscillator(float sampleRate) : Oszillator(sampleRa
     this->sine = new Sine(sampleRate);
     this->saw = new Sawtooth(sampleRate);
     this->pulse = new Pulse(sampleRate);
+    this->noise = new WhiteNoise(sampleRate);
     this->mode = OscMode::SAW;
 }
 
@@ -25,6 +26,7 @@ MultimodeOscillator::~MultimodeOscillator() {
     delete sine;
     delete saw;
     delete pulse;
+    delete noise;
 }
 
 void MultimodeOscillator::setFrequency(double frequency) {
@@ -37,6 +39,7 @@ void MultimodeOscillator::setVolume(float volume) {
     this->saw->setVolume(volume);
     this->sine->setVolume(volume);
     this->pulse->setVolume(volume);
+    this->noise->setVolume(volume);
 }
 
 float MultimodeOscillator::process() {
@@ -49,6 +52,9 @@ float MultimodeOscillator::process() {
     }
     else if (this->mode == PULSE) {
         return this->pulse->process();
+    }
+    else if(this->mode == NOISE) {
+        return this->noise->process();
     }
     else {
         return 0;

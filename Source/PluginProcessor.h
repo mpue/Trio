@@ -94,6 +94,7 @@ public:
     AudioProcessorValueTreeState* getValueTreeState();
     void setState(ValueTree* state, bool notify);
     Reverb* getReverb();
+    Distortion* getDistortion();
     
     vector<String> getProgramNames();
     String getSelectedProgram();
@@ -108,6 +109,7 @@ public:
     
     void setFxReverbEnabled(bool enabled);
     void setFxDelayEnabled(bool enabled);
+    void setFxDistEnabled(bool enabled);
     
 private:
     //==============================================================================
@@ -146,6 +148,7 @@ private:
     
     bool fxReverbEnabled;
     bool fxDelayEnabled;
+    bool fxDistortionEnabled;
     
 };
 

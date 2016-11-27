@@ -29,7 +29,7 @@ public:
     float fine;
     
 private:
-    Random* random;
+    ScopedPointer<Random> random;
     
 };
 

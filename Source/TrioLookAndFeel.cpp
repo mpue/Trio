@@ -33,10 +33,6 @@ void TrioLookAndFeel::drawRotarySlider	(	Graphics & 	g,
     // This is the binary image data that uses very little CPU when rotating
     Image myStrip = ImageCache::getFromMemory (BinaryData::Knob_64_png, BinaryData::Knob_64_pngSize);
     
-    const double fractRotation = (slider.getValue() - slider.getMinimum())  /   (slider.getMaximum() - slider.getMinimum()); //value between 0 and 1 for current amount of rotation
-    const int nFrames = myStrip.getHeight()/myStrip.getWidth(); // number of frames for vertical film strip
-    const int frameIdx = (int)ceil(fractRotation * ((double)nFrames-1.0) ); // current index from 0 --> nFrames-1
-    
     const float angle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
     const float radius = jmin (width / 2.0f, height / 2.0f) ;
     const float centreX = x + width * 0.5f;
@@ -45,6 +41,14 @@ void TrioLookAndFeel::drawRotarySlider	(	Graphics & 	g,
     const float ry = centreY - radius - 1.0f;
     const float rw = radius * 2.0f;
     const float thickness = 0.9f;
+    
+    const double fractRotation = (slider.getValue() - slider.getMinimum())  /
+                                 (slider.getMaximum() - slider.getMinimum()); //value between 0 and 1 for current amount of rotation
+    
+    const int nFrames = myStrip.getHeight()/myStrip.getWidth(); // number of frames for vertical film strip
+    const int frameIdx = (int)ceil(sliderPosProportional  * ((double)nFrames-1.0) ); // current index from 0 --> nFrames-1
+    
+    // Logger::getCurrentLogger()->writeToLog("==========" +String(sliderPosProportional));
     
     g.setColour(Colours::darkorange);
     {

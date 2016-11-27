@@ -37,7 +37,8 @@
 */
 class FXPanel  : public Component,
                  public SliderListener,
-                 public ButtonListener
+                 public ButtonListener,
+                 public ComboBoxListener
 {
 public:
     //==============================================================================
@@ -52,6 +53,7 @@ public:
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
 
     // Binary resources:
     static const char* fx_panel_png;
@@ -78,6 +80,11 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_mixleft_att;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_mixright_att;
 
+    ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> fxdist_enabled_att;
+    ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> fxdist_mode_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdist_mix_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdist_drive_att;
+
     //[/UserVariables]
 
     //==============================================================================
@@ -95,6 +102,10 @@ private:
     ScopedPointer<Slider> delayFBRightSlider;
     ScopedPointer<Slider> delayMixLeftSlider;
     ScopedPointer<Slider> delayMixRightSlider;
+    ScopedPointer<Slider> driveSlider;
+    ScopedPointer<Slider> mixSlider;
+    ScopedPointer<ComboBox> modeCombo;
+    ScopedPointer<ToggleButton> enableDistButton;
     Image cachedImage_fx_panel_png_1;
 
 

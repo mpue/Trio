@@ -48,7 +48,7 @@ TrioAudioProcessor::TrioAudioProcessor()
 
     parameters->createAndAddParameter("osc1shape", "Osc 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("osc2shape", "Osc 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc3shape", "Osc 3 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("osc3shape", "Osc 3 Shape", String(), NormalisableRange<float>(0.0f,3.0f), 0.0f, nullptr, nullptr);
     
     parameters->createAndAddParameter("filtermod", "Filter Env Mod", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
@@ -78,12 +78,12 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("mod2target", "Mod 2 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr);
     
     parameters->createAndAddParameter("fxreverb_enabled", "Reverb enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_damping", "Reverb : Damping", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_drylevel", "Reverb : Dry level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_wetlevel", "Reverb : Wet level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_freeze", "Reverb : Freeze level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_size", "Reverb : Room size", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_width", "Reverb : Width", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_damping", "Reverb Damping", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_drylevel", "Reverb Dry level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_wetlevel", "Reverb Wet level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_freeze", "Reverb Freeze level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_size", "Reverb Room size", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxreverb_width", "Reverb Width", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     
     parameters->createAndAddParameter("fxdelay_enabled", "Delay enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("fxdelay_mixleft", "Delay mix left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
@@ -92,6 +92,11 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("fxdelay_fbright", "Delay feedback right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("fxdelay_timeleft", "Delay time left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("fxdelay_timeright", "Delay time right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    
+    parameters->createAndAddParameter("fxdist_enabled", "Distortion enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdist_mode", "Distortion mode", String(), NormalisableRange<float>(1.0f,3.0f), 1.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdist_mix", "Distortion mix", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdist_drive", "Distortion drive", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr);
     
     parameters->state = ValueTree (Identifier ("default"));
     
@@ -161,6 +166,10 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->addParameterListener("fxdelay_fbright", this);
     parameters->addParameterListener("fxdelay_timeleft", this);
     parameters->addParameterListener("fxdelay_timeright", this);
+    parameters->addParameterListener("fxdist_enabled", this);
+    parameters->addParameterListener("fxdist_mode", this);
+    parameters->addParameterListener("fxdist_mix", this);
+    parameters->addParameterListener("fxdist_drive", this);
     
     reverbParams.damping = 0.0;
     reverbParams.dryLevel = 0.0;
@@ -509,9 +518,15 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             // }
         }
         
-        leftOut[sample] = value * model->getVolume();
-        rightOut[sample] = value * model->getVolume();
-
+        if (this->fxDistortionEnabled) {
+            leftOut[sample] = distortion->processSample(value) * model->getVolume();
+            rightOut[sample] = distortion->processSample(value) * model->getVolume();
+        }
+        else {
+            leftOut[sample] = value * model->getVolume();
+            rightOut[sample] = value * model->getVolume();
+        }
+        
         if(filterEnvelope->getState() != ADSR::env_idle) {
             filterEnvelope->process();
         }
@@ -646,7 +661,6 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     if (this->fxReverbEnabled) {
         reverb->processStereo(leftOut, rightOut, buffer.getNumSamples());
     }
-    
     
 }
 
@@ -862,6 +876,25 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
     if (parameterID == "fxdelay_timeright") {
         delayRight->setDelay(newValue * 1000);
     }
+    if (parameterID == "fxdist_enabled") {
+        
+        if (newValue > 0) {
+            this->fxDistortionEnabled = true;
+        }
+        else {
+            this->fxDistortionEnabled = false ;
+        }
+        
+    }
+    if (parameterID == "fxdist_mode") {
+        distortion->controls.mode = (int)newValue;
+    }
+    if (parameterID == "fxdist_mix") {
+        distortion->controls.mix = newValue;
+    }
+    if (parameterID == "fxdist_drive") {
+        distortion->controls.drive = newValue;
+    }
     
     this->reverb->setParameters(reverbParams);
     
@@ -875,12 +908,20 @@ void TrioAudioProcessor::setFxDelayEnabled(bool enabled) {
     this->fxDelayEnabled = enabled;
 }
 
+void TrioAudioProcessor::setFxDistEnabled(bool enabled) {
+    this->fxDistortionEnabled = enabled;
+}
+
 BasicDelayLine* TrioAudioProcessor::getLeftDelay() {
     return this->delayLeft;
 }
 
 BasicDelayLine* TrioAudioProcessor::getRightDelay() {
     return this->delayRight;
+}
+
+Distortion* TrioAudioProcessor::getDistortion() {
+    return this->distortion;
 }
 
 vector<Voice*> TrioAudioProcessor::getVoices() const {
@@ -924,47 +965,54 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
         
         String value = state->getChild(i).getProperty("value").toString();
         // parameters->getParameter(id)->setValue(value.getFloatValue());
-        float nval = this->parameters->getParameterRange(id).convertTo0to1(value.getFloatValue());
-        
+        float val = value.getFloatValue();
+        float nval = this->parameters->getParameterRange(id).convertTo0to1(val);
        
         parameters->getParameter(id)->setValueNotifyingHost(nval);
-        
-        
         
         cout << "setState : " << " param " << id << "has now value " << nval << endl;
     
         
         if (id == "osc1shape") {
-            if (nval == 0.0f) {
+            if (val == 0) {
                 mode1 = Oszillator::OscMode::SAW;
             }
-            else if (nval == 0.5f) {
+            else if (val == 1) {
                 mode1 = Oszillator::OscMode::SINE;
             }
-            else if (nval == 1.0f) {
+            else if (val == 2) {
                 mode1 = Oszillator::OscMode::PULSE;
+            }
+            else if (val == 3) {
+                mode1 = Oszillator::OscMode::NOISE;
             }
         }
         else if (id == "osc2shape") {
-            if (nval == 0.0f) {
+            if (val == 0) {
                 mode2 = Oszillator::OscMode::SAW;
             }
-            else if (nval == 0.5f) {
+            else if (val == 1) {
                 mode2 = Oszillator::OscMode::SINE;
             }
-            else if (nval == 1.0f) {
+            else if (val == 2) {
                 mode2 = Oszillator::OscMode::PULSE;
+            }
+            else if (val == 3) {
+                mode2 = Oszillator::OscMode::NOISE;
             }
         }
         else if (id == "osc3shape") {
-            if (nval == 0.0f) {
+            if (val == 0) {
                 mode3 = Oszillator::OscMode::SAW;
             }
-            else if (nval == 0.5f) {
+            else if (val == 1) {
                 mode3 = Oszillator::OscMode::SINE;
             }
-            else if (nval == 1.0f) {
+            else if (val == 2) {
                 mode3 = Oszillator::OscMode::PULSE;
+            }
+            else if (val == 3) {
+                mode3 = Oszillator::OscMode::NOISE;
             }
         }
         else if (id == "modsource") {

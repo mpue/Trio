@@ -2,8 +2,8 @@
 
 Distortion::Distortion() {
     controls.mode = 1;
-    controls.drive = 8.3f;
-    controls.mix = 0.5f;
+    controls.drive = 0.0f;
+    controls.mix = 0.0f;
 }
 
 Distortion::~Distortion() {}
@@ -18,16 +18,16 @@ float Distortion::processSample(float sample)
             output = softClip(output);
             break;
         case 2:
-            output = arctangent(input, controls.drive);
-            break;
-        case 3:
             output = hardClip(output);
             break;
+        case 3:
+            output = cubicWaveShaper(output);
+            break;
         case 4:
-            output = squareLaw(input, controls.drive);
+            output = arctangent(input, controls.drive);
             break;
         case 5:
-            output = cubicWaveShaper(output);
+            output = squareLaw(input, controls.drive);
             break;
         case 6:
             output = foldback(output);
