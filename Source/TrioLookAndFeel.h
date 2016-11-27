@@ -31,7 +31,8 @@ public:
                              float 	rotaryStartAngle,
                              float 	rotaryEndAngle,
                              Slider & 	slider ) override;
-    
+    void drawToggleButton (Graphics& g, ToggleButton& button,
+                           bool isMouseOverButton, bool isButtonDown) override;
 };
 
 

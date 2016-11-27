@@ -64,3 +64,68 @@ void TrioLookAndFeel::drawRotarySlider	(	Graphics & 	g,
                 myStrip.getWidth()); //Source
     
 }
+
+
+void TrioLookAndFeel::drawToggleButton (Graphics& g, ToggleButton& button,
+                                        bool isMouseOverButton, bool isButtonDown)
+{
+    
+    if (button.getToggleState()) {
+        LookAndFeel_V2::drawShinyButtonShape(g,
+                                             0,0,
+                                             button.getHeight(),button.getHeight(),
+                                             5.0f,
+                                             Colours::darkorange,
+                                             1.0f,
+                                             false,false,false,false);
+    }
+    
+    else {
+        LookAndFeel_V2::drawShinyButtonShape(g,
+                                             0,0,
+                                             button.getHeight(),button.getHeight(),
+                                             5.0f,
+                                             Colours::darkgrey,
+                                             1.0f,
+                                             false,false,false,false);
+    }
+    
+    /*
+    if (button.hasKeyboardFocus (true))
+    {
+        g.setColour (button.findColour (TextEditor::focusedOutlineColourId));
+        g.drawRect (0, 0, button.getWidth(), button.getHeight());
+    }
+    
+    float fontSize = jmin (15.0f, button.getHeight() * 0.75f);
+    const float tickWidth = fontSize * 1.1f;
+    
+    drawTickBox (g, button, 4.0f, (button.getHeight() - tickWidth) * 0.5f,
+                 tickWidth, tickWidth,
+                 button.getToggleState(),
+                 button.isEnabled(),
+                 isMouseOverButton,
+                 isButtonDown);
+    
+    g.setColour (button.findColour (ToggleButton::textColourId));
+    g.setFont (fontSize);
+    
+    if (! button.isEnabled())
+        g.setOpacity (0.5f);
+    
+    const int textX = (int) tickWidth + 5;
+    
+    */
+    
+    float fontSize = jmin (15.0f, button.getHeight() * 0.75f);
+    g.setColour (button.findColour (ToggleButton::textColourId));
+    g.setFont (fontSize);
+    
+    const int textX = button.getWidth() / 2 + 5;
+     
+    g.drawFittedText (button.getButtonText(),
+                      textX, 0,
+                      button.getWidth() - textX - 2, button.getHeight(),
+                      Justification::centredLeft, 10);
+    
+}
