@@ -70,6 +70,14 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxreverb_size_att;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxreverb_width_att;
 
+    ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> fxdelay_enabled_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_timeleft_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_timeright_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_fbleft_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_fbright_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_mixleft_att;
+    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdelay_mixright_att;
+
     //[/UserVariables]
 
     //==============================================================================
@@ -79,7 +87,14 @@ private:
     ScopedPointer<Slider> widthSlider;
     ScopedPointer<Slider> wetSlider;
     ScopedPointer<Slider> drySlider;
+    ScopedPointer<ToggleButton> enableReverbButton;
+    ScopedPointer<Slider> delayTimeLeftSlider;
     ScopedPointer<ToggleButton> enableDelayButton;
+    ScopedPointer<Slider> delayTimeRightSlider;
+    ScopedPointer<Slider> delayFBLeftSlider;
+    ScopedPointer<Slider> delayFBRightSlider;
+    ScopedPointer<Slider> delayMixLeftSlider;
+    ScopedPointer<Slider> delayMixRightSlider;
     Image cachedImage_fx_panel_png_1;
 
 

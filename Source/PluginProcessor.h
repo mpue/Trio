@@ -24,6 +24,7 @@
 #include <vector>
 #include "ADSR.h"
 #include "Distortion.h"
+#include "BasicDelayLine.h"
 
 using namespace std;
 
@@ -78,7 +79,9 @@ public:
     
     void parameterChanged(const String &parameterID, float newValue) override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
-
+    
+    BasicDelayLine* getLeftDelay();
+    BasicDelayLine* getRightDelay();
 
     Filter* getLeftFilter();
     Filter* getRightFilter();
@@ -104,7 +107,7 @@ public:
     void cleanupVoices();
     
     void setFxReverbEnabled(bool enabled);
-    
+    void setFxDelayEnabled(bool enabled);
     
 private:
     //==============================================================================
@@ -117,6 +120,9 @@ private:
     
     ScopedPointer<Filter> leftFilter;
     ScopedPointer<Filter>rightFilter;
+    
+    ScopedPointer<BasicDelayLine> delayLeft;
+    ScopedPointer<BasicDelayLine> delayRight;
     
     IIRCoefficients ic;
     
@@ -139,6 +145,7 @@ private:
     ComboBox* programCombo = 0;
     
     bool fxReverbEnabled;
+    bool fxDelayEnabled;
     
 };
 

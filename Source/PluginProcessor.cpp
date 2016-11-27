@@ -85,6 +85,14 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->createAndAddParameter("fxreverb_size", "Reverb : Room size", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     parameters->createAndAddParameter("fxreverb_width", "Reverb : Width", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
     
+    parameters->createAndAddParameter("fxdelay_enabled", "Delay enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdelay_mixleft", "Delay mix left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdelay_mixright", "Delay mix right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdelay_fbleft", "Delay feedback left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdelay_fbright", "Delay feedback right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdelay_timeleft", "Delay time left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    parameters->createAndAddParameter("fxdelay_timeright", "Delay time right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    
     parameters->state = ValueTree (Identifier ("default"));
     
     String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
@@ -146,6 +154,13 @@ TrioAudioProcessor::TrioAudioProcessor()
     parameters->addParameterListener("fxreverb_freeze", this);
     parameters->addParameterListener("fxreverb_size", this);
     parameters->addParameterListener("fxreverb_width", this);
+    parameters->addParameterListener("fxdelay_enabled", this);
+    parameters->addParameterListener("fxdelay_mixleft", this);
+    parameters->addParameterListener("fxdelay_mixright", this);
+    parameters->addParameterListener("fxdelay_fbleft", this);
+    parameters->addParameterListener("fxdelay_fbright", this);
+    parameters->addParameterListener("fxdelay_timeleft", this);
+    parameters->addParameterListener("fxdelay_timeright", this);
     
     reverbParams.damping = 0.0;
     reverbParams.dryLevel = 0.0;
@@ -158,8 +173,22 @@ TrioAudioProcessor::TrioAudioProcessor()
     reverb->setParameters(reverbParams);
     
     fxReverbEnabled = false;
+    fxDelayEnabled = false;
     
     distortion = new Distortion();
+    
+    delayLeft = new BasicDelayLine();
+    delayLeft->setMix(0.5);
+    delayLeft->setDelay(500);
+    delayLeft->setFeedback(0.5);
+    delayLeft->setUseExternalFeedback(false);
+    
+    delayRight = new BasicDelayLine();
+    delayRight->setMix(0.5);
+    delayRight->setDelay(375);
+    delayRight->setFeedback(0.5);
+    delayRight->setUseExternalFeedback(false);
+    
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -170,6 +199,8 @@ TrioAudioProcessor::~TrioAudioProcessor()
     this->filterEnvelope = nullptr;
     this->reverb = nullptr;
     this->distortion = nullptr;
+    this->delayRight = nullptr;
+    this->delayLeft = nullptr;
     
     this->cleanupVoices();
     
@@ -293,6 +324,9 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     leftFilter->coefficients(filterCutoff, 0.1f );
     rightFilter->coefficients(filterCutoff, 0.1f);
+    
+    delayLeft->resetBuffer();
+    delayRight->resetBuffer();
     
     // voice->addOszillator(whiteNoise);
     
@@ -496,7 +530,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             lfo2->process();
         }
         
-        distortion->processSample(leftOut[sample]);
+        // distortion->processSample(leftOut[sample]);
+
     }
     
     // is there at least one modulation target?
@@ -593,9 +628,26 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     leftFilter->process(leftOut,0,buffer.getNumSamples());
     rightFilter->process(rightOut, 0,buffer.getNumSamples());
     
+    if (this->fxDelayEnabled) {
+        
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+            leftOut[sample] = delayLeft->next(leftOut[sample]);
+            rightOut[sample] = delayRight->next(rightOut[sample]);
+            
+            if (leftOut[sample] > 1.0f) {
+                leftOut[sample] = 1.0f;
+            }
+            if (rightOut[sample] > 1.0f) {
+                rightOut[sample] = 1.0f;
+            }
+            
+        }
+    }
     if (this->fxReverbEnabled) {
         reverb->processStereo(leftOut, rightOut, buffer.getNumSamples());
     }
+    
+    
 }
 
 //==============================================================================
@@ -782,12 +834,53 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
         reverbParams.width = newValue;
     }
     
+    if (parameterID == "fxdelay_enabled") {
+        
+        if (newValue > 0) {
+            this->fxDelayEnabled = true;
+        }
+        else {
+            this->fxDelayEnabled = false ;
+        }
+        
+    }
+    if (parameterID == "fxdelay_mixleft") {
+        delayLeft->setMix(newValue);
+    }
+    if (parameterID == "fxdelay_mixright") {
+        delayRight->setMix(newValue);
+    }
+    if (parameterID == "fxdelay_fbleft") {
+        delayLeft->setFeedback(newValue);
+    }
+    if (parameterID == "fxdelay_fbright") {
+        delayRight->setFeedback(newValue);
+    }
+    if (parameterID == "fxdelay_timeleft") {
+        delayLeft->setDelay(newValue * 1000);
+    }
+    if (parameterID == "fxdelay_timeright") {
+        delayRight->setDelay(newValue * 1000);
+    }
+    
     this->reverb->setParameters(reverbParams);
     
 }
 
 void TrioAudioProcessor::setFxReverbEnabled(bool enabled) {
     this->fxReverbEnabled = enabled;
+}
+
+void TrioAudioProcessor::setFxDelayEnabled(bool enabled) {
+    this->fxDelayEnabled = enabled;
+}
+
+BasicDelayLine* TrioAudioProcessor::getLeftDelay() {
+    return this->delayLeft;
+}
+
+BasicDelayLine* TrioAudioProcessor::getRightDelay() {
+    return this->delayRight;
 }
 
 vector<Voice*> TrioAudioProcessor::getVoices() const {
