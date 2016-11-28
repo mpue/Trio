@@ -486,28 +486,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     // presetCombo->setSelectedId(1);
 
-    LookAndFeel::getDefaultLookAndFeel().setColour(Slider::rotarySliderFillColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(Slider::trackColourId, Colours::transparentBlack);
-    LookAndFeel::getDefaultLookAndFeel().setColour(Slider::thumbColourId, Colours::transparentBlack);
-
-    LookAndFeel::getDefaultLookAndFeel().setColour(ComboBox::backgroundColourId, Colours::black);
-    LookAndFeel::getDefaultLookAndFeel().setColour(PopupMenu::backgroundColourId, Colours::black);
-    LookAndFeel::getDefaultLookAndFeel().setColour(PopupMenu::highlightedBackgroundColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(PopupMenu::textColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(ComboBox::textColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(ComboBox::outlineColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(ComboBox::arrowColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(ComboBox::buttonColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextButton::buttonColourId, Colours::black);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextButton::buttonOnColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::outlineColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::backgroundColourId, Colours::black);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::highlightColourId, Colours::black);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::highlightedTextColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::textColourId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextButton::textColourOffId, Colours::darkorange);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextButton::textColourOnId, Colours::black);
-
     LookAndFeel::getDefaultLookAndFeel().setColour(CaretComponent::caretColourId, Colours::darkorange);
 
     imageButton->setRadioGroupId(1);
@@ -609,6 +587,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     processor->addListener(this);
 
+    /*
     cutoffSlider->setSkewFactorFromMidPoint(3.0f);
     resoSlider->setSkewFactorFromMidPoint(2.0f);
 
@@ -626,7 +605,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     osc2VolumeSlider->setSkewFactorFromMidPoint(0.3f);
     osc3VolumeSlider->setSkewFactorFromMidPoint(0.3f);
     ampVolSlider->setSkewFactorFromMidPoint(0.3f);
-
+     */
+     
     //[/Constructor]
 }
 

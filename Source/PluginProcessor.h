@@ -123,6 +123,9 @@ private:
     ScopedPointer<Filter> leftFilter;
     ScopedPointer<Filter>rightFilter;
     
+    ScopedPointer<IIRFilter> outputFilterL;
+    ScopedPointer<IIRFilter> outputFilterR;
+    
     ScopedPointer<BasicDelayLine> delayLeft;
     ScopedPointer<BasicDelayLine> delayRight;
     

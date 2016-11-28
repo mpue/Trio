@@ -26,6 +26,9 @@ TrioAudioProcessor::TrioAudioProcessor()
     currentProgramNumber = 0;
     leftFilter = new LowPassFilter();
     rightFilter = new LowPassFilter();
+    outputFilterL = new IIRFilter();
+    outputFilterR = new IIRFilter();
+    
     filterCutoff = 12000.0f;
     filterEnvelope = new ADSR();
     leftFilter->setModulator(filterEnvelope);
@@ -204,6 +207,8 @@ TrioAudioProcessor::~TrioAudioProcessor()
 {
     this->leftFilter = nullptr;
     this->rightFilter = nullptr;
+    this->outputFilterR = nullptr;
+    this->outputFilterL = nullptr;
     this->parameters = nullptr;
     this->filterEnvelope = nullptr;
     this->reverb = nullptr;
@@ -333,6 +338,9 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     leftFilter->coefficients(filterCutoff, 0.1f );
     rightFilter->coefficients(filterCutoff, 0.1f);
+    
+    outputFilterL->setCoefficients(IIRCoefficients::makeHighPass(sampleRate, 30));
+    outputFilterR->setCoefficients(IIRCoefficients::makeHighPass(sampleRate, 30));
     
     delayLeft->resetBuffer();
     delayRight->resetBuffer();
@@ -501,6 +509,21 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         }
         else if (m.isController()) {
             cout << "Control change : "<< m.getControllerNumber() << " : " << m.getControllerValue() << endl;
+
+            // Modulation wheel
+            if (m.getControllerNumber() == 1) {
+                
+                String paramName = "cutoff";
+                float max = this->parameters->getParameterRange(paramName).getRange().getEnd();
+                float min = this->parameters->getParameterRange(paramName).getRange().getStart();
+                
+                float range = abs(min) + max;
+                
+                float rate = (range / 127.0f) * m.getControllerValue() - range / 2;
+                // getModel()->setLfo1Rate(rate);
+                float nval = this->parameters->getParameterRange(paramName).convertTo0to1(rate);
+                parameters->getParameter(paramName)->setValueNotifyingHost(nval);
+            }
         }
         
     }
@@ -665,6 +688,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         reverb->processStereo(leftOut, rightOut, buffer.getNumSamples());
     }
     
+    outputFilterL->processSamples(leftOut, buffer.getNumSamples());
+    outputFilterR->processSamples(rightOut, buffer.getNumSamples());
 }
 
 //==============================================================================

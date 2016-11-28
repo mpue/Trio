@@ -36,8 +36,8 @@ private:
     // access the processor object that created it.
     TrioAudioProcessor& processor;
 
-    MainWindow* window;
-    TrioLookAndFeel lookAndFeel;
+    ScopedPointer<MainWindow> window;
+    ScopedPointer<TrioLookAndFeel> lf;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrioAudioProcessorEditor)
