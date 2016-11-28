@@ -42,6 +42,14 @@ int Oszillator::getPitch() const {
     return this->pitch;
 }
 
+void Oszillator::setPitchBend(float bend) {
+    this->pitchBend = bend;
+}
+
+float Oszillator::getPitchBend() const {
+    return this->pitchBend;
+}
+
 void Oszillator::setMode(OscMode mode) {
     this->mode = mode;
 }

@@ -34,6 +34,8 @@ public:
     virtual float process() = 0;
     void setPitch(int pitch);
     int getPitch() const;
+    void setPitchBend(float bend);
+    float getPitchBend() const;
     
     virtual void setFine(float fine) = 0;
     virtual float getFine() const = 0;
@@ -48,6 +50,7 @@ protected:
     double sampleRate;
     double phaseIncrement;
     int pitch; // halftones
+    float pitchBend;
     OscMode mode;
 
 

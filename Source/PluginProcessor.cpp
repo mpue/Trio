@@ -441,6 +441,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
     {
+         // Logger::getCurrentLogger()->writeToLog(String(time));
+        
         if (m.isNoteOn())
         {
             /*
@@ -482,18 +484,19 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         {
             int pitch = m.getPitchWheelValue();
             
-            if (pitch != globalPitch) {
-                
-                globalPitch = pitch;
-                
-                /*
-                cout << "PitchWheel : " << globalPitch << endl;
-                voice->setPitch(globalPitch / 4);
-                voice->updateOscillator(0);
-                voice->updateOscillator(1);
-                voice->updateOscillator(2);
-                 */
+            float nPitch = ((float)pitch - (float)0x3fff/2.0) / 8192;
+            float semitones = 2;
+            
+            nPitch = (nPitch * 2) / 12;
+            nPitch = pow(2, nPitch);
+            
+            Logger::getCurrentLogger()->writeToLog(String(nPitch));
+            
+            for (int i = 0; i < voices.size();i++) {
+                voices.at(i)->setPitchBend(nPitch);
             }
+            
+            globalPitch = nPitch;
 
         }
         else if (m.isController()) {

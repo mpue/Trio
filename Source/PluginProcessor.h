@@ -118,7 +118,7 @@ private:
     double sampleRate;
     int samplesPerBlock;
     
-    int globalPitch;
+    float globalPitch;
     
     ScopedPointer<Filter> leftFilter;
     ScopedPointer<Filter>rightFilter;

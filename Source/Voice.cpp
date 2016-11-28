@@ -18,6 +18,8 @@ Voice::Voice(float sampleRate) {
     this->playing = false;
     this->ampEnvelope = new ADSR();
     this->modulator = 0;
+    this->pitchBend = 1;
+    this->note = NULL;
     
     ampEnvelope->setAttackRate(0 * sampleRate);  // 1 second
     ampEnvelope->setDecayRate(0 * sampleRate);
@@ -40,12 +42,23 @@ void Voice::setNote(Note* note) {
     this->velocity = note->getVelocity();
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
-        o->setFrequency(midiNote[note->getMidiNote() + o->getPitch()]);
+        
+        if (note != NULL)
+            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch()]) * pitchBend);
     }
 }
 
 Note* Voice::getNote() const {
     return this->note;
+}
+
+void Voice::setPitchBend(float bend) {
+    this->pitchBend = bend;
+    for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
+        Oszillator* o = *it;
+        if (note != NULL)
+            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch()]) * pitchBend);
+    }
 }
 
 void Voice::addOszillator(Oszillator* o) {

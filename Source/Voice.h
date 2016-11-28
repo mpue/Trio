@@ -55,6 +55,8 @@ public:
 
     float getSampleRate();
     
+    void setPitchBend(float bend);
+    
 private:
     vector<Oszillator*> oscillators;
     Note* note;
@@ -67,6 +69,7 @@ private:
     bool playing;
     ADSR* ampEnvelope;
     Modulator* modulator;
+    float pitchBend;
 
     
 };
