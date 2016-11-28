@@ -408,7 +408,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     //[Constructor] You can add your own custom stuff here..
 
     animator = new ComponentAnimator();
-    
+
     osc1PitchSlider->setValue(0);
     ampSustainSlider->setValue(0.8);
     filterSustainSlider->setValue(0.8);
@@ -502,11 +502,12 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     LookAndFeel::getDefaultLookAndFeel().setColour(TextButton::buttonOnColourId, Colours::darkorange);
     LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::outlineColourId, Colours::darkorange);
     LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::backgroundColourId, Colours::black);
-    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::backgroundColourId, Colours::black);
-
+    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::highlightColourId, Colours::black);
+    LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::highlightedTextColourId, Colours::darkorange);
     LookAndFeel::getDefaultLookAndFeel().setColour(TextEditor::textColourId, Colours::darkorange);
     LookAndFeel::getDefaultLookAndFeel().setColour(TextButton::textColourOffId, Colours::darkorange);
     LookAndFeel::getDefaultLookAndFeel().setColour(TextButton::textColourOnId, Colours::black);
+
     LookAndFeel::getDefaultLookAndFeel().setColour(CaretComponent::caretColourId, Colours::darkorange);
 
     imageButton->setRadioGroupId(1);
@@ -610,22 +611,22 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     cutoffSlider->setSkewFactorFromMidPoint(3.0f);
     resoSlider->setSkewFactorFromMidPoint(2.0f);
-    
+
     ampAttackSlider->setSkewFactorFromMidPoint(1.0f);
     ampDecaySlider->setSkewFactorFromMidPoint(0.5f);
     ampSustainSlider->setSkewFactorFromMidPoint(0.5f);
     ampReleaseSlider->setSkewFactorFromMidPoint(1.0f);
-    
+
     filterAttackSlider->setSkewFactorFromMidPoint(1.0f);
     filterDecaySlider->setSkewFactorFromMidPoint(1.0f);
     filterSustainSlider->setSkewFactorFromMidPoint(0.5f);
     filterReleaseSlider->setSkewFactorFromMidPoint(1.0f);
-    
+
     osc1VolumeSlider->setSkewFactorFromMidPoint(0.3f);
     osc2VolumeSlider->setSkewFactorFromMidPoint(0.3f);
     osc3VolumeSlider->setSkewFactorFromMidPoint(0.3f);
     ampVolSlider->setSkewFactorFromMidPoint(0.3f);
-    
+
     //[/Constructor]
 }
 
@@ -1094,9 +1095,9 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
         presetPanel->setData(xml);
-        
+
         animator->fadeIn(presetPanel, 100);
-        
+
         // presetPanel->setVisible(true);
 
         //[/UserButtonCode_storeButton]

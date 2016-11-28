@@ -54,6 +54,8 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDrag (const MouseEvent& e) override;
 
     // Binary resources:
     static const char* fx_panel_png;
@@ -85,6 +87,10 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdist_mix_att;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdist_drive_att;
 
+    ScopedPointer<PopupMenu> popup;
+    vector<String> notenames;
+    vector<String> items;
+
     //[/UserVariables]
 
     //==============================================================================
@@ -106,6 +112,57 @@ private:
     ScopedPointer<Slider> mixSlider;
     ScopedPointer<ComboBox> modeCombo;
     ScopedPointer<ToggleButton> enableDistButton;
+    ScopedPointer<ToggleButton> enableSeqButton;
+    ScopedPointer<ToggleButton> stepButton1;
+    ScopedPointer<ToggleButton> stepButton2;
+    ScopedPointer<ToggleButton> stepButton3;
+    ScopedPointer<ToggleButton> stepButton4;
+    ScopedPointer<ToggleButton> stepButton5;
+    ScopedPointer<ToggleButton> stepButton6;
+    ScopedPointer<ToggleButton> stepButton7;
+    ScopedPointer<ToggleButton> stepButton8;
+    ScopedPointer<ToggleButton> stepButton9;
+    ScopedPointer<ToggleButton> stepButton10;
+    ScopedPointer<ToggleButton> stepButton11;
+    ScopedPointer<ToggleButton> stepButton12;
+    ScopedPointer<ToggleButton> stepButton13;
+    ScopedPointer<ToggleButton> stepButton14;
+    ScopedPointer<ToggleButton> stepButton15;
+    ScopedPointer<ToggleButton> stepButton16;
+    ScopedPointer<Label> label;
+    ScopedPointer<Label> label2;
+    ScopedPointer<TextEditor> note1;
+    ScopedPointer<TextEditor> note2;
+    ScopedPointer<TextEditor> note3;
+    ScopedPointer<TextEditor> note4;
+    ScopedPointer<TextEditor> note5;
+    ScopedPointer<TextEditor> note6;
+    ScopedPointer<TextEditor> note7;
+    ScopedPointer<TextEditor> note8;
+    ScopedPointer<TextEditor> note9;
+    ScopedPointer<TextEditor> note10;
+    ScopedPointer<TextEditor> note11;
+    ScopedPointer<TextEditor> note12;
+    ScopedPointer<TextEditor> note13;
+    ScopedPointer<TextEditor> note14;
+    ScopedPointer<TextEditor> note15;
+    ScopedPointer<TextEditor> note16;
+    ScopedPointer<TextEditor> vel1;
+    ScopedPointer<TextEditor> vel2;
+    ScopedPointer<TextEditor> vel3;
+    ScopedPointer<TextEditor> vel4;
+    ScopedPointer<TextEditor> vel5;
+    ScopedPointer<TextEditor> vel6;
+    ScopedPointer<TextEditor> vel7;
+    ScopedPointer<TextEditor> vel8;
+    ScopedPointer<TextEditor> vel9;
+    ScopedPointer<TextEditor> vel10;
+    ScopedPointer<TextEditor> vel11;
+    ScopedPointer<TextEditor> vel12;
+    ScopedPointer<TextEditor> vel13;
+    ScopedPointer<TextEditor> vel14;
+    ScopedPointer<TextEditor> vel15;
+    ScopedPointer<TextEditor> vel16;
     Image cachedImage_fx_panel_png_1;
 
 
