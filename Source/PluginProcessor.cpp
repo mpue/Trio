@@ -483,7 +483,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         
         // 8th
         // Logger::getCurrentLogger()->writeToLog("ppq : "+String(currentppq));
-        tick = (int)(currentppq * 4);
+        tick = (int)(currentppq * sequencer->getRaster() / 4);
         
         if (tick != lastTick) {
             sequencer->tick();
@@ -494,7 +494,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
                 for (int i = 0; i < voices.size();i++) {
                     
                     if (voices.at(i)->isPlaying()) {
-                        voices.at(i)->setOctave(octave);
+                        voices.at(i)->setOctave(sequencer->getOctave());
                         voices.at(i)->setOffset(sequencer->getOffset());
                         filterEnvelope->gate(true);
                         voices.at(i)->getAmpEnvelope()->gate(true);
@@ -505,14 +505,8 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         
             }
             
-            /*
-            if (octave < 2) {
-                octave++;
-            }
-            else {
-                octave = 0;
-            }
-             */
+
+            
             
         }
         

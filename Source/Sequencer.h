@@ -41,7 +41,7 @@ public:
     void setStepEnabled(int step, bool enabled);
     bool isStepEnabled(int step);
     bool isCurrentStepEnabled();
-    
+    void setNumOctaves(int octaves);
     
 private:
     vector<bool> steps;
@@ -49,6 +49,7 @@ private:
     vector<int> velocities;
     bool playing;
     int octave;
+    int numOctaves = 1;
     int raster;
     int currentStep = 0;
     

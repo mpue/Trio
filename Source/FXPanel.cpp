@@ -544,6 +544,44 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     vel16->setPopupMenuEnabled (true);
     vel16->setText (String());
 
+    addAndMakeVisible (octavesCombo = new ComboBox ("octavesCombo"));
+    octavesCombo->setEditableText (false);
+    octavesCombo->setJustificationType (Justification::centredLeft);
+    octavesCombo->setTextWhenNothingSelected (String());
+    octavesCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    octavesCombo->addItem (TRANS("1"), 1);
+    octavesCombo->addItem (TRANS("2"), 2);
+    octavesCombo->addItem (TRANS("3"), 3);
+    octavesCombo->addListener (this);
+
+    addAndMakeVisible (label3 = new Label ("new label",
+                                           TRANS("Octaves")));
+    label3->setFont (Font (15.00f, Font::plain));
+    label3->setJustificationType (Justification::centredLeft);
+    label3->setEditable (false, false, false);
+    label3->setColour (Label::textColourId, Colours::white);
+    label3->setColour (TextEditor::textColourId, Colours::black);
+    label3->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (notesCombo = new ComboBox ("notesCombo"));
+    notesCombo->setEditableText (false);
+    notesCombo->setJustificationType (Justification::centredLeft);
+    notesCombo->setTextWhenNothingSelected (String());
+    notesCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    notesCombo->addItem (TRANS("4"), 1);
+    notesCombo->addItem (TRANS("8"), 2);
+    notesCombo->addItem (TRANS("16"), 3);
+    notesCombo->addListener (this);
+
+    addAndMakeVisible (notesLabel = new Label ("new label",
+                                               TRANS("Notes")));
+    notesLabel->setFont (Font (15.00f, Font::plain));
+    notesLabel->setJustificationType (Justification::centredLeft);
+    notesLabel->setEditable (false, false, false);
+    notesLabel->setColour (Label::textColourId, Colours::white);
+    notesLabel->setColour (TextEditor::textColourId, Colours::black);
+    notesLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
     cachedImage_fx_panel_png_1 = ImageCache::getFromMemory (fx_panel_png, fx_panel_pngSize);
 
     //[UserPreSize]
@@ -631,7 +669,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note15->addMouseListener(this, false);
     note16->addMouseListener(this, false);
 
-    
+
     note1->setText("0");
     note2->setText("0");
     note3->setText("0");
@@ -698,7 +736,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note13->setComponentID("12");
     note14->setComponentID("13");
     note15->setComponentID("14");
-    
+
     //[/Constructor]
 }
 
@@ -776,6 +814,10 @@ FXPanel::~FXPanel()
     vel14 = nullptr;
     vel15 = nullptr;
     vel16 = nullptr;
+    octavesCombo = nullptr;
+    label3 = nullptr;
+    notesCombo = nullptr;
+    notesLabel = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -874,6 +916,10 @@ void FXPanel::resized()
     vel14->setBounds (616, 472, 32, 24);
     vel15->setBounds (648, 472, 32, 24);
     vel16->setBounds (680, 472, 32, 24);
+    octavesCombo->setBounds (728, 472, 72, 24);
+    label3->setBounds (728, 440, 72, 24);
+    notesCombo->setBounds (56, 472, 72, 24);
+    notesLabel->setBounds (56, 440, 72, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1030,14 +1076,14 @@ void FXPanel::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_stepButton4] -- add your button handler code here..
         processor->getSequencer()->setStepEnabled(3, stepButton4->getToggleState());
-        
+
         //[/UserButtonCode_stepButton4]
     }
     else if (buttonThatWasClicked == stepButton5)
     {
         //[UserButtonCode_stepButton5] -- add your button handler code here..
         processor->getSequencer()->setStepEnabled(4, stepButton5->getToggleState());
-        
+
         //[/UserButtonCode_stepButton5]
     }
     else if (buttonThatWasClicked == stepButton6)
@@ -1050,21 +1096,21 @@ void FXPanel::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_stepButton7] -- add your button handler code here..
         processor->getSequencer()->setStepEnabled(6, stepButton7->getToggleState());
-        
+
         //[/UserButtonCode_stepButton7]
     }
     else if (buttonThatWasClicked == stepButton8)
     {
         //[UserButtonCode_stepButton8] -- add your button handler code here..
         processor->getSequencer()->setStepEnabled(7, stepButton8->getToggleState());
-        
+
         //[/UserButtonCode_stepButton8]
     }
     else if (buttonThatWasClicked == stepButton9)
     {
         //[UserButtonCode_stepButton9] -- add your button handler code here..
         processor->getSequencer()->setStepEnabled(8, stepButton9->getToggleState());
-        
+
         //[/UserButtonCode_stepButton9]
     }
     else if (buttonThatWasClicked == stepButton10)
@@ -1125,6 +1171,18 @@ void FXPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         processor->getDistortion()->controls.mode = modeCombo->getSelectedId();
         //[/UserComboBoxCode_modeCombo]
     }
+    else if (comboBoxThatHasChanged == octavesCombo)
+    {
+        //[UserComboBoxCode_octavesCombo] -- add your combo box handling code here..
+        processor->getSequencer()->setNumOctaves(octavesCombo->getText().getIntValue());
+        //[/UserComboBoxCode_octavesCombo]
+    }
+    else if (comboBoxThatHasChanged == notesCombo)
+    {
+        //[UserComboBoxCode_notesCombo] -- add your combo box handling code here..
+        processor->getSequencer()->setRaster(notesCombo->getText().getIntValue());
+        //[/UserComboBoxCode_notesCombo]
+    }
 
     //[UsercomboBoxChanged_Post]
     //[/UsercomboBoxChanged_Post]
@@ -1150,23 +1208,24 @@ void FXPanel::mouseDrag (const MouseEvent& e)
 {
     //[UserCode_mouseDrag] -- Add your code here...
     TextEditor* t = static_cast<TextEditor*>(e.eventComponent);
-    
+
     int oldval = (int)t->getTextValue().toString().getFloatValue();
     int value = - e.getDistanceFromDragStartY() / 10;
-    
+
     if (value + oldval >= 0 && value + oldval <= 127) {
         t->setText(String(value + oldval));
     }
-    
+
     if (t->getName() == "note1") {
         int step = t->getComponentID().getIntValue();
         int offset = t->getTextValue().toString().getIntValue();
         processor->getSequencer()->setOffset(step,offset);
     }
+    /*
     else if (t->getName() == "vel1") {
-        
+
     }
-    
+     */
 
     //[/UserCode_mouseDrag]
 }
@@ -1456,6 +1515,22 @@ BEGIN_JUCER_METADATA
   <TEXTEDITOR name="vel1" id="701fff4c62bf4d14" memberName="vel16" virtualName=""
               explicitFocusOrder="0" pos="680 472 32 24" initialText="" multiline="0"
               retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+  <COMBOBOX name="octavesCombo" id="1f63ea09d37ce9fd" memberName="octavesCombo"
+            virtualName="" explicitFocusOrder="0" pos="728 472 72 24" editable="0"
+            layout="33" items="1&#10;2&#10;3" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+  <LABEL name="new label" id="6ba6d979d890192a" memberName="label3" virtualName=""
+         explicitFocusOrder="0" pos="728 440 72 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="Octaves" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15" bold="0" italic="0" justification="33"/>
+  <COMBOBOX name="notesCombo" id="4c2ae1bbe6e30e48" memberName="notesCombo"
+            virtualName="" explicitFocusOrder="0" pos="56 472 72 24" editable="0"
+            layout="33" items="4&#10;8&#10;16" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+  <LABEL name="new label" id="a419e5a0d88a9703" memberName="notesLabel"
+         virtualName="" explicitFocusOrder="0" pos="56 440 72 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="Notes" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

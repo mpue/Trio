@@ -163,6 +163,10 @@ private:
     ScopedPointer<TextEditor> vel14;
     ScopedPointer<TextEditor> vel15;
     ScopedPointer<TextEditor> vel16;
+    ScopedPointer<ComboBox> octavesCombo;
+    ScopedPointer<Label> label3;
+    ScopedPointer<ComboBox> notesCombo;
+    ScopedPointer<Label> notesLabel;
     Image cachedImage_fx_panel_png_1;
 
 

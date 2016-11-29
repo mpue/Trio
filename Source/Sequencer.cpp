@@ -57,6 +57,12 @@ void Sequencer::tick() {
     else {
         this->currentStep = 0;
     }
+    if (octave < numOctaves) {
+        octave++;
+    }
+    else {
+        octave = 0;
+    }
 }
 
 void Sequencer::setRaster(int raster) {
@@ -93,6 +99,10 @@ bool Sequencer::isStepEnabled(int step) {
 
 void Sequencer::setOctave(int octave) {
     this->octave = octave;
+}
+
+void Sequencer::setNumOctaves(int octaves) {
+    this->numOctaves = octaves;
 }
 
 int Sequencer::getOctave() {
