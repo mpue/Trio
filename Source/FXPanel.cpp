@@ -988,86 +988,108 @@ void FXPanel::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == enableSeqButton)
     {
         //[UserButtonCode_enableSeqButton] -- add your button handler code here..
+        processor->getSequencer()->setPlaying(enableSeqButton->getToggleState());
         //[/UserButtonCode_enableSeqButton]
     }
     else if (buttonThatWasClicked == stepButton1)
     {
         //[UserButtonCode_stepButton1] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(0, stepButton1->getToggleState());
         //[/UserButtonCode_stepButton1]
     }
     else if (buttonThatWasClicked == stepButton2)
     {
         //[UserButtonCode_stepButton2] -- add your button handler code here..
+       processor->getSequencer()->setStepEnabled(1, stepButton2->getToggleState());
         //[/UserButtonCode_stepButton2]
     }
     else if (buttonThatWasClicked == stepButton3)
     {
         //[UserButtonCode_stepButton3] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(2, stepButton3->getToggleState());
         //[/UserButtonCode_stepButton3]
     }
     else if (buttonThatWasClicked == stepButton4)
     {
         //[UserButtonCode_stepButton4] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(3, stepButton4->getToggleState());
+        
         //[/UserButtonCode_stepButton4]
     }
     else if (buttonThatWasClicked == stepButton5)
     {
         //[UserButtonCode_stepButton5] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(4, stepButton5->getToggleState());
+        
         //[/UserButtonCode_stepButton5]
     }
     else if (buttonThatWasClicked == stepButton6)
     {
         //[UserButtonCode_stepButton6] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(5, stepButton6->getToggleState());
         //[/UserButtonCode_stepButton6]
     }
     else if (buttonThatWasClicked == stepButton7)
     {
         //[UserButtonCode_stepButton7] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(6, stepButton7->getToggleState());
+        
         //[/UserButtonCode_stepButton7]
     }
     else if (buttonThatWasClicked == stepButton8)
     {
         //[UserButtonCode_stepButton8] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(7, stepButton8->getToggleState());
+        
         //[/UserButtonCode_stepButton8]
     }
     else if (buttonThatWasClicked == stepButton9)
     {
         //[UserButtonCode_stepButton9] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(8, stepButton9->getToggleState());
+        
         //[/UserButtonCode_stepButton9]
     }
     else if (buttonThatWasClicked == stepButton10)
     {
         //[UserButtonCode_stepButton10] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(9, stepButton10->getToggleState());
         //[/UserButtonCode_stepButton10]
     }
     else if (buttonThatWasClicked == stepButton11)
     {
         //[UserButtonCode_stepButton11] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(10, stepButton11->getToggleState());
         //[/UserButtonCode_stepButton11]
     }
     else if (buttonThatWasClicked == stepButton12)
     {
         //[UserButtonCode_stepButton12] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(11, stepButton12->getToggleState());
         //[/UserButtonCode_stepButton12]
     }
     else if (buttonThatWasClicked == stepButton13)
     {
         //[UserButtonCode_stepButton13] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(12, stepButton13->getToggleState());
         //[/UserButtonCode_stepButton13]
     }
     else if (buttonThatWasClicked == stepButton14)
     {
         //[UserButtonCode_stepButton14] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(13, stepButton14->getToggleState());
         //[/UserButtonCode_stepButton14]
     }
     else if (buttonThatWasClicked == stepButton15)
     {
         //[UserButtonCode_stepButton15] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(14, stepButton15->getToggleState());
         //[/UserButtonCode_stepButton15]
     }
     else if (buttonThatWasClicked == stepButton16)
     {
         //[UserButtonCode_stepButton16] -- add your button handler code here..
+        processor->getSequencer()->setStepEnabled(15, stepButton16->getToggleState());
         //[/UserButtonCode_stepButton16]
     }
 

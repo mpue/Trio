@@ -211,6 +211,8 @@ TrioAudioProcessor::TrioAudioProcessor()
     delayRight->setFeedback(0.5);
     delayRight->setUseExternalFeedback(false);
     
+    sequencer = new Sequencer();
+    
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -225,13 +227,17 @@ TrioAudioProcessor::~TrioAudioProcessor()
     this->distortion = nullptr;
     this->delayRight = nullptr;
     this->delayLeft = nullptr;
-    
+    this->sequencer = nullptr;
     this->cleanupVoices();
     
 }
 
 Reverb* TrioAudioProcessor::getReverb() {
     return reverb;
+}
+
+Sequencer* TrioAudioProcessor::getSequencer() {
+    return this->sequencer;
 }
 
 //==============================================================================
@@ -473,26 +479,31 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     
     bpm = (deltappq / (deltaTime / 1000)) * 60;
     
-    if (result.isPlaying) {
+    if (result.isPlaying && sequencer->isPlaying()) {
         
         // 8th
         // Logger::getCurrentLogger()->writeToLog("ppq : "+String(currentppq));
         tick = (int)(currentppq * 4);
         
         if (tick != lastTick) {
+            sequencer->tick();
             lastTick = tick;
             Logger::getCurrentLogger()->writeToLog("tick : "+String(tick) + " at " + String(elapsed));
             
-            for (int i = 0; i < voices.size();i++) {
-                
-                if (voices.at(i)->isPlaying()) {
-                    voices.at(i)->setOctave(octave);
-                    filterEnvelope->gate(true);
-                    voices.at(i)->getAmpEnvelope()->gate(true);
-                    // Logger::getCurrentLogger()->writeToLog("on");
+            if (sequencer->isCurrentStepEnabled()) {
+                for (int i = 0; i < voices.size();i++) {
+                    
+                    if (voices.at(i)->isPlaying()) {
+                        voices.at(i)->setOctave(octave);
+                        filterEnvelope->gate(true);
+                        voices.at(i)->getAmpEnvelope()->gate(true);
+                        // Logger::getCurrentLogger()->writeToLog("on");
+                    }
+                    
                 }
-                
+        
             }
+            
             
             if (octave < 2) {
                 octave++;

@@ -25,6 +25,7 @@
 #include "ADSR.h"
 #include "Distortion.h"
 #include "BasicDelayLine.h"
+#include "Sequencer.h";
 
 using namespace std;
 
@@ -111,6 +112,9 @@ public:
     void setFxDelayEnabled(bool enabled);
     void setFxDistEnabled(bool enabled);
     
+    Sequencer* getSequencer();
+    
+    
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrioAudioProcessor)
@@ -161,6 +165,8 @@ private:
     int currentProgramNumber;
     
     ComboBox* programCombo = 0;
+    
+    ScopedPointer<Sequencer> sequencer;
     
     int octave = 0;
     
