@@ -36,9 +36,12 @@ public:
     int getCurrentStep();
     void setOctave(int octave);
     int getOctave();
+    void setOffset(int step, int offset);
+    int getOffset();
     void setStepEnabled(int step, bool enabled);
     bool isStepEnabled(int step);
     bool isCurrentStepEnabled();
+    
     
 private:
     vector<bool> steps;

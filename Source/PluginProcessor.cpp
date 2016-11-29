@@ -495,6 +495,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
                     
                     if (voices.at(i)->isPlaying()) {
                         voices.at(i)->setOctave(octave);
+                        voices.at(i)->setOffset(sequencer->getOffset());
                         filterEnvelope->gate(true);
                         voices.at(i)->getAmpEnvelope()->gate(true);
                         // Logger::getCurrentLogger()->writeToLog("on");
@@ -504,13 +505,14 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         
             }
             
-            
+            /*
             if (octave < 2) {
                 octave++;
             }
             else {
                 octave = 0;
             }
+             */
             
         }
         

@@ -588,6 +588,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 
     modeCombo->setSelectedId(1);
 
+    /*
     notenames.push_back("A");
     notenames.push_back("A#");
     notenames.push_back("B");
@@ -611,6 +612,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
             popup->addItem(index++, notenames[i - 1]+String(o));
         }
     }
+     */
 
     note1->addMouseListener(this, false);
     note2->addMouseListener(this, false);
@@ -629,22 +631,23 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note15->addMouseListener(this, false);
     note16->addMouseListener(this, false);
 
-    note1->setText("C2");
-    note2->setText("C2");
-    note3->setText("C2");
-    note4->setText("C2");
-    note5->setText("C2");
-    note6->setText("C2");
-    note7->setText("C2");
-    note8->setText("C2");
-    note9->setText("C2");
-    note10->setText("C2");
-    note11->setText("C2");
-    note12->setText("C2");
-    note13->setText("C2");
-    note14->setText("C2");
-    note15->setText("C2");
-    note16->setText("C2");
+    
+    note1->setText("0");
+    note2->setText("0");
+    note3->setText("0");
+    note4->setText("0");
+    note5->setText("0");
+    note6->setText("0");
+    note7->setText("0");
+    note8->setText("0");
+    note9->setText("0");
+    note10->setText("0");
+    note11->setText("0");
+    note12->setText("0");
+    note13->setText("0");
+    note14->setText("0");
+    note15->setText("0");
+    note16->setText("0");
 
     vel1->addMouseListener(this, false);
     vel2->addMouseListener(this, false);
@@ -680,8 +683,22 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     vel15->setText("100");
     vel16->setText("100");
 
-
-
+    note1->setComponentID("0");
+    note2->setComponentID("1");
+    note3->setComponentID("2");
+    note4->setComponentID("3");
+    note5->setComponentID("4");
+    note6->setComponentID("5");
+    note7->setComponentID("6");
+    note8->setComponentID("7");
+    note9->setComponentID("8");
+    note10->setComponentID("9");
+    note11->setComponentID("10");
+    note12->setComponentID("11");
+    note13->setComponentID("12");
+    note14->setComponentID("13");
+    note15->setComponentID("14");
+    
     //[/Constructor]
 }
 
@@ -1116,7 +1133,7 @@ void FXPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 void FXPanel::mouseDown (const MouseEvent& e)
 {
     //[UserCode_mouseDown] -- Add your code here...
-
+    /*
     if (e.mods.isLeftButtonDown()) {
         TextEditor* t = static_cast<TextEditor*>(e.eventComponent);
         if (t->getName() == "note1") {
@@ -1124,6 +1141,7 @@ void FXPanel::mouseDown (const MouseEvent& e)
             t->setText(items.at(item-1));
         }
     }
+     */
 
     //[/UserCode_mouseDown]
 }
@@ -1132,15 +1150,24 @@ void FXPanel::mouseDrag (const MouseEvent& e)
 {
     //[UserCode_mouseDrag] -- Add your code here...
     TextEditor* t = static_cast<TextEditor*>(e.eventComponent);
-    if (t->getName() == "vel1") {
-
-        int oldval = (int)t->getTextValue().toString().getFloatValue();
-        int value = - e.getDistanceFromDragStartY() / 10;
-
-        if (value + oldval >= 0 && value + oldval <= 127) {
-            t->setText(String(value + oldval));
-        }
+    
+    int oldval = (int)t->getTextValue().toString().getFloatValue();
+    int value = - e.getDistanceFromDragStartY() / 10;
+    
+    if (value + oldval >= 0 && value + oldval <= 127) {
+        t->setText(String(value + oldval));
     }
+    
+    if (t->getName() == "note1") {
+        int step = t->getComponentID().getIntValue();
+        int offset = t->getTextValue().toString().getIntValue();
+        processor->getSequencer()->setOffset(step,offset);
+    }
+    else if (t->getName() == "vel1") {
+        
+    }
+    
+
     //[/UserCode_mouseDrag]
 }
 

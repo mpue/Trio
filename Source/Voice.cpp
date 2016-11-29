@@ -118,7 +118,16 @@ void Voice::setOctave(int number) {
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
         if (note != NULL)
-            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch() + octave * 12]) * pitchBend);
+            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch() + this->offset + this->octave * 12]) * pitchBend);
+    }
+}
+
+void Voice::setOffset(int number) {
+    this->offset = number;
+    for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
+        Oszillator* o = *it;
+        if (note != NULL)
+            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch() + this->offset + this->octave * 12]) * pitchBend);
     }
 }
 

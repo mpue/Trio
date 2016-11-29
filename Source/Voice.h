@@ -43,6 +43,8 @@ public:
     void setOctave(int number);
     int getOctave() const;
     
+    void setOffset(int number);
+    
     void setPitch(int number);
     int getPitch() const;
     void updateOscillator(int index);
@@ -81,7 +83,7 @@ private:
     float duration;
     float time;
     int octave = 0;
-
+    int offset = 0;
     
 };
 

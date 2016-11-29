@@ -14,7 +14,7 @@ Sequencer::Sequencer() {
     
     
     for (int i = 0; i < 16;i++) {
-        offsets.push_back(i);
+        offsets.push_back(0);
         velocities.push_back(100);
         steps.push_back(false);
     }
@@ -69,6 +69,14 @@ int Sequencer::getRaster() {
     
 int Sequencer::getCurrentStep() {
     return this->currentStep;
+}
+
+int Sequencer::getOffset() {
+    return this->offsets.at(currentStep);
+}
+
+void Sequencer::setOffset(int step, int offset) {
+    this->offsets.at(step) = offset;
 }
 
 void Sequencer::setStepEnabled(int step, bool enabled) {
