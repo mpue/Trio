@@ -679,7 +679,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     vel14->setText("100");
     vel15->setText("100");
     vel16->setText("100");
-    
+
 
 
     //[/Constructor]

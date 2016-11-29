@@ -119,6 +119,18 @@ private:
     int samplesPerBlock;
     
     float globalPitch;
+    float elapsed;
+    float lastTime;
+    float currentTime;
+    float deltaTime;
+    float bpm;
+    
+    float lastppq;
+    float currentppq;
+    float deltappq;
+    
+    int tick;
+    int lastTick;
     
     ScopedPointer<Filter> leftFilter;
     ScopedPointer<Filter>rightFilter;
@@ -141,6 +153,7 @@ private:
     Sine* lfo2;
     
     ScopedPointer<AudioProcessorValueTreeState> parameters;
+    juce::AudioPlayHead::CurrentPositionInfo result;
     
     vector<String> programNames;
     String selectedProgram;
@@ -148,6 +161,8 @@ private:
     int currentProgramNumber;
     
     ComboBox* programCombo = 0;
+    
+    int octave = 0;
     
     bool fxReverbEnabled;
     bool fxDelayEnabled;

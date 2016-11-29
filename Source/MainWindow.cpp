@@ -358,24 +358,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     statusLabel->setColour (TextEditor::textColourId, Colours::black);
     statusLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    addAndMakeVisible (infoText = new TextEditor ("infoText"));
-    infoText->setMultiLine (false);
-    infoText->setReturnKeyStartsNewLine (false);
-    infoText->setReadOnly (true);
-    infoText->setScrollbarsShown (false);
-    infoText->setCaretVisible (false);
-    infoText->setPopupMenuEnabled (false);
-    infoText->setText (String());
-
-    addAndMakeVisible (infoLabel = new Label ("infoLabel",
-                                              TRANS("Status\n")));
-    infoLabel->setFont (Font (15.00f, Font::plain));
-    infoLabel->setJustificationType (Justification::centredLeft);
-    infoLabel->setEditable (false, false, false);
-    infoLabel->setColour (Label::textColourId, Colours::white);
-    infoLabel->setColour (TextEditor::textColourId, Colours::black);
-    infoLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
     addAndMakeVisible (browseButton = new TextButton ("browseButton"));
     browseButton->setButtonText (TRANS("Browser"));
     browseButton->addListener (this);
@@ -587,6 +569,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     processor->addListener(this);
 
+    statusLabel->setColour(Label::textColourId, Colours::darkorange);
+
     /*
     cutoffSlider->setSkewFactorFromMidPoint(3.0f);
     resoSlider->setSkewFactorFromMidPoint(2.0f);
@@ -606,7 +590,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     osc3VolumeSlider->setSkewFactorFromMidPoint(0.3f);
     ampVolSlider->setSkewFactorFromMidPoint(0.3f);
      */
-     
+
     //[/Constructor]
 }
 
@@ -657,8 +641,6 @@ MainWindow::~MainWindow()
     imageButton8 = nullptr;
     imageButton9 = nullptr;
     statusLabel = nullptr;
-    infoText = nullptr;
-    infoLabel = nullptr;
     browseButton = nullptr;
     setupButton = nullptr;
     fxButton = nullptr;
@@ -769,9 +751,7 @@ void MainWindow::resized()
     imageButton7->setBounds (104, 384, 24, 24);
     imageButton8->setBounds (168, 384, 24, 24);
     imageButton9->setBounds (136, 384, 24, 24);
-    statusLabel->setBounds (720, 480, 150, 24);
-    infoText->setBounds (688, 476, 198, 24);
-    infoLabel->setBounds (688, 448, 64, 24);
+    statusLabel->setBounds (712, 472, 150, 24);
     browseButton->setBounds (441, 16, 64, 24);
     setupButton->setBounds (516, 16, 64, 24);
     fxButton->setBounds (364, 16, 64, 24);
@@ -783,97 +763,103 @@ void MainWindow::resized()
 void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
+
+    if (!isTimerRunning()) {
+        animator->fadeIn(statusLabel, 100);
+        startTimer(3000);
+
+    }
     //[/UsersliderValueChanged_Pre]
 
     if (sliderThatWasMoved == cutoffSlider)
     {
         //[UserSliderCode_cutoffSlider] -- add your slider handling code here..
         this->processor->getModel()->setFilterCutoff(cutoffSlider->getValue());
-        infoText->setText("Cutoff "  + juce::String(cutoffSlider->getValue() * 1000) + "Hz", juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Cutoff "  + juce::String(cutoffSlider->getValue() * 1000) + "Hz", juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_cutoffSlider]
     }
     else if (sliderThatWasMoved == resoSlider)
     {
         //[UserSliderCode_resoSlider] -- add your slider handling code here..
         this->processor->getModel()->setFilterResonance(resoSlider->getValue());
-        infoText->setText("Resonance "  + juce::String(resoSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Resonance "  + juce::String(resoSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_resoSlider]
     }
     else if (sliderThatWasMoved == osc1PitchSlider)
     {
         //[UserSliderCode_osc1PitchSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc1Pitch(osc1PitchSlider->getValue());
-        infoText->setText("Osc 1 Pitch : "  + juce::String(osc1PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 1 Pitch : "  + juce::String(osc1PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc1PitchSlider]
     }
     else if (sliderThatWasMoved == osc1FineSlider)
     {
         //[UserSliderCode_osc1FineSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc1Fine(osc1FineSlider->getValue());
-        infoText->setText("Osc 1 Fine : "  + juce::String(osc1FineSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 1 Fine : "  + juce::String(osc1FineSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc1FineSlider]
     }
     else if (sliderThatWasMoved == osc1VolumeSlider)
     {
         //[UserSliderCode_osc1VolumeSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc1Volume(osc1VolumeSlider->getValue());
-        infoText->setText("Osc 1 Volume : "  + juce::String(osc1VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 1 Volume : "  + juce::String(osc1VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc1VolumeSlider]
     }
     else if (sliderThatWasMoved == osc2PitchSlider)
     {
         //[UserSliderCode_osc2PitchSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc2Pitch(osc2PitchSlider->getValue());
-        infoText->setText("Osc 2 Pitch : "  + juce::String(osc2PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 2 Pitch : "  + juce::String(osc2PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc2PitchSlider]
     }
     else if (sliderThatWasMoved == osc2FineSlider)
     {
         //[UserSliderCode_osc2FineSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc2Fine(osc2FineSlider->getValue());
-        infoText->setText("Osc 2 Fine : "  + juce::String(osc2FineSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 2 Fine : "  + juce::String(osc2FineSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc2FineSlider]
     }
     else if (sliderThatWasMoved == osc2VolumeSlider)
     {
         //[UserSliderCode_osc2VolumeSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc2Volume(osc2VolumeSlider->getValue());
-        infoText->setText("Osc 2 Volume : "  + juce::String(osc2VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 2 Volume : "  + juce::String(osc2VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc2VolumeSlider]
     }
     else if (sliderThatWasMoved == osc3PitchSlider)
     {
         //[UserSliderCode_osc3PitchSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc3Pitch(osc3PitchSlider->getValue());
-        infoText->setText("Osc 3 Pitch : "  + juce::String(osc3PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 3 Pitch : "  + juce::String(osc3PitchSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc3PitchSlider]
     }
     else if (sliderThatWasMoved == osc3FineSlider)
     {
         //[UserSliderCode_osc3FineSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc3Fine(osc3FineSlider->getValue());
-        infoText->setText("Osc 3 Fine : "  + juce::String(osc3FineSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 3 Fine : "  + juce::String(osc3FineSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc3FineSlider]
     }
     else if (sliderThatWasMoved == osc3VolumeSlider)
     {
         //[UserSliderCode_osc3VolumeSlider] -- add your slider handling code here..
         this->processor->getModel()->setOsc3Volume(osc3VolumeSlider->getValue());
-        infoText->setText("Osc 3 Volume : "  + juce::String(osc3VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Osc 3 Volume : "  + juce::String(osc3VolumeSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_osc3VolumeSlider]
     }
     else if (sliderThatWasMoved == filterModSlider)
     {
         //[UserSliderCode_filterModSlider] -- add your slider handling code here..
         this->processor->getModel()->setFilterModAmount(filterModSlider->getValue());
-        infoText->setText("Filter mod : "  + juce::String(filterModSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Filter mod : "  + juce::String(filterModSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterModSlider]
     }
     else if (sliderThatWasMoved == lfo1RateSlider)
     {
         //[UserSliderCode_lfo1RateSlider] -- add your slider handling code here..
         this->processor->getModel()->setLfo1Rate(lfo1RateSlider->getValue());
-        infoText->setText("LFO1 rate : "  + juce::String(lfo1RateSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("LFO1 rate : "  + juce::String(lfo1RateSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_lfo1RateSlider]
     }
     else if (sliderThatWasMoved == lfo1ShapeSlider)
@@ -885,14 +871,14 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     {
         //[UserSliderCode_lfo1AmountSlider] -- add your slider handling code here..
         this->processor->getModel()->setLfo1Amount(lfo1AmountSlider->getValue());
-         infoText->setText("LFO1 amount : "  + juce::String(lfo1AmountSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("LFO1 amount : "  + juce::String(lfo1AmountSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_lfo1AmountSlider]
     }
     else if (sliderThatWasMoved == lfo2RateSlider)
     {
         //[UserSliderCode_lfo2RateSlider] -- add your slider handling code here..
         this->processor->getModel()->setLfo2Rate(lfo2RateSlider->getValue());
-        infoText->setText("LFO2 rate : "  + juce::String(lfo2RateSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("LFO2 rate : "  + juce::String(lfo2RateSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_lfo2RateSlider]
     }
     else if (sliderThatWasMoved == lfo2ShapeSlider)
@@ -904,70 +890,70 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     {
         //[UserSliderCode_lfo2AmountSlider] -- add your slider handling code here..
         this->processor->getModel()->setLfo2Amount(lfo2AmountSlider->getValue());
-        infoText->setText("LFO2 amount : "  + juce::String(lfo2AmountSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("LFO2 amount : "  + juce::String(lfo2AmountSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_lfo2AmountSlider]
     }
     else if (sliderThatWasMoved == filterAttackSlider)
     {
         //[UserSliderCode_filterAttackSlider] -- add your slider handling code here..
         this->processor->getModel()->setFilterEnvAttack(filterAttackSlider->getValue());
-        infoText->setText("Filter attack : "  + juce::String(filterAttackSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Filter attack : "  + juce::String(filterAttackSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterAttackSlider]
     }
     else if (sliderThatWasMoved == filterDecaySlider)
     {
         //[UserSliderCode_filterDecaySlider] -- add your slider handling code here..
         this->processor->getModel()->setFilterEnvDecay(filterDecaySlider->getValue());
-        infoText->setText("Filter decay : "  + juce::String(filterDecaySlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Filter decay : "  + juce::String(filterDecaySlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterDecaySlider]
     }
     else if (sliderThatWasMoved == filterSustainSlider)
     {
         //[UserSliderCode_filterSustainSlider] -- add your slider handling code here..
         this->processor->getModel()->setFilterEnvSustain(filterSustainSlider->getValue());
-        infoText->setText("Filter sustain : "  + juce::String(filterSustainSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Filter sustain : "  + juce::String(filterSustainSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterSustainSlider]
     }
     else if (sliderThatWasMoved == filterReleaseSlider)
     {
         //[UserSliderCode_filterReleaseSlider] -- add your slider handling code here..
         this->processor->getModel()->setFilterEnvRelease(filterReleaseSlider->getValue());
-        infoText->setText("Filter release : "  + juce::String(filterReleaseSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Filter release : "  + juce::String(filterReleaseSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterReleaseSlider]
     }
     else if (sliderThatWasMoved == ampAttackSlider)
     {
         //[UserSliderCode_ampAttackSlider] -- add your slider handling code here..
         this->processor->getModel()->setAmpEnvAttack(ampAttackSlider->getValue());
-        infoText->setText("Amp attack : "  + juce::String(ampAttackSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Amp attack : "  + juce::String(ampAttackSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampAttackSlider]
     }
     else if (sliderThatWasMoved == ampDecaySlider)
     {
         //[UserSliderCode_ampDecaySlider] -- add your slider handling code here..
         this->processor->getModel()->setAmpEnvDecay(ampDecaySlider->getValue());
-        infoText->setText("Amp decay : "  + juce::String(ampDecaySlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Amp decay : "  + juce::String(ampDecaySlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampDecaySlider]
     }
     else if (sliderThatWasMoved == ampSustainSlider)
     {
         //[UserSliderCode_ampSustainSlider] -- add your slider handling code here..
         this->processor->getModel()->setAmpEnvSustain(ampSustainSlider->getValue());
-        infoText->setText("Amp sustain : "  + juce::String(ampSustainSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Amp sustain : "  + juce::String(ampSustainSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampSustainSlider]
     }
     else if (sliderThatWasMoved == ampReleaseSlider)
     {
         //[UserSliderCode_ampReleaseSlider] -- add your slider handling code here..
         this->processor->getModel()->setAmpEnvRelease(ampReleaseSlider->getValue());
-        infoText->setText("Amp release : "  + juce::String(ampReleaseSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Amp release : "  + juce::String(ampReleaseSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampReleaseSlider]
     }
     else if (sliderThatWasMoved == ampVolSlider)
     {
         //[UserSliderCode_ampVolSlider] -- add your slider handling code here..
         this->processor->getModel()->setVolume(ampVolSlider->getValue());
-        infoText->setText("Amp volume : "  + juce::String(ampVolSlider->getValue()), juce::NotificationType::dontSendNotification);
+        statusLabel->setText("Amp volume : "  + juce::String(ampVolSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_ampVolSlider]
     }
 
@@ -1241,6 +1227,11 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
+void MainWindow::timerCallback() {
+    animator->fadeOut(statusLabel, 500);
+    stopTimer();
+    Logger::getCurrentLogger()->writeToLog("Animator stopped.");
+}
 
 void MainWindow::visibilityChanged() {
     String currentProgram = processor->getProgramName(processor->getCurrentProgram());
@@ -1327,7 +1318,7 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener"
+                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer"
                  constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">
@@ -1542,16 +1533,8 @@ BEGIN_JUCER_METADATA
                resourceOver="oscillator_sine_48_png" opacityOver="1" colourOver="ffff7e00"
                resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <LABEL name="statusLabel" id="f241e45e174945c6" memberName="statusLabel"
-         virtualName="" explicitFocusOrder="0" pos="720 480 150 24" textCol="ffffffff"
+         virtualName="" explicitFocusOrder="0" pos="712 472 150 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="&#10;" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="33"/>
-  <TEXTEDITOR name="infoText" id="1fabb7f74106637c" memberName="infoText" virtualName=""
-              explicitFocusOrder="0" pos="688 476 198 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="0" caret="0" popupmenu="0"/>
-  <LABEL name="infoLabel" id="f4ead94012368f89" memberName="infoLabel"
-         virtualName="" explicitFocusOrder="0" pos="688 448 64 24" textCol="ffffffff"
-         edTextCol="ff000000" edBkgCol="0" labelText="Status&#10;" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
   <TEXTBUTTON name="browseButton" id="f48c01fdd9a33988" memberName="browseButton"

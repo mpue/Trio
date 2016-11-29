@@ -40,6 +40,9 @@ public:
     
     void setNoteNumber(int number);
     int getNoteNumber() const;
+    void setOctave(int number);
+    int getOctave() const;
+    
     void setPitch(int number);
     int getPitch() const;
     void updateOscillator(int index);
@@ -57,6 +60,11 @@ public:
     
     void setPitchBend(float bend);
     
+    void setDuration(float duration);
+    float getDuration();
+    void setTime(float time);
+    float getTime();
+    
 private:
     vector<Oszillator*> oscillators;
     Note* note;
@@ -70,6 +78,9 @@ private:
     ADSR* ampEnvelope;
     Modulator* modulator;
     float pitchBend;
+    float duration;
+    float time;
+    int octave = 0;
 
     
 };

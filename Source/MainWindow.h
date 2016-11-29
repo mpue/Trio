@@ -43,7 +43,8 @@ class MainWindow  : public Component,
                     public SliderListener,
                     public ButtonListener,
                     public ComboBoxListener,
-                    public AudioProcessorListener
+                    public AudioProcessorListener,
+                    public Timer
 {
 public:
     //==============================================================================
@@ -59,6 +60,7 @@ public:
 
     inline virtual void audioProcessorChanged (AudioProcessor* processor) override {};
     void visibilityChanged() override;
+    void timerCallback() override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -167,8 +169,6 @@ private:
     ScopedPointer<ImageButton> imageButton8;
     ScopedPointer<ImageButton> imageButton9;
     ScopedPointer<Label> statusLabel;
-    ScopedPointer<TextEditor> infoText;
-    ScopedPointer<Label> infoLabel;
     ScopedPointer<TextButton> browseButton;
     ScopedPointer<TextButton> setupButton;
     ScopedPointer<TextButton> fxButton;

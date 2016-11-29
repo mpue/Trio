@@ -113,6 +113,19 @@ int Voice::getPitch() const {
     return this->pitch;
 }
 
+void Voice::setOctave(int number) {
+    this->octave = number;
+    for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
+        Oszillator* o = *it;
+        if (note != NULL)
+            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch() + octave * 12]) * pitchBend);
+    }
+}
+
+int Voice::getOctave() const {
+    return this->octave;
+}
+
 void Voice::updateOscillator(int index) {
     oscillators.at(index)->setFrequency(midiNote[this->noteNumber + oscillators.at(index)->getPitch()]);
 }
@@ -126,12 +139,6 @@ void Voice::calculateFrequencyTable() {
 }
 
 void Voice::setPlaying(bool playing) {
-    if (playing) {
-        ampEnvelope->gate(true);
-    }
-    else {
-        ampEnvelope->gate(false);
-    }
     this->playing = playing;
 }
 
@@ -150,4 +157,20 @@ ADSR* Voice::getAmpEnvelope() {
 
 void Voice::setModulator(Modulator* modulator) {
     this->modulator = modulator;
+}
+
+float Voice::getTime() {
+    return this->time;
+}
+
+void Voice::setTime(float time) {
+    this->time = time;
+}
+
+float Voice::getDuration() {
+    return this->duration;
+}
+
+void Voice::setDuration(float duration) {
+    this->duration = duration;
 }

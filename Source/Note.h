@@ -24,11 +24,13 @@ public:
     int getMidiNote() const;
     void setPlaying(bool playing);
     bool isPlaying() const;
+
     
 private:
     int velocity;
     int midiNote;
     bool playing;
+
     
 };
 

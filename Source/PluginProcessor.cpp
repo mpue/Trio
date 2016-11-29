@@ -34,6 +34,16 @@ TrioAudioProcessor::TrioAudioProcessor()
     leftFilter->setModulator(filterEnvelope);
     rightFilter->setModulator(filterEnvelope);
     
+    currentTime = 0;
+    lastTime = 0;
+    elapsed = 0;
+    deltaTime = 0;
+    bpm = 0;
+    
+    lastppq = 0;
+    currentppq = 0;
+    deltappq = 0;
+    
     this->parameters = new AudioProcessorValueTreeState(*this,nullptr);
     parameters->createAndAddParameter("volume", "Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
     
@@ -327,8 +337,6 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     filterEnvelope->setReleaseRate(0 * sampleRate);
     filterEnvelope->setSustainLevel(.8);
     
-    // WhiteNoise* whiteNoise = new WhiteNoise(sampleRate);
-    
     configureOscillators(Oszillator::OscMode::SAW, Oszillator::OscMode::SAW, Oszillator::OscMode::SAW);
     
     lfo1 = new Sine(sampleRate);
@@ -344,8 +352,6 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     delayLeft->resetBuffer();
     delayRight->resetBuffer();
-    
-    // voice->addOszillator(whiteNoise);
     
 }
 
@@ -447,9 +453,104 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     MidiMessage m;
     int time;
     
+    float duration = (1000 / sampleRate) * buffer.getNumSamples();
+    
+    elapsed += duration;
+    
+    if (elapsed > lastTime) {
+        deltaTime = elapsed - lastTime;
+        lastTime = elapsed;
+    }
+
+    getPlayHead()->getCurrentPosition(this->result);
+    
+    currentppq = result.ppqPosition;
+    
+    if (currentppq > lastppq) {
+        deltappq  = currentppq - lastppq;
+        lastppq = currentppq;
+    }
+    
+    bpm = (deltappq / (deltaTime / 1000)) * 60;
+    
+    if (result.isPlaying) {
+        
+        // 8th
+        // Logger::getCurrentLogger()->writeToLog("ppq : "+String(currentppq));
+        tick = (int)(currentppq * 4);
+        
+        if (tick != lastTick) {
+            lastTick = tick;
+            Logger::getCurrentLogger()->writeToLog("tick : "+String(tick) + " at " + String(elapsed));
+            
+            for (int i = 0; i < voices.size();i++) {
+                
+                if (voices.at(i)->isPlaying()) {
+                    voices.at(i)->setOctave(octave);
+                    filterEnvelope->gate(true);
+                    voices.at(i)->getAmpEnvelope()->gate(true);
+                    // Logger::getCurrentLogger()->writeToLog("on");
+                }
+                
+            }
+            
+            if (octave < 2) {
+                octave++;
+            }
+            else {
+                octave = 0;
+            }
+            
+        }
+        
+        
+        // Logger::getCurrentLogger()->writeToLog("ppq : "+String(round(currentppq * 4)));
+        // Logger::getCurrentLogger()->writeToLog("deltaTime : "+String(deltaTime / 1000));
+        // Logger::getCurrentLogger()->writeToLog("deltappq : "+String(deltappq));
+        // Logger::getCurrentLogger()->writeToLog("BPM : "+String(bpm));
+
+        /*
+        for (int i = 0; i < voices.size();i++) {
+            
+            if (voices.at(i)->isPlaying()) {
+                
+                // Logger::getCurrentLogger()->writeToLog(String(voices.at(i)->getTime()) + " " + String(elapsed));
+                
+                if (voices.at(i)->getTime() >= voices.at(i)->getDuration()) {
+                    voices.at(i)->setTime(0);
+                    voices.at(i)->getAmpEnvelope()->gate(false);
+                    // Logger::getCurrentLogger()->writeToLog("off");
+                    
+                }
+                else {
+                    voices.at(i)->setTime(voices.at(i)->getTime() + deltaTime);
+                }
+                
+            }
+            
+        }
+         */
+        
+
+        
+    }
+    
+    
+    
+    // Logger::getCurrentLogger()->writeToLog("Elapsed time :" +String(elapsed)+ "ms");
+    
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
     {
          // Logger::getCurrentLogger()->writeToLog(String(time));
+        
+        unsigned char* raw = (unsigned char*)m.getRawData();
+        
+        /*
+        for (int j = 0; j < m.getRawDataSize();j++) {
+            Logger::getCurrentLogger()->writeToLog(String(raw[j]));
+        }
+         */
+
         
         if (m.isNoteOn())
         {
@@ -467,6 +568,11 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             note->setVelocity(m.getVelocity());
             voices.at(m.getNoteNumber())->setNote(note);
             voices.at(m.getNoteNumber())->setPlaying(true);
+            if (!result.isPlaying) {
+                voices.at(m.getNoteNumber())->getAmpEnvelope()->gate(true);
+            }
+            voices.at(m.getNoteNumber())->setDuration(250);
+            voices.at(m.getNoteNumber())->setTime(elapsed);
             
  
           
@@ -474,7 +580,13 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         else if (m.isNoteOff())
         {
             cout << "Note off " << m.getNoteNumber() << endl;
-            voices.at(m.getNoteNumber())->setPlaying(false);
+            
+            voices.at(m.getNoteNumber())->getNote();
+            
+            if (voices.at(m.getNoteNumber())->isPlaying()) {
+                voices.at(m.getNoteNumber())->setPlaying(false);
+                voices.at(m.getNoteNumber())->getAmpEnvelope()->gate(false);
+            }
             
             filterEnvelope->gate(false);
                         
@@ -524,6 +636,9 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
                 float nval = this->parameters->getParameterRange(paramName).convertTo0to1(rate);
                 parameters->getParameter(paramName)->setValueNotifyingHost(nval);
             }
+        }
+        else {
+            Logger::getCurrentLogger()->writeToLog("Other message : " + String(m.getTimeStamp()));
         }
         
     }
