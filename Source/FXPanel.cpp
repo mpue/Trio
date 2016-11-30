@@ -261,7 +261,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note1->setReturnKeyStartsNewLine (false);
     note1->setReadOnly (false);
     note1->setScrollbarsShown (true);
-    note1->setCaretVisible (false);
+    note1->setCaretVisible (true);
     note1->setPopupMenuEnabled (true);
     note1->setText (String());
 
@@ -270,7 +270,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note2->setReturnKeyStartsNewLine (false);
     note2->setReadOnly (false);
     note2->setScrollbarsShown (true);
-    note2->setCaretVisible (false);
+    note2->setCaretVisible (true);
     note2->setPopupMenuEnabled (true);
     note2->setText (String());
 
@@ -279,7 +279,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note3->setReturnKeyStartsNewLine (false);
     note3->setReadOnly (false);
     note3->setScrollbarsShown (true);
-    note3->setCaretVisible (false);
+    note3->setCaretVisible (true);
     note3->setPopupMenuEnabled (true);
     note3->setText (String());
 
@@ -288,7 +288,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note4->setReturnKeyStartsNewLine (false);
     note4->setReadOnly (false);
     note4->setScrollbarsShown (true);
-    note4->setCaretVisible (false);
+    note4->setCaretVisible (true);
     note4->setPopupMenuEnabled (true);
     note4->setText (String());
 
@@ -297,7 +297,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note5->setReturnKeyStartsNewLine (false);
     note5->setReadOnly (false);
     note5->setScrollbarsShown (true);
-    note5->setCaretVisible (false);
+    note5->setCaretVisible (true);
     note5->setPopupMenuEnabled (true);
     note5->setText (String());
 
@@ -315,7 +315,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note7->setReturnKeyStartsNewLine (false);
     note7->setReadOnly (false);
     note7->setScrollbarsShown (true);
-    note7->setCaretVisible (false);
+    note7->setCaretVisible (true);
     note7->setPopupMenuEnabled (true);
     note7->setText (String());
 
@@ -324,7 +324,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note8->setReturnKeyStartsNewLine (false);
     note8->setReadOnly (false);
     note8->setScrollbarsShown (true);
-    note8->setCaretVisible (false);
+    note8->setCaretVisible (true);
     note8->setPopupMenuEnabled (true);
     note8->setText (String());
 
@@ -333,7 +333,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note9->setReturnKeyStartsNewLine (false);
     note9->setReadOnly (false);
     note9->setScrollbarsShown (true);
-    note9->setCaretVisible (false);
+    note9->setCaretVisible (true);
     note9->setPopupMenuEnabled (true);
     note9->setText (String());
 
@@ -342,7 +342,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note10->setReturnKeyStartsNewLine (false);
     note10->setReadOnly (false);
     note10->setScrollbarsShown (true);
-    note10->setCaretVisible (false);
+    note10->setCaretVisible (true);
     note10->setPopupMenuEnabled (true);
     note10->setText (String());
 
@@ -351,7 +351,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note11->setReturnKeyStartsNewLine (false);
     note11->setReadOnly (false);
     note11->setScrollbarsShown (true);
-    note11->setCaretVisible (false);
+    note11->setCaretVisible (true);
     note11->setPopupMenuEnabled (true);
     note11->setText (String());
 
@@ -360,7 +360,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note12->setReturnKeyStartsNewLine (false);
     note12->setReadOnly (false);
     note12->setScrollbarsShown (true);
-    note12->setCaretVisible (false);
+    note12->setCaretVisible (true);
     note12->setPopupMenuEnabled (true);
     note12->setText (String());
 
@@ -369,7 +369,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note13->setReturnKeyStartsNewLine (false);
     note13->setReadOnly (false);
     note13->setScrollbarsShown (true);
-    note13->setCaretVisible (false);
+    note13->setCaretVisible (true);
     note13->setPopupMenuEnabled (true);
     note13->setText (String());
 
@@ -378,7 +378,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note14->setReturnKeyStartsNewLine (false);
     note14->setReadOnly (false);
     note14->setScrollbarsShown (true);
-    note14->setCaretVisible (false);
+    note14->setCaretVisible (true);
     note14->setPopupMenuEnabled (true);
     note14->setText (String());
 
@@ -387,7 +387,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note15->setReturnKeyStartsNewLine (false);
     note15->setReadOnly (false);
     note15->setScrollbarsShown (true);
-    note15->setCaretVisible (false);
+    note15->setCaretVisible (true);
     note15->setPopupMenuEnabled (true);
     note15->setText (String());
 
@@ -396,61 +396,61 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note16->setReturnKeyStartsNewLine (false);
     note16->setReadOnly (false);
     note16->setScrollbarsShown (true);
-    note16->setCaretVisible (false);
+    note16->setCaretVisible (true);
     note16->setPopupMenuEnabled (true);
     note16->setText (String());
 
     addAndMakeVisible (vel1 = new TextEditor ("vel1"));
     vel1->setMultiLine (false);
     vel1->setReturnKeyStartsNewLine (false);
-    vel1->setReadOnly (true);
+    vel1->setReadOnly (false);
     vel1->setScrollbarsShown (true);
-    vel1->setCaretVisible (false);
+    vel1->setCaretVisible (true);
     vel1->setPopupMenuEnabled (true);
     vel1->setText (String());
 
     addAndMakeVisible (vel2 = new TextEditor ("vel1"));
     vel2->setMultiLine (false);
     vel2->setReturnKeyStartsNewLine (false);
-    vel2->setReadOnly (true);
+    vel2->setReadOnly (false);
     vel2->setScrollbarsShown (true);
-    vel2->setCaretVisible (false);
+    vel2->setCaretVisible (true);
     vel2->setPopupMenuEnabled (true);
     vel2->setText (String());
 
     addAndMakeVisible (vel3 = new TextEditor ("vel1"));
     vel3->setMultiLine (false);
     vel3->setReturnKeyStartsNewLine (false);
-    vel3->setReadOnly (true);
+    vel3->setReadOnly (false);
     vel3->setScrollbarsShown (true);
-    vel3->setCaretVisible (false);
+    vel3->setCaretVisible (true);
     vel3->setPopupMenuEnabled (true);
     vel3->setText (String());
 
     addAndMakeVisible (vel4 = new TextEditor ("vel1"));
     vel4->setMultiLine (false);
     vel4->setReturnKeyStartsNewLine (false);
-    vel4->setReadOnly (true);
+    vel4->setReadOnly (false);
     vel4->setScrollbarsShown (true);
-    vel4->setCaretVisible (false);
+    vel4->setCaretVisible (true);
     vel4->setPopupMenuEnabled (true);
     vel4->setText (String());
 
     addAndMakeVisible (vel5 = new TextEditor ("vel1"));
     vel5->setMultiLine (false);
     vel5->setReturnKeyStartsNewLine (false);
-    vel5->setReadOnly (true);
+    vel5->setReadOnly (false);
     vel5->setScrollbarsShown (true);
-    vel5->setCaretVisible (false);
+    vel5->setCaretVisible (true);
     vel5->setPopupMenuEnabled (true);
     vel5->setText (String());
 
     addAndMakeVisible (vel6 = new TextEditor ("vel1"));
     vel6->setMultiLine (false);
     vel6->setReturnKeyStartsNewLine (false);
-    vel6->setReadOnly (true);
+    vel6->setReadOnly (false);
     vel6->setScrollbarsShown (true);
-    vel6->setCaretVisible (false);
+    vel6->setCaretVisible (true);
     vel6->setPopupMenuEnabled (true);
     vel6->setText (String());
 
@@ -459,88 +459,88 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     vel7->setReturnKeyStartsNewLine (false);
     vel7->setReadOnly (false);
     vel7->setScrollbarsShown (true);
-    vel7->setCaretVisible (false);
+    vel7->setCaretVisible (true);
     vel7->setPopupMenuEnabled (true);
     vel7->setText (String());
 
     addAndMakeVisible (vel8 = new TextEditor ("vel1"));
     vel8->setMultiLine (false);
     vel8->setReturnKeyStartsNewLine (false);
-    vel8->setReadOnly (true);
+    vel8->setReadOnly (false);
     vel8->setScrollbarsShown (true);
-    vel8->setCaretVisible (false);
+    vel8->setCaretVisible (true);
     vel8->setPopupMenuEnabled (true);
     vel8->setText (String());
 
     addAndMakeVisible (vel9 = new TextEditor ("vel1"));
     vel9->setMultiLine (false);
     vel9->setReturnKeyStartsNewLine (false);
-    vel9->setReadOnly (true);
+    vel9->setReadOnly (false);
     vel9->setScrollbarsShown (true);
-    vel9->setCaretVisible (false);
+    vel9->setCaretVisible (true);
     vel9->setPopupMenuEnabled (true);
     vel9->setText (String());
 
     addAndMakeVisible (vel10 = new TextEditor ("vel1"));
     vel10->setMultiLine (false);
     vel10->setReturnKeyStartsNewLine (false);
-    vel10->setReadOnly (true);
+    vel10->setReadOnly (false);
     vel10->setScrollbarsShown (true);
-    vel10->setCaretVisible (false);
+    vel10->setCaretVisible (true);
     vel10->setPopupMenuEnabled (true);
     vel10->setText (String());
 
     addAndMakeVisible (vel11 = new TextEditor ("vel1"));
     vel11->setMultiLine (false);
     vel11->setReturnKeyStartsNewLine (false);
-    vel11->setReadOnly (true);
+    vel11->setReadOnly (false);
     vel11->setScrollbarsShown (true);
-    vel11->setCaretVisible (false);
+    vel11->setCaretVisible (true);
     vel11->setPopupMenuEnabled (true);
     vel11->setText (String());
 
     addAndMakeVisible (vel12 = new TextEditor ("vel1"));
     vel12->setMultiLine (false);
     vel12->setReturnKeyStartsNewLine (false);
-    vel12->setReadOnly (true);
+    vel12->setReadOnly (false);
     vel12->setScrollbarsShown (true);
-    vel12->setCaretVisible (false);
+    vel12->setCaretVisible (true);
     vel12->setPopupMenuEnabled (true);
     vel12->setText (String());
 
     addAndMakeVisible (vel13 = new TextEditor ("vel1"));
     vel13->setMultiLine (false);
     vel13->setReturnKeyStartsNewLine (false);
-    vel13->setReadOnly (true);
+    vel13->setReadOnly (false);
     vel13->setScrollbarsShown (true);
-    vel13->setCaretVisible (false);
+    vel13->setCaretVisible (true);
     vel13->setPopupMenuEnabled (true);
     vel13->setText (String());
 
     addAndMakeVisible (vel14 = new TextEditor ("vel1"));
     vel14->setMultiLine (false);
     vel14->setReturnKeyStartsNewLine (false);
-    vel14->setReadOnly (true);
+    vel14->setReadOnly (false);
     vel14->setScrollbarsShown (true);
-    vel14->setCaretVisible (false);
+    vel14->setCaretVisible (true);
     vel14->setPopupMenuEnabled (true);
     vel14->setText (String());
 
     addAndMakeVisible (vel15 = new TextEditor ("vel1"));
     vel15->setMultiLine (false);
     vel15->setReturnKeyStartsNewLine (false);
-    vel15->setReadOnly (true);
+    vel15->setReadOnly (false);
     vel15->setScrollbarsShown (true);
-    vel15->setCaretVisible (false);
+    vel15->setCaretVisible (true);
     vel15->setPopupMenuEnabled (true);
     vel15->setText (String());
 
     addAndMakeVisible (vel16 = new TextEditor ("vel1"));
     vel16->setMultiLine (false);
     vel16->setReturnKeyStartsNewLine (false);
-    vel16->setReadOnly (true);
+    vel16->setReadOnly (false);
     vel16->setScrollbarsShown (true);
-    vel16->setCaretVisible (false);
+    vel16->setCaretVisible (true);
     vel16->setPopupMenuEnabled (true);
     vel16->setText (String());
 
@@ -549,9 +549,10 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     octavesCombo->setJustificationType (Justification::centredLeft);
     octavesCombo->setTextWhenNothingSelected (String());
     octavesCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    octavesCombo->addItem (TRANS("1"), 1);
-    octavesCombo->addItem (TRANS("2"), 2);
-    octavesCombo->addItem (TRANS("3"), 3);
+    octavesCombo->addItem (TRANS("0"), 1);
+    octavesCombo->addItem (TRANS("1"), 2);
+    octavesCombo->addItem (TRANS("2"), 3);
+    octavesCombo->addItem (TRANS("3"), 4);
     octavesCombo->addListener (this);
 
     addAndMakeVisible (label3 = new Label ("new label",
@@ -568,9 +569,11 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     notesCombo->setJustificationType (Justification::centredLeft);
     notesCombo->setTextWhenNothingSelected (String());
     notesCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    notesCombo->addItem (TRANS("4"), 1);
-    notesCombo->addItem (TRANS("8"), 2);
-    notesCombo->addItem (TRANS("16"), 3);
+    notesCombo->addItem (TRANS("32"), 1);
+    notesCombo->addItem (TRANS("16"), 2);
+    notesCombo->addItem (TRANS("8"), 3);
+    notesCombo->addItem (TRANS("4"), 4);
+    notesCombo->addItem (TRANS("2"), 5);
     notesCombo->addListener (this);
 
     addAndMakeVisible (notesLabel = new Label ("new label",
@@ -625,7 +628,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     modeCombo->addItem("Cubic shaper", 3);
 
     modeCombo->setSelectedId(1);
-    
+
     stepButtons.push_back(stepButton1);
     stepButtons.push_back(stepButton2);
     stepButtons.push_back(stepButton3);
@@ -643,6 +646,10 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     stepButtons.push_back(stepButton15);
     stepButtons.push_back(stepButton16);
     
+    for(int i = 0; i < stepButtons.size();i++) {
+        stepButtons.at(i)->setToggleState(true, juce::NotificationType::dontSendNotification);
+    }
+
     velocityFields.push_back(vel1);
     velocityFields.push_back(vel2);
     velocityFields.push_back(vel3);
@@ -659,7 +666,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     velocityFields.push_back(vel14);
     velocityFields.push_back(vel15);
     velocityFields.push_back(vel16);
-    
+
     offsetFields.push_back(note1);
     offsetFields.push_back(note2);
     offsetFields.push_back(note3);
@@ -676,8 +683,8 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     offsetFields.push_back(note14);
     offsetFields.push_back(note15);
     offsetFields.push_back(note16);
-    
-    
+
+
     note1->addMouseListener(this, false);
     note2->addMouseListener(this, false);
     note3->addMouseListener(this, false);
@@ -761,7 +768,9 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note13->setComponentID("12");
     note14->setComponentID("13");
     note15->setComponentID("14");
-    
+
+    notesCombo->setSelectedItemIndex(0);
+    octavesCombo->setSelectedItemIndex(0);
     //[/Constructor]
 }
 
@@ -1235,25 +1244,26 @@ void FXPanel::mouseDown (const MouseEvent& e)
 void FXPanel::mouseDrag (const MouseEvent& e)
 {
     //[UserCode_mouseDrag] -- Add your code here...
-    TextEditor* t = static_cast<TextEditor*>(e.eventComponent);
 
-    int oldval = (int)t->getTextValue().toString().getFloatValue();
-    int value = - e.getDistanceFromDragStartY() / 10;
+    if (TextEditor* t = dynamic_cast<TextEditor*>(e.eventComponent)) {
 
-    if (value + oldval >= 0 && value + oldval <= 127) {
-        t->setText(String(value + oldval));
+        int oldval = (int)t->getTextValue().toString().getFloatValue();
+        int value = - e.getDistanceFromDragStartY() / 20;
+
+        if (value + oldval >= -64 && value + oldval <= 64) {
+            t->setText(String(value + oldval));
+        }
+
+        if (t->getName() == "note1") {
+            int step = t->getComponentID().getIntValue();
+            int offset = t->getTextValue().toString().getIntValue();
+            processor->getSequencer()->setOffset(step,offset);
+        }
+
+        else if (t->getName() == "vel1") {
+
+        }
     }
-
-    if (t->getName() == "note1") {
-        int step = t->getComponentID().getIntValue();
-        int offset = t->getTextValue().toString().getIntValue();
-        processor->getSequencer()->setOffset(step,offset);
-    }
-    /*
-    else if (t->getName() == "vel1") {
-
-    }
-     */
 
     //[/UserCode_mouseDrag]
 }
@@ -1262,8 +1272,8 @@ void FXPanel::mouseDrag (const MouseEvent& e)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
-    
-    
+
+
     for (int i = 0; i < this->processor->getSequencer()->getSteps().size();i++) {
         stepButtons.at(i)->setToggleState(this->processor->getSequencer()->getSteps().at(i), juce::NotificationType::dontSendNotification);
     }
@@ -1278,7 +1288,7 @@ void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
     octavesCombo->setText(String(this->processor->getSequencer()->getNumOctaves()));
     notesCombo->setText(String(this->processor->getSequencer()->getRaster()));
     enableSeqButton->setToggleState(this->processor->getSequencer()->isEnabled(), juce::NotificationType::dontSendNotification);
-    
+
 }
 
 
@@ -1295,7 +1305,7 @@ void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="FXPanel" componentName=""
-                 parentClasses="public Component" constructorParams="TrioAudioProcessor* p"
+                 parentClasses="public Component, public ChangeListener" constructorParams="TrioAudioProcessor* p"
                  variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
                  overlayOpacity="0.330" fixedSize="0" initialWidth="910" initialHeight="600">
   <METHODS>
@@ -1470,103 +1480,104 @@ BEGIN_JUCER_METADATA
          fontsize="15" bold="0" italic="0" justification="34"/>
   <TEXTEDITOR name="note1" id="90ce893ec11d1321" memberName="note1" virtualName=""
               explicitFocusOrder="0" pos="200 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="eb547dad73dcac93" memberName="note2" virtualName=""
               explicitFocusOrder="0" pos="232 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="107f2b54ed369549" memberName="note3" virtualName=""
               explicitFocusOrder="0" pos="264 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="bf8d1bc40a59acca" memberName="note4" virtualName=""
               explicitFocusOrder="0" pos="296 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="119aacc149b1175" memberName="note5" virtualName=""
               explicitFocusOrder="0" pos="328 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="efbb02422d9c6af9" memberName="note6" virtualName=""
               explicitFocusOrder="0" pos="360 440 32 24" initialText="" multiline="0"
               retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="c9d8e036b67e80a" memberName="note7" virtualName=""
               explicitFocusOrder="0" pos="392 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="3e0bfaa4513716ec" memberName="note8" virtualName=""
               explicitFocusOrder="0" pos="424 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="5a942c376061e351" memberName="note9" virtualName=""
               explicitFocusOrder="0" pos="456 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="f79d9377c4ad17da" memberName="note10" virtualName=""
               explicitFocusOrder="0" pos="488 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="13c49dd9947b63a3" memberName="note11" virtualName=""
               explicitFocusOrder="0" pos="520 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="e6da41e9763a554d" memberName="note12" virtualName=""
               explicitFocusOrder="0" pos="552 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="b9e021c747bb5d93" memberName="note13" virtualName=""
               explicitFocusOrder="0" pos="584 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="4daf3234708c4b8f" memberName="note14" virtualName=""
               explicitFocusOrder="0" pos="616 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="39c973d1846d1f9a" memberName="note15" virtualName=""
               explicitFocusOrder="0" pos="648 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="note1" id="c6a7cd1506a36d00" memberName="note16" virtualName=""
               explicitFocusOrder="0" pos="680 440 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="ef1d8e7d20b14651" memberName="vel1" virtualName=""
               explicitFocusOrder="0" pos="200 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="1ca19df1b93b6ffd" memberName="vel2" virtualName=""
               explicitFocusOrder="0" pos="232 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="37c84e212c820c1f" memberName="vel3" virtualName=""
               explicitFocusOrder="0" pos="264 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="fa0abf27d80af56d" memberName="vel4" virtualName=""
               explicitFocusOrder="0" pos="296 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="ea77e842a37ddd1a" memberName="vel5" virtualName=""
               explicitFocusOrder="0" pos="328 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="44a9e111d73c6964" memberName="vel6" virtualName=""
               explicitFocusOrder="0" pos="360 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="ee609a9c5bbba1c5" memberName="vel7" virtualName=""
               explicitFocusOrder="0" pos="392 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="3ff1177c88b6f941" memberName="vel8" virtualName=""
               explicitFocusOrder="0" pos="424 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="4e4b1842f297113f" memberName="vel9" virtualName=""
               explicitFocusOrder="0" pos="456 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="bc458777e38b376d" memberName="vel10" virtualName=""
               explicitFocusOrder="0" pos="488 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="55febf15e7fbca59" memberName="vel11" virtualName=""
               explicitFocusOrder="0" pos="520 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="a64c22ee92c4002" memberName="vel12" virtualName=""
               explicitFocusOrder="0" pos="552 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="344faea266ade142" memberName="vel13" virtualName=""
               explicitFocusOrder="0" pos="584 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="427cd6bd629a8321" memberName="vel14" virtualName=""
               explicitFocusOrder="0" pos="616 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="c06857524da62db3" memberName="vel15" virtualName=""
               explicitFocusOrder="0" pos="648 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="vel1" id="701fff4c62bf4d14" memberName="vel16" virtualName=""
               explicitFocusOrder="0" pos="680 472 32 24" initialText="" multiline="0"
-              retKeyStartsLine="0" readonly="1" scrollbars="1" caret="0" popupmenu="1"/>
+              retKeyStartsLine="0" readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <COMBOBOX name="octavesCombo" id="1f63ea09d37ce9fd" memberName="octavesCombo"
             virtualName="" explicitFocusOrder="0" pos="728 472 72 24" editable="0"
-            layout="33" items="1&#10;2&#10;3" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+            layout="33" items="0&#10;1&#10;2&#10;3" textWhenNonSelected=""
+            textWhenNoItems="(no choices)"/>
   <LABEL name="new label" id="6ba6d979d890192a" memberName="label3" virtualName=""
          explicitFocusOrder="0" pos="728 440 72 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Octaves" editableSingleClick="0"
@@ -1574,7 +1585,8 @@ BEGIN_JUCER_METADATA
          fontsize="15" bold="0" italic="0" justification="33"/>
   <COMBOBOX name="notesCombo" id="4c2ae1bbe6e30e48" memberName="notesCombo"
             virtualName="" explicitFocusOrder="0" pos="56 472 72 24" editable="0"
-            layout="33" items="4&#10;8&#10;16" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+            layout="33" items="32&#10;16&#10;8&#10;4&#10;2" textWhenNonSelected=""
+            textWhenNoItems="(no choices)"/>
   <LABEL name="new label" id="a419e5a0d88a9703" memberName="notesLabel"
          virtualName="" explicitFocusOrder="0" pos="56 440 72 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Notes" editableSingleClick="0"

@@ -454,7 +454,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->fxPanel = new FXPanel(processor);
     fxPanel->setBounds(x,y,getWidth(),getHeight());
     p->addChangeListener(this->fxPanel);
-    
+
     addChildComponent(fxPanel);
     addChildComponent(presetPanel);
 
@@ -1063,30 +1063,30 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_storeButton] -- add your button handler code here..
 
         ValueTree seq = ValueTree (Identifier ("sequencer"));
-        
+
         processor->getValueTreeState()->state.addChild(seq, 0, nullptr);
-        
+
         seq.setProperty("raster", processor->getSequencer()->getRaster(), nullptr);
         seq.setProperty("octaves", processor->getSequencer()->getNumOctaves(), nullptr);
         seq.setProperty("stepconfig", processor->getSequencer()->getStepConfig(), nullptr);
         seq.setProperty("enabled", processor->getSequencer()->isEnabled(), nullptr);
-        
+
         ValueTree offsets = ValueTree (Identifier ("offsets"));
-        
+
         for (int i = 0; i < 16;i++ ) {
             offsets.setProperty("offset_"+String(i), processor->getSequencer()->getOffsetAt(i), nullptr);
         }
-        
+
         seq.addChild(offsets, 0, nullptr);
-        
+
         ValueTree velocities = ValueTree (Identifier ("velocities"));
-        
+
         for (int i = 0; i < 16;i++ ) {
             offsets.setProperty("velocity_"+String(i), processor->getSequencer()->getVelocityAt(i), nullptr);
         }
-        
+
         seq.addChild(velocities, 0, nullptr);
-        
+
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
         presetPanel->setData(xml);
 
@@ -1346,7 +1346,7 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer"
+                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer, public ChangeBroadcaster"
                  constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">

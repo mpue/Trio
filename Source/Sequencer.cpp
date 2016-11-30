@@ -16,10 +16,10 @@ Sequencer::Sequencer() {
     for (int i = 0; i < 16;i++) {
         offsets.push_back(0);
         velocities.push_back(100);
-        steps.push_back(false);
+        steps.push_back(true);
     }
     
-    this->raster = 16;
+    this->raster = 32;
     this->octave = 0;
     this->currentStep = 0;
     this->playing = false;

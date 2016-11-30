@@ -44,7 +44,8 @@ class MainWindow  : public Component,
                     public ButtonListener,
                     public ComboBoxListener,
                     public AudioProcessorListener,
-                    public Timer
+                    public Timer,
+                    public ChangeBroadcaster
 {
 public:
     //==============================================================================

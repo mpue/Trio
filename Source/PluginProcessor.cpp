@@ -575,9 +575,9 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             note->setVelocity(m.getVelocity());
             voices.at(m.getNoteNumber())->setNote(note);
             voices.at(m.getNoteNumber())->setPlaying(true);
-            if (!result.isPlaying) {
+//             if (!result.isPlaying) {
                 voices.at(m.getNoteNumber())->getAmpEnvelope()->gate(true);
-            }
+//            }
             voices.at(m.getNoteNumber())->setDuration(250);
             voices.at(m.getNoteNumber())->setTime(elapsed);
             

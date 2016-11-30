@@ -36,10 +36,10 @@
                                                                     //[/Comments]
 */
 class FXPanel  : public Component,
+                 public ChangeListener,
                  public SliderListener,
                  public ButtonListener,
-                 public ComboBoxListener,
-                 public ChangeListener
+                 public ComboBoxListener
 {
 public:
     //==============================================================================
@@ -48,7 +48,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -95,7 +95,7 @@ private:
     vector<ToggleButton*> stepButtons;
     vector<TextEditor*> offsetFields;
     vector<TextEditor*> velocityFields;
-    
+
     //[/UserVariables]
 
     //==============================================================================
