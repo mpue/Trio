@@ -479,7 +479,7 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     
     bpm = (deltappq / (deltaTime / 1000)) * 60;
     
-    if (result.isPlaying && sequencer->isPlaying()) {
+    if (result.isPlaying && sequencer->isEnabled()) {
         
         // 8th
         // Logger::getCurrentLogger()->writeToLog("ppq : "+String(currentppq));
@@ -1104,7 +1104,38 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
     Oszillator::OscMode mode2 = Oszillator::OscMode::SAW;
     Oszillator::OscMode mode3 = Oszillator::OscMode::SAW;
     
+    if (state->getChildWithName("sequencer").isValid()) {
+        
+        ValueTree v = state->getChildWithName("sequencer");
+        
+        int raster = v.getProperty("raster").toString().getIntValue();
+        int octaves = v.getProperty("octaves").toString().getIntValue();
+        int stepconfig = v.getProperty("stepconfig");
+        bool enabled = v.getProperty("enabled");
+        ValueTree offsets = v.getChildWithName("offsets");
+        
+        if (offsets.isValid()) {
+            for (int j = 0; j < 16;j++) {
+                int offset = offsets.getProperty("offset_"+String(j));
+                sequencer->setOffset(j, offset);
+                Logger::getCurrentLogger()->writeToLog("found offset : "+ String(offset));
+            }
+        }
+        
+        sequencer->setNumOctaves(octaves);
+        sequencer->setStepConfig(stepconfig);
+        sequencer->setRaster(raster);
+        sequencer->setEnabled(enabled);
+    }
+    else {
+        sequencer->setNumOctaves(1);
+        sequencer->setStepConfig(0);
+        sequencer->setRaster(16);
+        sequencer->setEnabled(false);
+    }
+    
     for (int i = 0; i < state->getNumChildren();i++) {
+        
         // cout << state->getChild(i).getProperty("id").toString()<< ":" << state->getChild(i).getProperty("value").toString().getFloatValue() << endl;
         String id = state->getChild(i).getProperty("id").toString();
 
@@ -1168,6 +1199,8 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
         else if (id == "modsource") {
             
         }
+
+        
     }
     
     setupOscillators(mode1, mode2, mode3);

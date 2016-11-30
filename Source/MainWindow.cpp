@@ -1059,6 +1059,23 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_storeButton] -- add your button handler code here..
 
+        ValueTree seq = ValueTree (Identifier ("sequencer"));
+        
+        processor->getValueTreeState()->state.addChild(seq, 0, nullptr);
+        
+        seq.setProperty("raster", processor->getSequencer()->getRaster(), nullptr);
+        seq.setProperty("octaves", processor->getSequencer()->getNumOctaves(), nullptr);
+        seq.setProperty("stepconfig", processor->getSequencer()->getStepConfig(), nullptr);
+        seq.setProperty("enabled", processor->getSequencer()->isEnabled(), nullptr);
+        
+        ValueTree offsets = ValueTree (Identifier ("offsets"));
+        
+        for (int i = 0; i < 16;i++ ) {
+            offsets.setProperty("offset_"+String(i), processor->getSequencer()->getOffsetAt(i), nullptr);
+        }
+        
+        seq.addChild(offsets, 0, nullptr);
+
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
         presetPanel->setData(xml);
 

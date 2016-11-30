@@ -31,6 +31,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     this->processor = p;
+    p->getSequencer()->addChangeListener(this);
     //[/Constructor_pre]
 
     addAndMakeVisible (dampSlider = new Slider ("dampSlider"));
@@ -625,7 +626,41 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     modeCombo->addItem("Cubic shaper", 3);
 
     modeCombo->setSelectedId(1);
-
+    
+    stepButtons.push_back(stepButton1);
+    stepButtons.push_back(stepButton2);
+    stepButtons.push_back(stepButton3);
+    stepButtons.push_back(stepButton4);
+    stepButtons.push_back(stepButton5);
+    stepButtons.push_back(stepButton6);
+    stepButtons.push_back(stepButton7);
+    stepButtons.push_back(stepButton8);
+    stepButtons.push_back(stepButton9);
+    stepButtons.push_back(stepButton10);
+    stepButtons.push_back(stepButton11);
+    stepButtons.push_back(stepButton12);
+    stepButtons.push_back(stepButton13);
+    stepButtons.push_back(stepButton14);
+    stepButtons.push_back(stepButton15);
+    stepButtons.push_back(stepButton16);
+    
+    offsetFields.push_back(note1);
+    offsetFields.push_back(note2);
+    offsetFields.push_back(note3);
+    offsetFields.push_back(note4);
+    offsetFields.push_back(note5);
+    offsetFields.push_back(note6);
+    offsetFields.push_back(note7);
+    offsetFields.push_back(note8);
+    offsetFields.push_back(note9);
+    offsetFields.push_back(note10);
+    offsetFields.push_back(note11);
+    offsetFields.push_back(note12);
+    offsetFields.push_back(note13);
+    offsetFields.push_back(note14);
+    offsetFields.push_back(note15);
+    offsetFields.push_back(note16);
+    
     /*
     notenames.push_back("A");
     notenames.push_back("A#");
@@ -743,6 +778,8 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 FXPanel::~FXPanel()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    stepButtons.clear();
+    offsetFields.clear();
     //[/Destructor_pre]
 
     dampSlider = nullptr;
@@ -1051,7 +1088,7 @@ void FXPanel::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == enableSeqButton)
     {
         //[UserButtonCode_enableSeqButton] -- add your button handler code here..
-        processor->getSequencer()->setPlaying(enableSeqButton->getToggleState());
+        processor->getSequencer()->setEnabled(enableSeqButton->getToggleState());
         //[/UserButtonCode_enableSeqButton]
     }
     else if (buttonThatWasClicked == stepButton1)
@@ -1233,6 +1270,24 @@ void FXPanel::mouseDrag (const MouseEvent& e)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
+    if (source == processor->getSequencer()) {
+        
+        for (int i = 0; i < processor->getSequencer()->getSteps().size();i++) {
+            stepButtons.at(i)->setToggleState(processor->getSequencer()->getSteps().at(i), juce::NotificationType::dontSendNotification);
+        }
+        for (int i = 0; i < 16;i++) {
+            int offset = processor->getSequencer()->getOffsetAt(i);
+            offsetFields.at(i)->setText(String(offset));
+            Logger::getCurrentLogger()->writeToLog("ofs : "+ String(offset));
+        }
+        
+        octavesCombo->setText(String(processor->getSequencer()->getNumOctaves()));
+        notesCombo->setText(String(processor->getSequencer()->getRaster()));
+        enableSeqButton->setToggleState(processor->getSequencer()->isEnabled(), juce::NotificationType::dontSendNotification);
+        
+    }
+}
 //[/MiscUserCode]
 
 

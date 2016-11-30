@@ -36,6 +36,7 @@
                                                                     //[/Comments]
 */
 class FXPanel  : public Component,
+                 public ChangeListener,
                  public SliderListener,
                  public ButtonListener,
                  public ComboBoxListener
@@ -47,6 +48,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void changeListenerCallback (ChangeBroadcaster* source) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -90,6 +92,8 @@ private:
     ScopedPointer<PopupMenu> popup;
     vector<String> notenames;
     vector<String> items;
+    vector<ToggleButton*> stepButtons;
+    vector<TextEditor*> offsetFields;
 
     //[/UserVariables]
 

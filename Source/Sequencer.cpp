@@ -30,16 +30,46 @@ Sequencer::~Sequencer() {
     
 }
 
-vector<int> Sequencer::getOffsets() {
-    return this->offsets;
-}
-
 vector<int> Sequencer::getVelocities() {
     return this->velocities;
 }
 
 vector<bool> Sequencer::getSteps() {
     return this->steps;
+}
+
+int Sequencer::getStepConfig() {
+    
+    int config = 0;
+    
+    for (int i = 0; i< steps.size();i++) {
+        
+        if (steps.at(i)) {
+            config |= 1 << i;
+        }
+    }
+    
+    return config;
+}
+
+void Sequencer::setStepConfig(int config) {
+    for (int i = 0; i< steps.size();i++) {
+        
+        steps.at(i) = false;
+        if ((config >> i) & 1){
+            steps.at(i) = true;
+        }
+    }
+    sendChangeMessage();
+}
+
+void Sequencer::setEnabled(bool enabled) {
+    this->enabled = enabled;
+    sendChangeMessage();
+}
+
+bool Sequencer::isEnabled() {
+    return this->enabled;
 }
 
 void Sequencer::setPlaying(bool playing) {
@@ -67,6 +97,8 @@ void Sequencer::tick() {
 
 void Sequencer::setRaster(int raster) {
     this->raster = raster;
+    sendChangeMessage();
+
 }
 
 int Sequencer::getRaster() {
@@ -76,6 +108,11 @@ int Sequencer::getRaster() {
 int Sequencer::getCurrentStep() {
     return this->currentStep;
 }
+
+int Sequencer::getOffsetAt(int step){
+    return this->offsets.at(step);
+}
+
 
 int Sequencer::getOffset() {
     return this->offsets.at(currentStep);
@@ -103,6 +140,11 @@ void Sequencer::setOctave(int octave) {
 
 void Sequencer::setNumOctaves(int octaves) {
     this->numOctaves = octaves;
+    sendChangeMessage();
+}
+
+int Sequencer::getNumOctaves() {
+    return this->numOctaves;
 }
 
 int Sequencer::getOctave() {
