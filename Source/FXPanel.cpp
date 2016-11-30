@@ -31,7 +31,6 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     this->processor = p;
-    p->getSequencer()->addChangeListener(this);
     //[/Constructor_pre]
 
     addAndMakeVisible (dampSlider = new Slider ("dampSlider"));
@@ -644,6 +643,23 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     stepButtons.push_back(stepButton15);
     stepButtons.push_back(stepButton16);
     
+    velocityFields.push_back(vel1);
+    velocityFields.push_back(vel2);
+    velocityFields.push_back(vel3);
+    velocityFields.push_back(vel4);
+    velocityFields.push_back(vel5);
+    velocityFields.push_back(vel6);
+    velocityFields.push_back(vel7);
+    velocityFields.push_back(vel8);
+    velocityFields.push_back(vel9);
+    velocityFields.push_back(vel10);
+    velocityFields.push_back(vel11);
+    velocityFields.push_back(vel12);
+    velocityFields.push_back(vel13);
+    velocityFields.push_back(vel14);
+    velocityFields.push_back(vel15);
+    velocityFields.push_back(vel16);
+    
     offsetFields.push_back(note1);
     offsetFields.push_back(note2);
     offsetFields.push_back(note3);
@@ -661,32 +677,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     offsetFields.push_back(note15);
     offsetFields.push_back(note16);
     
-    /*
-    notenames.push_back("A");
-    notenames.push_back("A#");
-    notenames.push_back("B");
-    notenames.push_back("C");
-    notenames.push_back("C#");
-    notenames.push_back("D");
-    notenames.push_back("D#");
-    notenames.push_back("E");
-    notenames.push_back("F");
-    notenames.push_back("F#");
-    notenames.push_back("G");
-    notenames.push_back("G#");
-
-    int index = 1;
-
-    popup = new PopupMenu();
-
-    for (int o = 0; o < 8; o++) {
-        for (int i = 1; i < 13; i++) {
-            items.push_back(notenames[i - 1]+String(o));
-            popup->addItem(index++, notenames[i - 1]+String(o));
-        }
-    }
-     */
-
+    
     note1->addMouseListener(this, false);
     note2->addMouseListener(this, false);
     note3->addMouseListener(this, false);
@@ -703,7 +694,6 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note14->addMouseListener(this, false);
     note15->addMouseListener(this, false);
     note16->addMouseListener(this, false);
-
 
     note1->setText("0");
     note2->setText("0");
@@ -771,7 +761,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     note13->setComponentID("12");
     note14->setComponentID("13");
     note15->setComponentID("14");
-
+    
     //[/Constructor]
 }
 
@@ -780,6 +770,7 @@ FXPanel::~FXPanel()
     //[Destructor_pre]. You can add your own custom destruction code here..
     stepButtons.clear();
     offsetFields.clear();
+    velocityFields.clear();
     //[/Destructor_pre]
 
     dampSlider = nullptr;
@@ -1271,23 +1262,26 @@ void FXPanel::mouseDrag (const MouseEvent& e)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
-    if (source == processor->getSequencer()) {
-        
-        for (int i = 0; i < processor->getSequencer()->getSteps().size();i++) {
-            stepButtons.at(i)->setToggleState(processor->getSequencer()->getSteps().at(i), juce::NotificationType::dontSendNotification);
-        }
-        for (int i = 0; i < 16;i++) {
-            int offset = processor->getSequencer()->getOffsetAt(i);
-            offsetFields.at(i)->setText(String(offset));
-            Logger::getCurrentLogger()->writeToLog("ofs : "+ String(offset));
-        }
-        
-        octavesCombo->setText(String(processor->getSequencer()->getNumOctaves()));
-        notesCombo->setText(String(processor->getSequencer()->getRaster()));
-        enableSeqButton->setToggleState(processor->getSequencer()->isEnabled(), juce::NotificationType::dontSendNotification);
-        
+    
+    
+    for (int i = 0; i < this->processor->getSequencer()->getSteps().size();i++) {
+        stepButtons.at(i)->setToggleState(this->processor->getSequencer()->getSteps().at(i), juce::NotificationType::dontSendNotification);
     }
+    for (int i = 0; i < 16;i++) {
+        int offset = this->processor->getSequencer()->getOffsetAt(i);
+        offsetFields.at(i)->setText(String(offset), false);
+    }
+    for (int i = 0; i < 16;i++) {
+        int velocity = this->processor->getSequencer()->getVelocityAt(i);
+        velocityFields.at(i)->setText(String(velocity),false);
+    }
+    octavesCombo->setText(String(this->processor->getSequencer()->getNumOctaves()));
+    notesCombo->setText(String(this->processor->getSequencer()->getRaster()));
+    enableSeqButton->setToggleState(this->processor->getSequencer()->isEnabled(), juce::NotificationType::dontSendNotification);
+    
 }
+
+
 //[/MiscUserCode]
 
 

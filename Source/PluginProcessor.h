@@ -25,14 +25,15 @@
 #include "ADSR.h"
 #include "Distortion.h"
 #include "BasicDelayLine.h"
-#include "Sequencer.h";
+#include "Sequencer.h"
+
 
 using namespace std;
 
 //==============================================================================
 /**
 */
-class TrioAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener, public ComboBox::Listener
+class TrioAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener, public ComboBox::Listener, public ChangeBroadcaster
 {
 public:
     
@@ -113,7 +114,7 @@ public:
     void setFxDistEnabled(bool enabled);
     
     Sequencer* getSequencer();
-    
+   
     
 private:
     //==============================================================================
@@ -165,7 +166,7 @@ private:
     int currentProgramNumber;
     
     ComboBox* programCombo = 0;
-    
+   
     ScopedPointer<Sequencer> sequencer;
     
     int octave = 0;

@@ -1104,6 +1104,7 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
     Oszillator::OscMode mode2 = Oszillator::OscMode::SAW;
     Oszillator::OscMode mode3 = Oszillator::OscMode::SAW;
     
+    
     if (state->getChildWithName("sequencer").isValid()) {
         
         ValueTree v = state->getChildWithName("sequencer");
@@ -1112,13 +1113,22 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
         int octaves = v.getProperty("octaves").toString().getIntValue();
         int stepconfig = v.getProperty("stepconfig");
         bool enabled = v.getProperty("enabled");
+        
         ValueTree offsets = v.getChildWithName("offsets");
         
         if (offsets.isValid()) {
             for (int j = 0; j < 16;j++) {
                 int offset = offsets.getProperty("offset_"+String(j));
                 sequencer->setOffset(j, offset);
-                Logger::getCurrentLogger()->writeToLog("found offset : "+ String(offset));
+            }
+        }
+        
+        ValueTree velocities = v.getChildWithName("velocities");
+        
+        if (velocities.isValid()) {
+            for (int j = 0; j < 16;j++) {
+                int velocity = velocities.getProperty("velocity_"+String(j));
+                sequencer->setVelocity(j, velocity);
             }
         }
         
@@ -1133,7 +1143,7 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
         sequencer->setRaster(16);
         sequencer->setEnabled(false);
     }
-    
+        
     for (int i = 0; i < state->getNumChildren();i++) {
         
         // cout << state->getChild(i).getProperty("id").toString()<< ":" << state->getChild(i).getProperty("value").toString().getFloatValue() << endl;
@@ -1204,7 +1214,8 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
     }
     
     setupOscillators(mode1, mode2, mode3);
-    
+    sendChangeMessage();
+
 }
 
 void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
@@ -1260,3 +1271,4 @@ void TrioAudioProcessor::selectFilterModulator(TrioAudioProcessor::ModulatorType
             break;
     }
 }
+

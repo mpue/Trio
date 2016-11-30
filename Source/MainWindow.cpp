@@ -37,6 +37,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     this->processor = p;
+
     //[/Constructor_pre]
 
     addAndMakeVisible (cutoffSlider = new Slider ("cutoffSlider"));
@@ -452,7 +453,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     this->fxPanel = new FXPanel(processor);
     fxPanel->setBounds(x,y,getWidth(),getHeight());
-
+    p->addChangeListener(this->fxPanel);
+    
     addChildComponent(fxPanel);
     addChildComponent(presetPanel);
 
@@ -568,6 +570,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     lfo2ModCombo->setSelectedId(nval);
 
     processor->addListener(this);
+    // processor->addListener(fxPanel);
 
     statusLabel->setColour(Label::textColourId, Colours::darkorange);
 
@@ -1075,7 +1078,15 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         }
         
         seq.addChild(offsets, 0, nullptr);
-
+        
+        ValueTree velocities = ValueTree (Identifier ("velocities"));
+        
+        for (int i = 0; i < 16;i++ ) {
+            offsets.setProperty("velocity_"+String(i), processor->getSequencer()->getVelocityAt(i), nullptr);
+        }
+        
+        seq.addChild(velocities, 0, nullptr);
+        
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
         presetPanel->setData(xml);
 

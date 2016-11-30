@@ -15,10 +15,9 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-
 using namespace std;
 
-class Sequencer : public ChangeBroadcaster {
+class Sequencer {
     
 public:
     Sequencer();
@@ -43,6 +42,9 @@ public:
     void setOffset(int step, int offset);
     int getOffset();
     int getOffsetAt(int step);
+    int getVelocity();
+    int getVelocityAt(int step);
+    void setVelocity(int step, int offset);
     void setStepEnabled(int step, bool enabled);
     bool isStepEnabled(int step);
     bool isCurrentStepEnabled();

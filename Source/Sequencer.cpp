@@ -60,12 +60,10 @@ void Sequencer::setStepConfig(int config) {
             steps.at(i) = true;
         }
     }
-    sendChangeMessage();
 }
 
 void Sequencer::setEnabled(bool enabled) {
     this->enabled = enabled;
-    sendChangeMessage();
 }
 
 bool Sequencer::isEnabled() {
@@ -97,8 +95,6 @@ void Sequencer::tick() {
 
 void Sequencer::setRaster(int raster) {
     this->raster = raster;
-    sendChangeMessage();
-
 }
 
 int Sequencer::getRaster() {
@@ -122,6 +118,20 @@ void Sequencer::setOffset(int step, int offset) {
     this->offsets.at(step) = offset;
 }
 
+
+int Sequencer::getVelocityAt(int step){
+    return this->velocities.at(step);
+}
+
+
+int Sequencer::getVelocity() {
+    return this->velocities.at(currentStep);
+}
+
+void Sequencer::setVelocity(int step, int velocity) {
+    this->velocities.at(step) = velocity;
+}
+
 void Sequencer::setStepEnabled(int step, bool enabled) {
     this->steps.at(step) = enabled;
 }
@@ -140,7 +150,6 @@ void Sequencer::setOctave(int octave) {
 
 void Sequencer::setNumOctaves(int octaves) {
     this->numOctaves = octaves;
-    sendChangeMessage();
 }
 
 int Sequencer::getNumOctaves() {
