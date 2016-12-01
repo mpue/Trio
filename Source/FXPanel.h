@@ -50,6 +50,10 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     void changeListenerCallback (ChangeBroadcaster* source) override;
+    // void mouseWheelMove(const MouseEvent &event, const MouseWheelDetails &wheel) override;
+    bool keyPressed (const KeyPress& key, Component* originatingComponent)override;
+    void valueUp(TextEditor* editor);
+    void valueDown(TextEditor * editor);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -59,7 +63,7 @@ public:
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void mouseDown (const MouseEvent& e) override;
     void mouseDrag (const MouseEvent& e) override;
-    bool keyPressed (const KeyPress& key, Component* originatingComponent)override;
+
     // Binary resources:
     static const char* fx_panel_png;
     static const int fx_panel_pngSize;
@@ -91,6 +95,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> fxdist_drive_att;
 
     ScopedPointer<PopupMenu> popup;
+    ScopedPointer<GlowEffect> glow;
     vector<String> notenames;
     vector<String> items;
     vector<ToggleButton*> stepButtons;

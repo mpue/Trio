@@ -95,6 +95,8 @@ void TrioLookAndFeel::drawToggleButton (Graphics& g, ToggleButton& button,
     }
     
     
+    
+    
     float fontSize = jmin (15.0f, button.getHeight() * 0.75f);
     g.setColour (button.findColour (ToggleButton::textColourId));
     g.setFont (fontSize);

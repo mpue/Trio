@@ -27,16 +27,6 @@ void LowPassFilter::coefficients(float frequency, float resonance) {
     this->frequency = frequency;
     this->resonance = resonance;
     
-    /*
-    if (this->modulator != 0) {
-        frequency = frequency * modulator->getOutput();
-    }
-    
-    if (frequency <= 0) {
-        frequency = 0.1;
-    }
-     */
-    
     IIRCoefficients ic1  = IIRCoefficients::makeLowPass (44100, frequency, resonance);
     filter1->setCoefficients(ic1);
     filter2->setCoefficients(ic1);

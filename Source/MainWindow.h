@@ -188,6 +188,8 @@ private:
     ScopedPointer<TextButton> setupButton;
     ScopedPointer<TextButton> fxButton;
     ScopedPointer<ImageButton> noiseButton;
+    ScopedPointer<ToggleButton> lowPassPutton;
+    ScopedPointer<ToggleButton> highPassButton;
     Image cachedImage_trio_png_1;
 
 

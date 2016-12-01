@@ -10,7 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "LowPassFilter.h"
+#include "MultimodeFilter.h"
 #include "Filter.h"
 
 #include <iostream>
@@ -24,8 +24,10 @@ TrioAudioProcessor::TrioAudioProcessor()
 {
     globalPitch = 0;
     currentProgramNumber = 0;
-    leftFilter = new LowPassFilter();
-    rightFilter = new LowPassFilter();
+    leftFilter = new MultimodeFilter();
+    leftFilter->setMode(MultimodeFilter::Mode::HIGHPASS);
+    rightFilter = new MultimodeFilter();
+    rightFilter->setMode(MultimodeFilter::Mode::HIGHPASS);
     outputFilterL = new IIRFilter();
     outputFilterR = new IIRFilter();
     
@@ -1078,11 +1080,11 @@ vector<Voice*> TrioAudioProcessor::getVoices() const {
     return this->voices;
 }
 
-Filter* TrioAudioProcessor::getLeftFilter() {
+MultimodeFilter* TrioAudioProcessor::getLeftFilter() {
     return leftFilter;
 }
 
-Filter* TrioAudioProcessor::getRightFilter() {
+MultimodeFilter* TrioAudioProcessor::getRightFilter() {
     return rightFilter;
 }
 

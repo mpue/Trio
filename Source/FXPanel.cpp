@@ -699,6 +699,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 
     notesCombo->setSelectedItemIndex(0);
     octavesCombo->setSelectedItemIndex(0);
+    glow = new GlowEffect();
     //[/Constructor]
 }
 
@@ -787,6 +788,7 @@ FXPanel::~FXPanel()
 
     //[Destructor]. You can add your own custom destruction code here..
     popup = nullptr;
+    glow = nullptr;
     //[/Destructor]
 }
 
@@ -1202,73 +1204,108 @@ void FXPanel::mouseDrag (const MouseEvent& e)
 void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
 
 
-    for (int i = 0; i < this->processor->getSequencer()->getSteps().size();i++) {
-        stepButtons.at(i)->setToggleState(this->processor->getSequencer()->getSteps().at(i), juce::NotificationType::dontSendNotification);
+    if (Sequencer* s = dynamic_cast<Sequencer*>(source)) {
+
+        if (s->isEnabled()) {
+
+            glow->setGlowProperties(25.0f, Colours::yellow);
+
+            for (int i = 0; i < this->processor->getSequencer()->getSteps().size();i++) {
+                stepButtons.at(i)->setComponentEffect(nullptr);
+            }
+
+            stepButtons.at(s->getCurrentStep())->setComponentEffect(glow);
+        }
     }
-    for (int i = 0; i < 16;i++) {
-        int offset = this->processor->getSequencer()->getOffsetAt(i);
-        offsetFields.at(i)->setText(String(offset), false);
+    else {
+
+        for (int i = 0; i < this->processor->getSequencer()->getSteps().size();i++) {
+            stepButtons.at(i)->setToggleState(this->processor->getSequencer()->getSteps().at(i), juce::NotificationType::dontSendNotification);
+        }
+        for (int i = 0; i < 16;i++) {
+            int offset = this->processor->getSequencer()->getOffsetAt(i);
+            offsetFields.at(i)->setText(String(offset), false);
+        }
+        for (int i = 0; i < 16;i++) {
+            int velocity = this->processor->getSequencer()->getVelocityAt(i);
+            velocityFields.at(i)->setText(String(velocity),false);
+        }
+        octavesCombo->setText(String(this->processor->getSequencer()->getNumOctaves()));
+        notesCombo->setText(String(this->processor->getSequencer()->getRaster()));
+        enableSeqButton->setToggleState(this->processor->getSequencer()->isEnabled(), juce::NotificationType::dontSendNotification);
+
     }
-    for (int i = 0; i < 16;i++) {
-        int velocity = this->processor->getSequencer()->getVelocityAt(i);
-        velocityFields.at(i)->setText(String(velocity),false);
-    }
-    octavesCombo->setText(String(this->processor->getSequencer()->getNumOctaves()));
-    notesCombo->setText(String(this->processor->getSequencer()->getRaster()));
-    enableSeqButton->setToggleState(this->processor->getSequencer()->isEnabled(), juce::NotificationType::dontSendNotification);
+
 
 }
 
 
 bool FXPanel::keyPressed (const KeyPress& key, Component* originatingComponent) {
-    
+
     TextEditor* editor = static_cast<TextEditor*>(originatingComponent);
-    
+
     if (key == KeyPress::upKey) {
-        
-        if (editor->getName() == "note1") {
-            int offset = editor->getTextValue().toString().getIntValue();
-            
-            if (offset < 63) {
-                offset++;
-                editor->setText(String(offset),false);
-            }
-            
-        }
-        
-        else if (editor->getName() == "vel1") {
-            int velocity = editor->getTextValue().toString().getIntValue();
-            
-            if (velocity < 127) {
-                velocity++;
-                editor->setText(String(velocity),false);
-            }
-        }
-        
-        
+         this->valueUp(editor);
+
     }
     else if (key  == KeyPress::downKey) {
-        if (editor->getName() == "note1") {
-            int offset = editor->getTextValue().toString().getIntValue();
-            
-            if (offset > -63) {
-                offset--;
-                editor->setText(String(offset),false);
-            }
-            
+        this->valueDown(editor);
+    }
+
+    return true;
+}
+
+void FXPanel::valueUp(TextEditor* editor) {
+    if (editor->getName() == "note1") {
+        int offset = editor->getTextValue().toString().getIntValue();
+
+        if (offset < 63) {
+            offset++;
+            editor->setText(String(offset),false);
         }
-        
-        else if (editor->getName() == "vel1") {
-            int velocity = editor->getTextValue().toString().getIntValue();
-            
-            if (velocity > 0) {
-                velocity--;
-                editor->setText(String(velocity),false);
-            }
+
+    }
+
+    else if (editor->getName() == "vel1") {
+        int velocity = editor->getTextValue().toString().getIntValue();
+
+        if (velocity < 127) {
+            velocity++;
+            editor->setText(String(velocity),false);
         }
     }
-    
-    return true;
+
+    if (editor->getName() == "note1") {
+        int step = editor->getComponentID().getIntValue();
+        int offset = editor->getTextValue().toString().getIntValue();
+        processor->getSequencer()->setOffset(step,offset);
+    }
+}
+
+void FXPanel::valueDown(TextEditor* editor) {
+    if (editor->getName() == "note1") {
+        int offset = editor->getTextValue().toString().getIntValue();
+
+        if (offset > -63) {
+            offset--;
+            editor->setText(String(offset),false);
+        }
+
+    }
+
+    else if (editor->getName() == "vel1") {
+        int velocity = editor->getTextValue().toString().getIntValue();
+
+        if (velocity > 0) {
+            velocity--;
+            editor->setText(String(velocity),false);
+        }
+    }
+    if (editor->getName() == "note1") {
+        int step = editor->getComponentID().getIntValue();
+        int offset = editor->getTextValue().toString().getIntValue();
+        processor->getSequencer()->setOffset(step,offset);
+    }
 }
 
 //[/MiscUserCode]

@@ -12,12 +12,11 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "WhiteNoise.h"
 #include "Oszillator.h"
 #include "MultimodeOscillator.h"
 #include "Voice.h"
 #include "ADSR.h"
-#include "Filter.h"
+#include "MultimodeFilter.h"
 #include "Model.h"
 
 #include <stack>
@@ -85,8 +84,8 @@ public:
     BasicDelayLine* getLeftDelay();
     BasicDelayLine* getRightDelay();
 
-    Filter* getLeftFilter();
-    Filter* getRightFilter();
+    MultimodeFilter* getLeftFilter();
+    MultimodeFilter* getRightFilter();
     ADSR* getFilterEnv();
     Model* getModel();
     ScopedPointer<Reverb> reverb;
@@ -137,8 +136,8 @@ private:
     int tick;
     int lastTick;
     
-    ScopedPointer<Filter> leftFilter;
-    ScopedPointer<Filter>rightFilter;
+    ScopedPointer<MultimodeFilter> leftFilter;
+    ScopedPointer<MultimodeFilter>rightFilter;
     
     ScopedPointer<IIRFilter> outputFilterL;
     ScopedPointer<IIRFilter> outputFilterR;

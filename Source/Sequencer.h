@@ -14,10 +14,11 @@
 #include <vector>
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Modulator.h"
 
 using namespace std;
 
-class Sequencer {
+class Sequencer : public Modulator , public ChangeBroadcaster{
     
 public:
     Sequencer();
@@ -27,6 +28,9 @@ public:
     vector<int> getVelocities();
     vector<bool> getSteps();
 
+    float process(void) override;
+    float getOutput(void) override;
+    
     int getStepConfig();
     void setStepConfig(int config);
     void setPlaying(bool playing);
@@ -50,6 +54,8 @@ public:
     bool isCurrentStepEnabled();
     void setNumOctaves(int octaves);
     int getNumOctaves();
+    bool isModulator();
+    void setModulator(bool modulator);
     
 private:
     vector<bool> steps;
@@ -61,6 +67,7 @@ private:
     int numOctaves = 1;
     int raster;
     int currentStep = 0;
+    bool modulator;
     
     JUCE_LEAK_DETECTOR(Sequencer);
 };

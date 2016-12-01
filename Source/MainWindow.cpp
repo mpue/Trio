@@ -380,6 +380,19 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
                             ImageCache::getFromMemory (oscillator_noise_48_png, oscillator_noise_48_pngSize), 1.000f, Colours::white,
                             ImageCache::getFromMemory (oscillator_noise_48_png, oscillator_noise_48_pngSize), 1.000f, Colour (0xffff7e00),
                             Image(), 1.000f, Colour (0xffff7e00));
+    addAndMakeVisible (lowPassPutton = new ToggleButton ("lowPassPutton"));
+    lowPassPutton->setButtonText (TRANS("LP"));
+    lowPassPutton->setRadioGroupId (111);
+    lowPassPutton->addListener (this);
+    lowPassPutton->setToggleState (true, dontSendNotification);
+    lowPassPutton->setColour (ToggleButton::textColourId, Colours::white);
+
+    addAndMakeVisible (highPassButton = new ToggleButton ("highPassButton"));
+    highPassButton->setButtonText (TRANS("HP"));
+    highPassButton->setRadioGroupId (111);
+    highPassButton->addListener (this);
+    highPassButton->setColour (ToggleButton::textColourId, Colours::white);
+
     cachedImage_trio_png_1 = ImageCache::getFromMemory (trio_png, trio_pngSize);
 
     //[UserPreSize]
@@ -408,6 +421,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     //presetCombo->setSelectedItemIndex(0);
 
     presetCombo->addListener(processor);
+    modCombo->addItem (TRANS("Sequencer"), 5);
 
     modCombo->setSelectedItemIndex(0);
     lfo1ModCombo->setSelectedItemIndex(0);
@@ -454,6 +468,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->fxPanel = new FXPanel(processor);
     fxPanel->setBounds(x,y,getWidth(),getHeight());
     p->addChangeListener(this->fxPanel);
+    p->getSequencer()->addChangeListener(this->fxPanel);
 
     this->browserPanel = new BrowserPanel(processor);
     browserPanel->setBounds(x,y,getWidth(),getHeight());
@@ -652,6 +667,8 @@ MainWindow::~MainWindow()
     setupButton = nullptr;
     fxButton = nullptr;
     noiseButton = nullptr;
+    lowPassPutton = nullptr;
+    highPassButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -764,6 +781,8 @@ void MainWindow::resized()
     setupButton->setBounds (516, 16, 64, 24);
     fxButton->setBounds (364, 16, 64, 24);
     noiseButton->setBounds (200, 384, 24, 24);
+    lowPassPutton->setBounds (358, 64, 48, 24);
+    highPassButton->setBounds (406, 64, 48, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1240,6 +1259,18 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_noiseButton]
     }
+    else if (buttonThatWasClicked == lowPassPutton)
+    {
+        //[UserButtonCode_lowPassPutton] -- add your button handler code here..
+        processor->getLeftFilter()->setMode(MultimodeFilter::Mode::LOWPASS);
+        //[/UserButtonCode_lowPassPutton]
+    }
+    else if (buttonThatWasClicked == highPassButton)
+    {
+        //[UserButtonCode_highPassButton] -- add your button handler code here..
+        processor->getLeftFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
+        //[/UserButtonCode_highPassButton]
+    }
 
     //[UserbuttonClicked_Post]
 
@@ -1624,6 +1655,14 @@ BEGIN_JUCER_METADATA
                resourceNormal="oscillator_noise_48_png" opacityNormal="1" colourNormal="ffffffff"
                resourceOver="oscillator_noise_48_png" opacityOver="1" colourOver="ffff7e00"
                resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
+  <TOGGLEBUTTON name="lowPassPutton" id="60daab19b2c9e457" memberName="lowPassPutton"
+                virtualName="" explicitFocusOrder="0" pos="358 64 48 24" txtcol="ffffffff"
+                buttonText="LP" connectedEdges="0" needsCallback="1" radioGroupId="111"
+                state="1"/>
+  <TOGGLEBUTTON name="highPassButton" id="af92ba4031eff084" memberName="highPassButton"
+                virtualName="" explicitFocusOrder="0" pos="406 64 48 24" txtcol="ffffffff"
+                buttonText="HP" connectedEdges="0" needsCallback="1" radioGroupId="111"
+                state="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

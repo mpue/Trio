@@ -78,6 +78,15 @@ bool Sequencer::isPlaying() {
     return this->playing;
 }
 
+float Sequencer::process() {
+    return (1.0f / 127.0f) * this->offsets.at(currentStep);
+    tick();
+}
+
+float Sequencer::getOutput() {
+    return (1.0f / 127.0f) * this->offsets.at(currentStep);
+}
+
 void Sequencer::tick() {
     if (currentStep < 15) {
         this->currentStep++;
@@ -93,6 +102,7 @@ void Sequencer::tick() {
         }
         
     }
+    // sendChangeMessage();
 
 }
 
@@ -162,4 +172,12 @@ int Sequencer::getNumOctaves() {
 int Sequencer::getOctave() {
     return this->octave;
     
+}
+
+bool Sequencer::isModulator() {
+    return this->isModulator();
+}
+
+void Sequencer::setModulator(bool modulator) {
+    this->modulator = modulator;
 }
