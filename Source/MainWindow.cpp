@@ -455,10 +455,14 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     fxPanel->setBounds(x,y,getWidth(),getHeight());
     p->addChangeListener(this->fxPanel);
 
+    this->browserPanel = new BrowserPanel(processor);
+    browserPanel->setBounds(x,y,getWidth(),getHeight());
+
     addChildComponent(fxPanel);
     addChildComponent(presetPanel);
+    addChildComponent(browserPanel);
 
-    fxButton->setBroughtToFrontOnMouseClick(true);
+    fxButton->toFront(false);
     storeButton->toFront(false);
     browseButton->toFront(false);
     setupButton->toFront(false);
@@ -681,6 +685,7 @@ MainWindow::~MainWindow()
     this->ampReleaseAttachment = nullptr;
     this->presetPanel = nullptr;
     this->animator = nullptr;
+    this->browserPanel = nullptr;
     /*
     this->modSourceAttachment = nullptr;
     this->mod1TargetAttachment = nullptr;
@@ -1209,28 +1214,19 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == browseButton)
     {
         //[UserButtonCode_browseButton] -- add your button handler code here..
+        toggleView(PanelDisplay::BROWSER);
         //[/UserButtonCode_browseButton]
     }
     else if (buttonThatWasClicked == setupButton)
     {
         //[UserButtonCode_setupButton] -- add your button handler code here..
+        toggleView(PanelDisplay::SETUP);
         //[/UserButtonCode_setupButton]
     }
     else if (buttonThatWasClicked == fxButton)
     {
         //[UserButtonCode_fxButton] -- add your button handler code here..
-
-        if (fxPanel->isVisible()) {
-            animator->fadeOut(fxPanel, 100);
-            // fxPanel->setVisible(false);
-            fxButton->setButtonText("FX");
-        }
-        else {
-            animator->fadeIn(fxPanel, 100);
-            //fxPanel->setVisible(true);
-            fxButton->setButtonText("Main");
-
-        }
+        toggleView(PanelDisplay::FX);
         //[/UserButtonCode_fxButton]
     }
     else if (buttonThatWasClicked == noiseButton)
@@ -1333,6 +1329,54 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
 
 }
 
+void MainWindow::toggleView(MainWindow::PanelDisplay display) {
+
+    if (display == PanelDisplay::BROWSER) {
+
+        if (fxPanel->isVisible()) {
+            animator->fadeOut(fxPanel, 100);
+            fxButton->setButtonText("FX");
+            animator->fadeIn(browserPanel, 100);
+            browseButton->setButtonText("Main");
+        }
+        else if (browserPanel->isVisible()) {
+            animator->fadeOut(browserPanel, 100);
+            browseButton->setButtonText("Browser");
+        }
+        else {
+            animator->fadeIn(browserPanel, 100);
+            browseButton->setButtonText("Main");
+        }
+
+    }
+    else if (display == PanelDisplay::FX) {
+
+        if (browserPanel->isVisible()) {
+            animator->fadeOut(browserPanel, 100);
+            browseButton->setButtonText("Browser");
+            animator->fadeIn(fxPanel, 100);
+            fxButton->setButtonText("Main");
+        }
+        else if (fxPanel->isVisible()) {
+            animator->fadeOut(fxPanel, 100);
+            fxButton->setButtonText("FX");
+        }
+        else {
+            animator->fadeIn(fxPanel, 100);
+            fxButton->setButtonText("Main");
+        }
+
+    }
+
+
+    this->currentDisplay = display;
+
+}
+
+bool MainWindow::keyPressed (const KeyPress& key, Component* originatingComponent) {
+    return true;
+}
+
 //[/MiscUserCode]
 
 
@@ -1346,7 +1390,7 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer, public ChangeBroadcaster"
+                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer, public ChangeBroadcaster, public KeyListener"
                  constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">

@@ -39,11 +39,12 @@ TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
     lf->setColour(TextButton::buttonOnColourId, Colours::darkorange);
     lf->setColour(TextEditor::outlineColourId, Colours::darkorange);
     lf->setColour(TextEditor::backgroundColourId, Colours::black);
-    lf->setColour(TextEditor::highlightColourId, Colours::black);
-    lf->setColour(TextEditor::highlightedTextColourId, Colours::darkorange);
+    lf->setColour(TextEditor::highlightColourId, Colours::darkorange);
+    lf->setColour(TextEditor::highlightedTextColourId, Colours::black);
     lf->setColour(TextEditor::textColourId, Colours::darkorange);
     lf->setColour(TextButton::textColourOffId, Colours::darkorange);
     lf->setColour(TextButton::textColourOnId, Colours::black);
+    lf->setColour(CaretComponent::caretColourId, Colours::darkorange);
     
     // LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     

@@ -27,6 +27,7 @@
 #include "PresetDialog.h"
 #include "Oszillator.h"
 #include "FXPanel.h"
+#include "BrowserPanel.h"
 //[/Headers]
 
 
@@ -45,7 +46,8 @@ class MainWindow  : public Component,
                     public ComboBoxListener,
                     public AudioProcessorListener,
                     public Timer,
-                    public ChangeBroadcaster
+                    public ChangeBroadcaster,
+                    public KeyListener
 {
 public:
     //==============================================================================
@@ -55,6 +57,13 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 
+    enum PanelDisplay {
+        MAIN,
+        FX,
+        BROWSER,
+        SETUP
+    };
+
     virtual void audioProcessorParameterChanged (AudioProcessor* processor,
                                                  int parameterIndex,
                                                  float newValue) override;
@@ -62,6 +71,8 @@ public:
     inline virtual void audioProcessorChanged (AudioProcessor* processor) override {};
     void visibilityChanged() override;
     void timerCallback() override;
+    void toggleView(PanelDisplay display);
+    bool keyPressed (const KeyPress& key, Component* originatingComponent) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -119,11 +130,14 @@ private:
 
     ScopedPointer<PresetDialog> presetPanel;
     ScopedPointer<FXPanel> fxPanel;
+    ScopedPointer<BrowserPanel> browserPanel;
 
     Oszillator::OscMode mode1;
     Oszillator::OscMode mode2;
     Oszillator::OscMode mode3;
     ScopedPointer<ComponentAnimator> animator;
+
+    PanelDisplay currentDisplay = MAIN;
 
     //[/UserVariables]
 

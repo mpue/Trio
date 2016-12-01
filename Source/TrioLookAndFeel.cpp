@@ -208,6 +208,7 @@ void TrioLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& area
 
 void TrioLookAndFeel::drawLabel (Graphics& g, Label& label)
 {
+    /*
     g.fillAll (label.findColour (Label::backgroundColourId));
     
     if (! label.isBeingEdited())
@@ -219,17 +220,12 @@ void TrioLookAndFeel::drawLabel (Graphics& g, Label& label)
         g.setFont (font);
         
         Rectangle<int> textArea (label.getBorderSize().subtractedFrom (label.getLocalBounds()).expanded(3, 1));
-        
-        // Rectangle<int> textArea (label.getLocalBounds());
-        
-        
-        g.drawText(label.getText(), textArea ,label.getJustificationType(),false);
-        
-        /*
+    
+     
         g.drawFittedText (label.getText(), textArea, label.getJustificationType(),
                           jmax (1, (int) (textArea.getHeight() / font.getHeight())),
                           label.getMinimumHorizontalScale());
-        */
+     
          
         g.setColour (label.findColour (Label::outlineColourId).withMultipliedAlpha (alpha));
     }
@@ -239,11 +235,16 @@ void TrioLookAndFeel::drawLabel (Graphics& g, Label& label)
     }
     
     g.drawRect (label.getLocalBounds());
+     */
+    LookAndFeel_V2::drawLabel(g, label);
 }
 
 void TrioLookAndFeel::drawComboBox (Graphics& g, int width, int height, const bool isButtonDown,
                                    int buttonX, int buttonY, int buttonW, int buttonH, ComboBox& box)
 {
+    LookAndFeel_V1::drawComboBox(g, width, height, isButtonDown, buttonX, buttonY, buttonW, buttonH, box);
+    
+    /*
     g.fillAll (box.findColour (ComboBox::backgroundColourId));
     
     if (box.isEnabled() && box.hasKeyboardFocus (false))
@@ -259,7 +260,7 @@ void TrioLookAndFeel::drawComboBox (Graphics& g, int width, int height, const bo
     
     const float outlineThickness = box.isEnabled() ? (isButtonDown ? 1.2f : 0.5f) : 0.3f;
     
-    /*
+    
     const Colour baseColour (LookAndFeelHelpers::createBaseColour (box.findColour (ComboBox::buttonColourId),
                                                                    box.hasKeyboardFocus (true),
                                                                    false, isButtonDown)

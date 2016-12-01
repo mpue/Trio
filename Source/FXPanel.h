@@ -37,6 +37,7 @@
 */
 class FXPanel  : public Component,
                  public ChangeListener,
+                 public KeyListener,
                  public SliderListener,
                  public ButtonListener,
                  public ComboBoxListener
@@ -58,7 +59,7 @@ public:
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void mouseDown (const MouseEvent& e) override;
     void mouseDrag (const MouseEvent& e) override;
-
+    bool keyPressed (const KeyPress& key, Component* originatingComponent)override;
     // Binary resources:
     static const char* fx_panel_png;
     static const int fx_panel_pngSize;

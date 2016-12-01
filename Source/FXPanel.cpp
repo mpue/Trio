@@ -645,7 +645,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     stepButtons.push_back(stepButton14);
     stepButtons.push_back(stepButton15);
     stepButtons.push_back(stepButton16);
-    
+
     for(int i = 0; i < stepButtons.size();i++) {
         stepButtons.at(i)->setToggleState(true, juce::NotificationType::dontSendNotification);
     }
@@ -667,6 +667,12 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     velocityFields.push_back(vel15);
     velocityFields.push_back(vel16);
 
+    for (int i = 0; i < velocityFields.size();i++) {
+        velocityFields.at(i)->setText("100");
+        velocityFields.at(i)->addMouseListener(this, false);
+        velocityFields.at(i)->addKeyListener(this);
+    }
+
     offsetFields.push_back(note1);
     offsetFields.push_back(note2);
     offsetFields.push_back(note3);
@@ -684,90 +690,12 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     offsetFields.push_back(note15);
     offsetFields.push_back(note16);
 
-
-    note1->addMouseListener(this, false);
-    note2->addMouseListener(this, false);
-    note3->addMouseListener(this, false);
-    note4->addMouseListener(this, false);
-    note5->addMouseListener(this, false);
-    note6->addMouseListener(this, false);
-    note7->addMouseListener(this, false);
-    note8->addMouseListener(this, false);
-    note9->addMouseListener(this, false);
-    note10->addMouseListener(this, false);
-    note11->addMouseListener(this, false);
-    note12->addMouseListener(this, false);
-    note13->addMouseListener(this, false);
-    note14->addMouseListener(this, false);
-    note15->addMouseListener(this, false);
-    note16->addMouseListener(this, false);
-
-    note1->setText("0");
-    note2->setText("0");
-    note3->setText("0");
-    note4->setText("0");
-    note5->setText("0");
-    note6->setText("0");
-    note7->setText("0");
-    note8->setText("0");
-    note9->setText("0");
-    note10->setText("0");
-    note11->setText("0");
-    note12->setText("0");
-    note13->setText("0");
-    note14->setText("0");
-    note15->setText("0");
-    note16->setText("0");
-
-    vel1->addMouseListener(this, false);
-    vel2->addMouseListener(this, false);
-    vel3->addMouseListener(this, false);
-    vel4->addMouseListener(this, false);
-    vel5->addMouseListener(this, false);
-    vel6->addMouseListener(this, false);
-    vel7->addMouseListener(this, false);
-    vel8->addMouseListener(this, false);
-    vel9->addMouseListener(this, false);
-    vel10->addMouseListener(this, false);
-    vel11->addMouseListener(this, false);
-    vel12->addMouseListener(this, false);
-    vel13->addMouseListener(this, false);
-    vel14->addMouseListener(this, false);
-    vel15->addMouseListener(this, false);
-    vel16->addMouseListener(this, false);
-
-    vel1->setText("100");
-    vel2->setText("100");
-    vel3->setText("100");
-    vel4->setText("100");
-    vel5->setText("100");
-    vel6->setText("100");
-    vel7->setText("100");
-    vel8->setText("100");
-    vel9->setText("100");
-    vel10->setText("100");
-    vel11->setText("100");
-    vel12->setText("100");
-    vel13->setText("100");
-    vel14->setText("100");
-    vel15->setText("100");
-    vel16->setText("100");
-
-    note1->setComponentID("0");
-    note2->setComponentID("1");
-    note3->setComponentID("2");
-    note4->setComponentID("3");
-    note5->setComponentID("4");
-    note6->setComponentID("5");
-    note7->setComponentID("6");
-    note8->setComponentID("7");
-    note9->setComponentID("8");
-    note10->setComponentID("9");
-    note11->setComponentID("10");
-    note12->setComponentID("11");
-    note13->setComponentID("12");
-    note14->setComponentID("13");
-    note15->setComponentID("14");
+    for (int i = 0; i < offsetFields.size();i++) {
+        offsetFields.at(i)->addMouseListener(this, false);
+        offsetFields.at(i)->setText("0");
+        offsetFields.at(i)->setComponentID(String(i));
+        offsetFields.at(i)->addKeyListener(this);
+    }
 
     notesCombo->setSelectedItemIndex(0);
     octavesCombo->setSelectedItemIndex(0);
@@ -1292,6 +1220,57 @@ void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
 }
 
 
+bool FXPanel::keyPressed (const KeyPress& key, Component* originatingComponent) {
+    
+    TextEditor* editor = static_cast<TextEditor*>(originatingComponent);
+    
+    if (key == KeyPress::upKey) {
+        
+        if (editor->getName() == "note1") {
+            int offset = editor->getTextValue().toString().getIntValue();
+            
+            if (offset < 63) {
+                offset++;
+                editor->setText(String(offset),false);
+            }
+            
+        }
+        
+        else if (editor->getName() == "vel1") {
+            int velocity = editor->getTextValue().toString().getIntValue();
+            
+            if (velocity < 127) {
+                velocity++;
+                editor->setText(String(velocity),false);
+            }
+        }
+        
+        
+    }
+    else if (key  == KeyPress::downKey) {
+        if (editor->getName() == "note1") {
+            int offset = editor->getTextValue().toString().getIntValue();
+            
+            if (offset > -63) {
+                offset--;
+                editor->setText(String(offset),false);
+            }
+            
+        }
+        
+        else if (editor->getName() == "vel1") {
+            int velocity = editor->getTextValue().toString().getIntValue();
+            
+            if (velocity > 0) {
+                velocity--;
+                editor->setText(String(velocity),false);
+            }
+        }
+    }
+    
+    return true;
+}
+
 //[/MiscUserCode]
 
 
@@ -1305,9 +1284,10 @@ void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="FXPanel" componentName=""
-                 parentClasses="public Component, public ChangeListener" constructorParams="TrioAudioProcessor* p"
-                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
-                 overlayOpacity="0.330" fixedSize="0" initialWidth="910" initialHeight="600">
+                 parentClasses="public Component, public ChangeListener, public KeyListener"
+                 constructorParams="TrioAudioProcessor* p" variableInitialisers=""
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
+                 fixedSize="0" initialWidth="910" initialHeight="600">
   <METHODS>
     <METHOD name="mouseDown (const MouseEvent&amp; e)"/>
     <METHOD name="mouseDrag (const MouseEvent&amp; e)"/>
