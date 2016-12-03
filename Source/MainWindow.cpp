@@ -454,6 +454,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->ampDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampdecay", *this->ampDecaySlider);
     this->ampSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampsustain", *this->ampSustainSlider);
     this->ampReleaseAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"amprelease", *this->ampReleaseSlider);
+    this->filtermodeAttachment = new AudioProcessorValueTreeState::ButtonAttachment(*processor->getValueTreeState(),"filtermode", *this->lowPassPutton);
+
     /*
     this->modSourceAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"modsource", *this->modCombo);
     this->mod1TargetAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"mod1target", *this->lfo1ModCombo);
@@ -589,8 +591,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     lfo2ModCombo->setSelectedId(nval);
 
     processor->addListener(this);
-    // processor->addListener(fxPanel);
-
+    
     statusLabel->setColour(Label::textColourId, Colours::darkorange);
 
     /*
@@ -619,6 +620,42 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 MainWindow::~MainWindow()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+
+	processor->removeListener(this);
+	processor->removeAllChangeListeners();
+
+	this->volumeAttachement = nullptr;
+	this->osc1VolAttachment = nullptr;
+	this->osc2VolAttachment = nullptr;
+	this->osc3VolAttachment = nullptr;
+	this->osc1PitchAttachment = nullptr;
+	this->osc2PitchAttachment = nullptr;
+	this->osc3PitchAttachment = nullptr;
+	this->osc1FineAttachment = nullptr;
+	this->osc2FineAttachment = nullptr;
+	this->osc3FineAttachment = nullptr;
+	this->filterModAttachment = nullptr;
+	this->cutoffAttachment = nullptr;
+	this->resoAttachment = nullptr;
+	this->lfo1RateAttachment = nullptr;
+	this->lfo1ShapeAttachment = nullptr;
+	this->lfo1AmountAttachment = nullptr;
+	this->lfo2RateAttachment = nullptr;
+	this->lfo2ShapeAttachment = nullptr;
+	this->lfo2AmountAttachment = nullptr;
+	this->filterAttackAttachment = nullptr;
+	this->filterDecayAttachment = nullptr;
+	this->filterSustainAttachment = nullptr;
+	this->filterReleaseAttachment = nullptr;
+	this->ampAttackAttachment = nullptr;
+	this->ampDecayAttachment = nullptr;
+	this->ampSustainAttachment = nullptr;
+	this->ampReleaseAttachment = nullptr;
+	this->presetPanel = nullptr;
+	this->animator = nullptr;
+	this->browserPanel = nullptr;
+	this->filtermodeAttachment = nullptr;
+
     //[/Destructor_pre]
 
     cutoffSlider = nullptr;
@@ -672,43 +709,15 @@ MainWindow::~MainWindow()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+    
+	processor->removeListener(this);
+	this->fxPanel = nullptr;
 
-    this->volumeAttachement = nullptr;
-    this->osc1VolAttachment = nullptr;
-    this->osc2VolAttachment = nullptr;
-    this->osc3VolAttachment = nullptr;
-    this->osc1PitchAttachment = nullptr;
-    this->osc2PitchAttachment = nullptr;
-    this->osc3PitchAttachment = nullptr;
-    this->osc1FineAttachment = nullptr;
-    this->osc2FineAttachment = nullptr;
-    this->osc3FineAttachment = nullptr;
-    this->filterModAttachment = nullptr;
-    this->cutoffAttachment = nullptr;
-    this->resoAttachment = nullptr;
-    this->lfo1RateAttachment = nullptr;
-    this->lfo1ShapeAttachment = nullptr;
-    this->lfo1AmountAttachment = nullptr;
-    this->lfo2RateAttachment = nullptr;
-    this->lfo2ShapeAttachment = nullptr;
-    this->lfo2AmountAttachment = nullptr;
-    this->filterAttackAttachment = nullptr;
-    this->filterDecayAttachment = nullptr;
-    this->filterSustainAttachment = nullptr;
-    this->filterReleaseAttachment = nullptr;
-    this->ampAttackAttachment = nullptr;
-    this->ampDecayAttachment = nullptr;
-    this->ampSustainAttachment = nullptr;
-    this->ampReleaseAttachment = nullptr;
-    this->presetPanel = nullptr;
-    this->animator = nullptr;
-    this->browserPanel = nullptr;
-    /*
-    this->modSourceAttachment = nullptr;
-    this->mod1TargetAttachment = nullptr;
-    this->mod2TargetAttachment = nullptr;
-    */
-    processor->removeListener(this);
+    // this->modSourceAttachment = nullptr;
+    // this->mod1TargetAttachment = nullptr;
+    // this->mod2TargetAttachment = nullptr;
+    
+    
 
     //[/Destructor]
 }
@@ -1263,12 +1272,14 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_lowPassPutton] -- add your button handler code here..
         processor->getLeftFilter()->setMode(MultimodeFilter::Mode::LOWPASS);
+        processor->getRightFilter()->setMode(MultimodeFilter::Mode::LOWPASS);
         //[/UserButtonCode_lowPassPutton]
     }
     else if (buttonThatWasClicked == highPassButton)
     {
         //[UserButtonCode_highPassButton] -- add your button handler code here..
         processor->getLeftFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
+        processor->getRightFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
         //[/UserButtonCode_highPassButton]
     }
 
@@ -1289,8 +1300,20 @@ void MainWindow::timerCallback() {
 }
 
 void MainWindow::visibilityChanged() {
-    String currentProgram = processor->getProgramName(processor->getCurrentProgram());
-    presetCombo->setText(currentProgram,NotificationType::dontSendNotification);
+
+    String currentProgram = processor->getSelectedProgram();
+    
+    if (currentProgram == "") {
+        for (int i = 0; i < processor->getNumPrograms();i++) {
+            if (processor->getProgramName(i) == "init") {
+                processor->setCurrentProgram(i);
+                break;
+            }
+        }
+        
+    }
+    
+    presetCombo->setText(processor->getSelectedProgram(),NotificationType::dontSendNotification);
 }
 
 void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int parameterIndex, float newValue) {

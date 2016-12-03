@@ -79,8 +79,8 @@ bool Sequencer::isPlaying() {
 }
 
 float Sequencer::process() {
+	tick();
     return (1.0f / 127.0f) * this->offsets.at(currentStep);
-    tick();
 }
 
 float Sequencer::getOutput() {
@@ -175,7 +175,7 @@ int Sequencer::getOctave() {
 }
 
 bool Sequencer::isModulator() {
-    return this->isModulator();
+    return this->modulator;
 }
 
 void Sequencer::setModulator(bool modulator) {

@@ -12,7 +12,7 @@
 #define TRIOLOOKANDFEEL_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "juce_LookAndFeel_V2.h"
+
 
 
 class TrioLookAndFeel : public LookAndFeel_V1 {
@@ -23,6 +23,16 @@ public:
     
     ~TrioLookAndFeel();
     
+	void drawShinyButtonShape(Graphics& g,
+		float x, float y, float w, float h,
+		float maxCornerSize,
+		const Colour& baseColour,
+		const float strokeWidth,
+		const bool flatOnLeft,
+		const bool flatOnRight,
+		const bool flatOnTop,
+		const bool flatOnBottom);
+
     void drawRotarySlider	(	Graphics & 	g,
                              int 	x,
                              int 	y,

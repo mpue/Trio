@@ -25,9 +25,9 @@ TrioAudioProcessor::TrioAudioProcessor()
     globalPitch = 0;
     currentProgramNumber = 0;
     leftFilter = new MultimodeFilter();
-    leftFilter->setMode(MultimodeFilter::Mode::HIGHPASS);
+    leftFilter->setMode(MultimodeFilter::Mode::LOWPASS);
     rightFilter = new MultimodeFilter();
-    rightFilter->setMode(MultimodeFilter::Mode::HIGHPASS);
+    rightFilter->setMode(MultimodeFilter::Mode::LOWPASS);
     outputFilterL = new IIRFilter();
     outputFilterR = new IIRFilter();
     
@@ -47,71 +47,72 @@ TrioAudioProcessor::TrioAudioProcessor()
     deltappq = 0;
     
     this->parameters = new AudioProcessorValueTreeState(*this,nullptr);
-    parameters->createAndAddParameter("volume", "Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("volume", "Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("osc1vol", "Osc 1 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc2vol", "Osc 2 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc3vol", "Osc 3 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("osc1vol", "Osc 1 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc2vol", "Osc 2 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc3vol", "Osc 3 Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("osc1pitch", "Osc 1 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc2pitch", "Osc 2 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc3pitch", "Osc 3 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("osc1pitch", "Osc 1 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc2pitch", "Osc 2 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc3pitch", "Osc 3 Pitch", String(), NormalisableRange<float>(-36.0f,36.0f, 1.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("osc1fine", "Osc 1 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc2fine", "Osc 2 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc3fine", "Osc 3 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("osc1fine", "Osc 1 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc2fine", "Osc 2 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc3fine", "Osc 3 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr));
 
-    parameters->createAndAddParameter("osc1shape", "Osc 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc2shape", "Osc 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("osc3shape", "Osc 3 Shape", String(), NormalisableRange<float>(0.0f,3.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("osc1shape", "Osc 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc2shape", "Osc 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("osc3shape", "Osc 3 Shape", String(), NormalisableRange<float>(0.0f,3.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("filtermod", "Filter Env Mod", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("filtermod", "Filter Env Mod", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("filtermode", "Filtermode", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("filterattack", "Filter attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("filterdecay", "Filter decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("filtersustain", "Filter sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("filterrelease", "Filter release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("filterattack", "Filter attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("filterdecay", "Filter decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("filtersustain", "Filter sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("filterrelease", "Filter release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("ampattack", "Amp attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("ampdecay", "Amp decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("ampsustain", "Amp sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("amprelease", "Amp release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("ampattack", "Amp attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("ampdecay", "Amp decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("ampsustain", "Amp sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("amprelease", "Amp release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("modsource", "Mod source", String(), NormalisableRange<float>(1.0f,4.0f), 1.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("mod1target", "Mod 1 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("mod2target", "Mod 2 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("modsource", "Mod source", String(), NormalisableRange<float>(1.0f,4.0f), 1.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod1target", "Mod 1 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod2target", "Mod 2 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("fxreverb_enabled", "Reverb enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_damping", "Reverb Damping", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_drylevel", "Reverb Dry level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_wetlevel", "Reverb Wet level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_freeze", "Reverb Freeze level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_size", "Reverb Room size", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxreverb_width", "Reverb Width", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("fxreverb_enabled", "Reverb enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxreverb_damping", "Reverb Damping", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxreverb_drylevel", "Reverb Dry level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxreverb_wetlevel", "Reverb Wet level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxreverb_freeze", "Reverb Freeze level", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxreverb_size", "Reverb Room size", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxreverb_width", "Reverb Width", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("fxdelay_enabled", "Delay enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdelay_mixleft", "Delay mix left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdelay_mixright", "Delay mix right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdelay_fbleft", "Delay feedback left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdelay_fbright", "Delay feedback right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdelay_timeleft", "Delay time left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdelay_timeright", "Delay time right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("fxdelay_enabled", "Delay enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdelay_mixleft", "Delay mix left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdelay_mixright", "Delay mix right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdelay_fbleft", "Delay feedback left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdelay_fbright", "Delay feedback right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdelay_timeleft", "Delay time left", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdelay_timeright", "Delay time right", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     
-    parameters->createAndAddParameter("fxdist_enabled", "Distortion enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdist_mode", "Distortion mode", String(), NormalisableRange<float>(1.0f,3.0f), 1.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdist_mix", "Distortion mix", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr);
-    parameters->createAndAddParameter("fxdist_drive", "Distortion drive", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr);
+    registeredParams.push_back(parameters->createAndAddParameter("fxdist_enabled", "Distortion enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdist_mode", "Distortion mode", String(), NormalisableRange<float>(1.0f,3.0f), 1.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdist_mix", "Distortion mix", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("fxdist_drive", "Distortion drive", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr));
     
     parameters->state = ValueTree (Identifier ("default"));
     
@@ -130,62 +131,11 @@ TrioAudioProcessor::TrioAudioProcessor()
         
     }
     
-    parameters->addParameterListener("volume", this);
-    parameters->addParameterListener("osc1vol", this);
-    parameters->addParameterListener("osc2vol", this);
-    parameters->addParameterListener("osc3vol", this);
-    parameters->addParameterListener("osc1pitch", this);
-    parameters->addParameterListener("osc2pitch", this);
-    parameters->addParameterListener("osc3pitch", this);
-    parameters->addParameterListener("osc1fine", this);
-    parameters->addParameterListener("osc2fine", this);
-    parameters->addParameterListener("osc3fine", this);
-    parameters->addParameterListener("osc1shape", this);
-    parameters->addParameterListener("osc2shape", this);
-    parameters->addParameterListener("osc3shape", this);
-    parameters->addParameterListener("filtermod", this);
-    parameters->addParameterListener("cutoff", this);
-    parameters->addParameterListener("reso", this);
-    parameters->addParameterListener("lfo1rate", this);
-    parameters->addParameterListener("lfo2rate", this);
-    parameters->addParameterListener("lfo1shape", this);
-    parameters->addParameterListener("lfo2shape", this);
-    parameters->addParameterListener("lfo1rate", this);
-    parameters->addParameterListener("lfo2rate", this);
-    parameters->addParameterListener("lfo1amount", this);
-    parameters->addParameterListener("lfo2amount", this);
-    parameters->addParameterListener("filterattack", this);
-    parameters->addParameterListener("filterdecay", this);
-    parameters->addParameterListener("filtersustain", this);
-    parameters->addParameterListener("filterrelease", this);
-    parameters->addParameterListener("ampattack", this);
-    parameters->addParameterListener("ampdecay", this);
-    parameters->addParameterListener("ampsustain", this);
-    parameters->addParameterListener("amprelease", this);
-    parameters->addParameterListener("modsource", this);
-    parameters->addParameterListener("amprelease", this);
-    parameters->addParameterListener("modsource", this);
-    parameters->addParameterListener("mod1target", this);
-    parameters->addParameterListener("mod2target", this);
-    parameters->addParameterListener("fxreverb_enabled", this);
-    parameters->addParameterListener("fxreverb_damping", this);
-    parameters->addParameterListener("fxreverb_drylevel", this);
-    parameters->addParameterListener("fxreverb_wetlevel", this);
-    parameters->addParameterListener("fxreverb_freeze", this);
-    parameters->addParameterListener("fxreverb_size", this);
-    parameters->addParameterListener("fxreverb_width", this);
-    parameters->addParameterListener("fxdelay_enabled", this);
-    parameters->addParameterListener("fxdelay_mixleft", this);
-    parameters->addParameterListener("fxdelay_mixright", this);
-    parameters->addParameterListener("fxdelay_fbleft", this);
-    parameters->addParameterListener("fxdelay_fbright", this);
-    parameters->addParameterListener("fxdelay_timeleft", this);
-    parameters->addParameterListener("fxdelay_timeright", this);
-    parameters->addParameterListener("fxdist_enabled", this);
-    parameters->addParameterListener("fxdist_mode", this);
-    parameters->addParameterListener("fxdist_mix", this);
-    parameters->addParameterListener("fxdist_drive", this);
+    for (int i = 0; i < registeredParams.size();i++) {
+        parameters->addParameterListener(registeredParams.at(i)->getName(20), this);
+    }
     
+
     reverbParams.damping = 0.0;
     reverbParams.dryLevel = 0.0;
     reverbParams.freezeMode = 0.0;
@@ -219,6 +169,13 @@ TrioAudioProcessor::TrioAudioProcessor()
 
 TrioAudioProcessor::~TrioAudioProcessor()
 {
+
+	for (int i = 0; i < registeredParams.size(); i++) {
+		parameters->removeParameterListener(registeredParams.at(i)->getName(20),this);
+
+	}
+
+    this->registeredParams.clear();
     this->leftFilter = nullptr;
     this->rightFilter = nullptr;
     this->outputFilterR = nullptr;
@@ -339,7 +296,9 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     cout << "PrepareToPlay" << endl;
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
-    
+ 
+	setPlayConfigDetails(0, 2, sampleRate, samplesPerBlock);
+
     filterEnvelope->setAttackRate(0 * sampleRate);  // 1 second
     filterEnvelope->setDecayRate(0 * sampleRate);
     filterEnvelope->setReleaseRate(0 * sampleRate);
@@ -361,6 +320,9 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     delayLeft->resetBuffer();
     delayRight->resetBuffer();
     
+	reverb->setSampleRate(sampleRate);
+	reverb->reset();
+
 }
 
 Oszillator* TrioAudioProcessor::createOscillator(Oszillator::OscMode mode) {
@@ -513,61 +475,16 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         }
         
         
-        // Logger::getCurrentLogger()->writeToLog("ppq : "+String(round(currentppq * 4)));
-        // Logger::getCurrentLogger()->writeToLog("deltaTime : "+String(deltaTime / 1000));
-        // Logger::getCurrentLogger()->writeToLog("deltappq : "+String(deltappq));
-        // Logger::getCurrentLogger()->writeToLog("BPM : "+String(bpm));
-
-        /*
-        for (int i = 0; i < voices.size();i++) {
-            
-            if (voices.at(i)->isPlaying()) {
-                
-                // Logger::getCurrentLogger()->writeToLog(String(voices.at(i)->getTime()) + " " + String(elapsed));
-                
-                if (voices.at(i)->getTime() >= voices.at(i)->getDuration()) {
-                    voices.at(i)->setTime(0);
-                    voices.at(i)->getAmpEnvelope()->gate(false);
-                    // Logger::getCurrentLogger()->writeToLog("off");
-                    
-                }
-                else {
-                    voices.at(i)->setTime(voices.at(i)->getTime() + deltaTime);
-                }
-                
-            }
-            
-        }
-         */
-        
-
-        
     }
     
     
-    
-    // Logger::getCurrentLogger()->writeToLog("Elapsed time :" +String(elapsed)+ "ms");
-    
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
     {
-         // Logger::getCurrentLogger()->writeToLog(String(time));
-        
-        unsigned char* raw = (unsigned char*)m.getRawData();
-        
-        /*
-        for (int j = 0; j < m.getRawDataSize();j++) {
-            Logger::getCurrentLogger()->writeToLog(String(raw[j]));
-        }
-         */
 
-        
+
         if (m.isNoteOn())
         {
-            /*
-            if (getVoicesPlaying() == 0) {
-                filterEnvelope->gate(true);
-            }
-            */
+
             filterEnvelope->gate(true);
             
             Note* note = new Note();
@@ -577,14 +494,10 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             note->setVelocity(m.getVelocity());
             voices.at(m.getNoteNumber())->setNote(note);
             voices.at(m.getNoteNumber())->setPlaying(true);
-//             if (!result.isPlaying) {
-                voices.at(m.getNoteNumber())->getAmpEnvelope()->gate(true);
-//            }
+            voices.at(m.getNoteNumber())->getAmpEnvelope()->gate(true);
             voices.at(m.getNoteNumber())->setDuration(250);
             voices.at(m.getNoteNumber())->setTime(elapsed);
             
- 
-          
         }
         else if (m.isNoteOff())
         {
@@ -598,12 +511,6 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             }
             
             filterEnvelope->gate(false);
-                        
-            /*
-            if (getVoicesPlaying() == 0) {
-                filterEnvelope->gate(false);
-            }
-            */
             
         }
         else if (m.isAftertouch())
@@ -798,22 +705,34 @@ void TrioAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
             leftOut[sample] = delayLeft->next(leftOut[sample]);
             rightOut[sample] = delayRight->next(rightOut[sample]);
-            
-            if (leftOut[sample] > 1.0f) {
-                leftOut[sample] = 1.0f;
-            }
-            if (rightOut[sample] > 1.0f) {
-                rightOut[sample] = 1.0f;
-            }
-            
         }
     }
     if (this->fxReverbEnabled) {
         reverb->processStereo(leftOut, rightOut, buffer.getNumSamples());
+
     }
     
     outputFilterL->processSamples(leftOut, buffer.getNumSamples());
     outputFilterR->processSamples(rightOut, buffer.getNumSamples());
+
+	for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+
+		if (leftOut[sample] > 0.5f) {
+			leftOut[sample] = 0.5f;
+		}
+		else if (leftOut[sample] < -0.5f) {
+			leftOut[sample] = -0.5f;
+		}
+
+		if (rightOut[sample] > 0.5f) {
+			rightOut[sample] = 0.5f;
+		}
+		else if (rightOut[sample] < -0.5f) {
+			rightOut[sample] = -0.5f;
+		}
+
+
+	}
 }
 
 //==============================================================================
@@ -834,6 +753,9 @@ void TrioAudioProcessor::getStateInformation (MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    parameters->state.setProperty("program", getCurrentProgram(),nullptr);
+    
     ScopedPointer<XmlElement> xml (parameters->state.createXml());
     copyXmlToBinary (*xml, destData);
 }
@@ -845,8 +767,13 @@ void TrioAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
     // whose contents will have been created by the getStateInformation() call.
     ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
     if (xmlState != nullptr)
-        if (xmlState->hasTagName (parameters->state.getType()))
+        if (xmlState->hasTagName (parameters->state.getType())) {
             parameters->state = ValueTree::fromXml (*xmlState);
+            if (parameters->state.hasProperty("program")) {
+                setSelectedProgram(getProgramName(parameters->state.getProperty("program")));
+                Logger::getCurrentLogger()->writeToLog("Stored program : " + selectedProgram);
+            }
+        }
     
 }
 
@@ -1047,6 +974,9 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
     if (parameterID == "fxdist_drive") {
         distortion->controls.drive = newValue;
     }
+    if (parameterID == "filtermode") {
+        this->model->setFilterMode(newValue);
+    }
     
     this->reverb->setParameters(reverbParams);
     
@@ -1054,10 +984,13 @@ void TrioAudioProcessor::parameterChanged(const juce::String &parameterID, float
 
 void TrioAudioProcessor::setFxReverbEnabled(bool enabled) {
     this->fxReverbEnabled = enabled;
+	this->reverb->reset();
 }
 
 void TrioAudioProcessor::setFxDelayEnabled(bool enabled) {
     this->fxDelayEnabled = enabled;
+	this->delayLeft->resetBuffer();
+	this->delayRight->resetBuffer();
 }
 
 void TrioAudioProcessor::setFxDistEnabled(bool enabled) {

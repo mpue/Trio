@@ -13,6 +13,7 @@
 
 #include "Voice.h"
 #include "Filter.h"
+#include "MultimodeFilter.h"
 #include "ADSR.h"
 #include "Oszillator.h"
 #include "Sine.h"
@@ -27,7 +28,7 @@ class Model {
     
 public:
 
-    Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv,Sine* lfo1, Sine* lfo2, int sampleRate);
+    Model(vector<Voice*> voices, MultimodeFilter* leftFilter, MultimodeFilter* rightFilter, ADSR* filterEnv,Sine* lfo1, Sine* lfo2, int sampleRate);
     ~Model();
     
     int getOsc1Pitch();
@@ -77,6 +78,9 @@ public:
     
     float getFilterModAmount();
     void setFilterModAmount(float amount);
+    
+    float getFilterMode();
+    void setFilterMode(float mode);
     
     float getVolume();
     void setVolume(float volume);
@@ -133,8 +137,8 @@ private:
     float filterModAmount;
     
     vector<Voice*> voices;
-    Filter* leftFilter;
-    Filter* rightFilter;
+    MultimodeFilter* leftFilter;
+    MultimodeFilter* rightFilter;
     ADSR* filterEnv;
     Sine* lfo1;
     Sine* lfo2;
@@ -149,6 +153,8 @@ private:
     int modsource;
     int mod1target;
     int mod2target;
+    
+    int filtermode;
 };
 
 

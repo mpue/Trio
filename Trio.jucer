@@ -2,26 +2,69 @@
 
 <JUCERPROJECT id="uVkiVn" name="Trio" projectType="audioplug" version="1.0.0"
               bundleIdentifier="de.pueski.Trio" includeBinaryInAppConfig="1"
-              buildVST="0" buildVST3="0" buildAU="1" buildAUv3="0" buildRTAS="0"
+              buildVST="1" buildVST3="0" buildAU="1" buildAUv3="0" buildRTAS="0"
               buildAAX="0" pluginName="Trio" pluginDesc="Trio" pluginManufacturer="pueski"
-              pluginManufacturerCode="Manu" pluginCode="Uvki" pluginChannelConfigs=""
+              pluginManufacturerCode="Manu" pluginCode="Uvki" pluginChannelConfigs="{0,2}"
               pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="TrioAU"
               pluginRTASCategory="" aaxIdentifier="com.yourcompany.Trio" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
-              jucerVersion="4.2.1">
+              jucerVersion="4.3.0">
   <MAINGROUP id="spDKWA" name="Trio">
     <GROUP id="{2A1EAFF9-2CF2-6681-400F-6E51A93E25C9}" name="Resources">
-      <FILE id="UOt086" name="Knob_48.png" compile="0" resource="1" file="../../knob/Knob_48.png"/>
-      <FILE id="XRvFiQ" name="Knob_64.png" compile="0" resource="1" file="../../knob/Knob_64.png"/>
+      <FILE id="QqRSsi" name="Knob_48.png" compile="0" resource="1" file="Knob_48.png"/>
+      <FILE id="P9JoJF" name="Knob_64.png" compile="0" resource="1" file="Knob_64.png"/>
     </GROUP>
     <GROUP id="{973A5F90-B82E-4BC1-6D49-78E790BACA7B}" name="Source">
+      <FILE id="FQn9W1" name="BrowserPanel.cpp" compile="1" resource="0"
+            file="Source/BrowserPanel.cpp"/>
+      <FILE id="BoULQs" name="BrowserPanel.h" compile="0" resource="0" file="Source/BrowserPanel.h"/>
+      <FILE id="aVLJMY" name="BasicDelayLine.cpp" compile="1" resource="0"
+            file="Source/BasicDelayLine.cpp"/>
+      <FILE id="bwersk" name="BasicDelayLine.h" compile="0" resource="0"
+            file="Source/BasicDelayLine.h"/>
+      <FILE id="PjPigK" name="FXPanel.cpp" compile="1" resource="0" file="Source/FXPanel.cpp"/>
+      <FILE id="aJljOP" name="FXPanel.h" compile="0" resource="0" file="Source/FXPanel.h"/>
+      <FILE id="kTkCzC" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
+      <FILE id="DNMYmI" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
+      <FILE id="RUPcKe" name="PresetDialog.cpp" compile="1" resource="0"
+            file="Source/PresetDialog.cpp"/>
+      <FILE id="Qnksaj" name="PresetDialog.h" compile="0" resource="0" file="Source/PresetDialog.h"/>
+      <FILE id="pIfbKT" name="PresetWindow.cpp" compile="1" resource="0"
+            file="Source/PresetWindow.cpp"/>
+      <FILE id="DVQtl0" name="PresetWindow.h" compile="0" resource="0" file="Source/PresetWindow.h"/>
+      <GROUP id="{FE71C827-790D-F0E0-B56D-BCCCA6736420}" name="Filters">
+        <FILE id="tJyEW2" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
+        <FILE id="nDBXHw" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
+        <FILE id="A12q3G" name="HighPassFilter.cpp" compile="1" resource="0"
+              file="Source/HighPassFilter.cpp"/>
+        <FILE id="f7uJyV" name="HighPassFilter.h" compile="0" resource="0"
+              file="Source/HighPassFilter.h"/>
+        <FILE id="OiJ1Vx" name="LowPassFilter.cpp" compile="1" resource="0"
+              file="Source/LowPassFilter.cpp"/>
+        <FILE id="j70ccu" name="LowPassFilter.h" compile="0" resource="0" file="Source/LowPassFilter.h"/>
+        <FILE id="u0j2Yt" name="MultimodeFilter.cpp" compile="1" resource="0"
+              file="Source/MultimodeFilter.cpp"/>
+        <FILE id="kPB8ls" name="MultimodeFilter.h" compile="0" resource="0"
+              file="Source/MultimodeFilter.h"/>
+      </GROUP>
       <GROUP id="{C4D87346-FD23-E98A-B930-F244E3C758CF}" name="Modulators">
         <FILE id="aarOVo" name="ADSR.cpp" compile="1" resource="0" file="Source/ADSR.cpp"/>
         <FILE id="SpHGcP" name="ADSR.h" compile="0" resource="0" file="Source/ADSR.h"/>
+        <FILE id="cy9BbL" name="Modulator.h" compile="0" resource="0" file="Source/Modulator.h"/>
+        <FILE id="v2WzFx" name="Sequencer.cpp" compile="1" resource="0" file="Source/Sequencer.cpp"/>
+        <FILE id="JbkuEK" name="Sequencer.h" compile="0" resource="0" file="Source/Sequencer.h"/>
       </GROUP>
       <FILE id="TrpiD7" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
       <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
       <GROUP id="{826D2A94-B03C-6072-5870-EC17E24DF23B}" name="Oscillators">
+        <FILE id="UAHIst" name="MultimodeOscillator.cpp" compile="1" resource="0"
+              file="Source/MultimodeOscillator.cpp"/>
+        <FILE id="Ow0rpK" name="MultimodeOscillator.h" compile="0" resource="0"
+              file="Source/MultimodeOscillator.h"/>
+        <FILE id="xxizkT" name="Pulse.cpp" compile="1" resource="0" file="Source/Pulse.cpp"/>
+        <FILE id="YlCs8G" name="Pulse.h" compile="0" resource="0" file="Source/Pulse.h"/>
+        <FILE id="GRQkKk" name="Sine.cpp" compile="1" resource="0" file="Source/Sine.cpp"/>
+        <FILE id="stBkvu" name="Sine.h" compile="0" resource="0" file="Source/Sine.h"/>
         <FILE id="Qu1PLf" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
         <FILE id="qFfVLB" name="Voice.cpp" compile="1" resource="0" file="Source/Voice.cpp"/>
         <FILE id="R4iZXK" name="Note.h" compile="0" resource="0" file="Source/Note.h"/>
@@ -71,6 +114,52 @@
         <MODULEPATH id="juce_audio_plugin_client" path="../../../Downloads/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Trio"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Trio"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+    <VS2015 targetFolder="Builds/VisualStudio2015" vst3Folder="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="1" optimisation="1" targetName="Trio"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="0" optimisation="3" targetName="Trio"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_opengl" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_cryptography" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_core" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\JUCE\modules"/>
+      </MODULEPATHS>
+    </VS2015>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
@@ -88,5 +177,8 @@
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
-  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled" JUCE_JACK="enabled"/>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>

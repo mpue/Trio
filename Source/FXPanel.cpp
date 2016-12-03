@@ -612,7 +612,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     this->fxdelay_timeright_att = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"fxdelay_timeright", *this->delayTimeRightSlider);
 
     this->fxdist_enabled_att = new AudioProcessorValueTreeState::ButtonAttachment(*processor->getValueTreeState(),"fxdist_enabled", *this->enableDistButton);
-    this->fxdist_mode_att = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"fxdist_mode", *this->modeCombo);
+    // this->fxdist_mode_att = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"fxdist_mode", *this->modeCombo);
     this->fxdist_mix_att = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"fxdist_mix", *this->mixSlider);
     this->fxdist_drive_att = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"fxdist_drive", *this->mixSlider);
 
@@ -700,12 +700,37 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     notesCombo->setSelectedItemIndex(0);
     octavesCombo->setSelectedItemIndex(0);
     glow = new GlowEffect();
+
+	processor->addListener(this);
+
     //[/Constructor]
 }
 
 FXPanel::~FXPanel()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+
+	this->fxreverb_enabled_att = nullptr;
+	this->fxreverb_size_att = nullptr;
+	this->fxreverb_width_att = nullptr;
+	this->fxreverb_freeze_att = nullptr;
+	this->fxreverb_damping_att = nullptr;
+	this->fxreverb_drylevel_att = nullptr;
+	this->fxreverb_wetlevel_att = nullptr;
+
+	this->fxdelay_enabled_att = nullptr;
+	this->fxdelay_mixleft_att = nullptr;
+	this->fxdelay_mixright_att = nullptr;
+	this->fxdelay_fbleft_att = nullptr;
+	this->fxdelay_fbright_att = nullptr;
+	this->fxdelay_timeleft_att = nullptr;
+	this->fxdelay_timeright_att = nullptr;
+
+	this->fxdist_enabled_att = nullptr;
+	this->fxdist_mode_att = nullptr;
+	this->fxdist_mix_att = nullptr;
+	this->fxdist_drive_att = nullptr;
+
     stepButtons.clear();
     offsetFields.clear();
     velocityFields.clear();
@@ -789,6 +814,9 @@ FXPanel::~FXPanel()
     //[Destructor]. You can add your own custom destruction code here..
     popup = nullptr;
     glow = nullptr;
+
+	processor->removeListener(this);
+
     //[/Destructor]
 }
 
@@ -1136,6 +1164,10 @@ void FXPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     {
         //[UserComboBoxCode_modeCombo] -- add your combo box handling code here..
         processor->getDistortion()->controls.mode = modeCombo->getSelectedId();
+
+		String id = "fxdist_mode";
+		float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(modeCombo->getSelectedId());
+		processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserComboBoxCode_modeCombo]
     }
     else if (comboBoxThatHasChanged == octavesCombo)
@@ -1239,6 +1271,25 @@ void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
 
 }
 
+void FXPanel::audioProcessorParameterChanged(AudioProcessor* processor,
+	int parameterIndex,
+	float newValue) {
+
+	String id = processor->getParameterID(parameterIndex);
+
+	float value = processor->getParameter(parameterIndex);
+	float nval = this->processor->getValueTreeState()->getParameterRange(id).convertFrom0to1(value);
+
+	if (id == "fxdist_mode") {
+		modeCombo->setSelectedId(nval);
+	}
+
+}
+
+void FXPanel::audioProcessorChanged(AudioProcessor * processor)
+{
+}
+
 
 bool FXPanel::keyPressed (const KeyPress& key, Component* originatingComponent) {
 
@@ -1321,7 +1372,7 @@ void FXPanel::valueDown(TextEditor* editor) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="FXPanel" componentName=""
-                 parentClasses="public Component, public ChangeListener, public KeyListener"
+                 parentClasses="public Component, public ChangeListener, public KeyListener, public AudioProcessorListener"
                  constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">

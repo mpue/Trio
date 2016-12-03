@@ -113,6 +113,7 @@ public:
     void setFxDistEnabled(bool enabled);
     
     Sequencer* getSequencer();
+    vector<AudioProcessorParameter*> registeredParams;
    
     
 private:

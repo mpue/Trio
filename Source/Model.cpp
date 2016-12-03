@@ -18,7 +18,7 @@
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADSR* filterEnv, Sine* lfo1, Sine* lfo2, int sampleRate) {
+Model::Model(vector<Voice*> voices, MultimodeFilter* leftFilter, MultimodeFilter* rightFilter, ADSR* filterEnv, Sine* lfo1, Sine* lfo2, int sampleRate) {
     this->voices = voices;
     this->leftFilter = leftFilter;
     this->rightFilter = rightFilter;
@@ -28,6 +28,7 @@ Model::Model(vector<Voice*> voices, Filter* leftFilter, Filter* rightFilter, ADS
     this->lfo2 = lfo2;
     this->volume = 1.0f;
     this->filterResonance = 0.1f;
+    this->filtermode = 1;
 }
 
 Model::~Model() {
@@ -155,7 +156,6 @@ void Model::setOsc3Volume(float Volume) {
     
 }
 
-
 float Model::getAmpEnvAttack() {
     return this->ampEnvAttack;
 }
@@ -165,7 +165,6 @@ void Model::setAmpEnvAttack(float attack) {
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getAmpEnvelope()->setAttackRate(attack * voices.at(i)->getSampleRate());
     }
-    
 }
 
 float Model::getAmpEnvDecay() {
@@ -271,8 +270,21 @@ void Model::setFilterEnvRelease(float release) {
 
 }
 
-float Model::getFilterModAmount() {
-    return this->filterModAmount;
+float Model::getFilterMode() {
+    return this->filtermode;
+}
+
+void Model::setFilterMode(float mode) {
+    this->filtermode = mode;
+    
+    if (mode == 0) {
+        this->leftFilter->setMode(MultimodeFilter::LOWPASS);
+        this->rightFilter->setMode(MultimodeFilter::LOWPASS);
+    }
+    else {
+        this->leftFilter->setMode(MultimodeFilter::HIGHPASS);
+        this->rightFilter->setMode(MultimodeFilter::HIGHPASS);
+    }
 }
 
 void Model::setFilterModAmount(float amount) {

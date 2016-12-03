@@ -69,13 +69,50 @@ void TrioLookAndFeel::drawRotarySlider	(	Graphics & 	g,
     
 }
 
+void TrioLookAndFeel::drawShinyButtonShape(Graphics& g,
+	float x, float y, float w, float h,
+	float maxCornerSize,
+	const Colour& baseColour,
+	const float strokeWidth,
+	const bool flatOnLeft,
+	const bool flatOnRight,
+	const bool flatOnTop,
+	const bool flatOnBottom) 
+{
+	if (w <= strokeWidth * 1.1f || h <= strokeWidth * 1.1f)
+		return;
+
+	const float cs = jmin(maxCornerSize, w * 0.5f, h * 0.5f);
+
+	Path outline;
+	outline.addRoundedRectangle(x, y, w, h, cs, cs,
+		!(flatOnLeft || flatOnTop),
+		!(flatOnRight || flatOnTop),
+		!(flatOnLeft || flatOnBottom),
+		!(flatOnRight || flatOnBottom));
+
+	ColourGradient cg(baseColour, 0.0f, y,
+		baseColour.overlaidWith(Colour(0x070000ff)), 0.0f, y + h,
+		false);
+
+	cg.addColour(0.5, baseColour.overlaidWith(Colour(0x33ffffff)));
+	cg.addColour(0.51, baseColour.overlaidWith(Colour(0x110000ff)));
+
+	g.setGradientFill(cg);
+	g.fillPath(outline);
+
+	g.setColour(Colour(0x80000000));
+	g.strokePath(outline, PathStrokeType(strokeWidth));
+}
+
+
 
 void TrioLookAndFeel::drawToggleButton (Graphics& g, ToggleButton& button,
                                         bool isMouseOverButton, bool isButtonDown)
 {
     
     if (button.getToggleState()) {
-        LookAndFeel_V2::drawShinyButtonShape(g,
+        drawShinyButtonShape(g,
                                              0,0,
                                              button.getHeight(),button.getHeight(),
                                              5.0f,
@@ -85,7 +122,7 @@ void TrioLookAndFeel::drawToggleButton (Graphics& g, ToggleButton& button,
     }
     
     else {
-        LookAndFeel_V2::drawShinyButtonShape(g,
+        drawShinyButtonShape(g,
                                              0,0,
                                              button.getHeight(),button.getHeight(),
                                              5.0f,

@@ -8,7 +8,9 @@
 
 #include "Pulse.h"
 
-#include "math.h"
+#define _USE_MATH_DEFINES
+
+#include <math.h>
 #include <iostream>
 
 Pulse::Pulse(float sampleRate) : Oszillator(sampleRate) {
