@@ -47,7 +47,8 @@ class MainWindow  : public Component,
                     public AudioProcessorListener,
                     public Timer,
                     public ChangeBroadcaster,
-                    public KeyListener
+                    public KeyListener,
+                    public ChangeListener
 {
 public:
     //==============================================================================
@@ -73,6 +74,7 @@ public:
     void timerCallback() override;
     void toggleView(PanelDisplay display);
     bool keyPressed (const KeyPress& key, Component* originatingComponent) override;
+    void changeListenerCallback (ChangeBroadcaster* source) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;

@@ -38,7 +38,6 @@
 class FXPanel  : public Component,
                  public ChangeListener,
                  public KeyListener,
-                 public AudioProcessorListener,
                  public SliderListener,
                  public ButtonListener,
                  public ComboBoxListener
@@ -55,8 +54,6 @@ public:
     bool keyPressed (const KeyPress& key, Component* originatingComponent)override;
     void valueUp(TextEditor* editor);
     void valueDown(TextEditor * editor);
-	virtual void audioProcessorParameterChanged(AudioProcessor* processor, int parameterIndex, float newValue) override;
-	virtual void audioProcessorChanged(AudioProcessor* processor) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;

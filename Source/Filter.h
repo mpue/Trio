@@ -20,10 +20,8 @@ public:
     virtual ~Filter();
     
     virtual void coefficients(float frequency, float resonance) = 0;
-    virtual void process(float *in, float *out, int numSampless) = 0;
     virtual void setModulator(Modulator* modulator) = 0;
     virtual void setModAmount(float amount) = 0;
-
     
     
 };

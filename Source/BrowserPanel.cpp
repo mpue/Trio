@@ -42,6 +42,12 @@ BrowserPanel::BrowserPanel (TrioAudioProcessor* p)
 
 
     //[Constructor] You can add your own custom stuff here..
+
+    patchBrowser = new PatchBrowserComponent();
+    addAndMakeVisible(patchBrowser);
+
+    patchBrowser->addChangeListener(this);
+
     //[/Constructor]
 }
 
@@ -85,6 +91,15 @@ void BrowserPanel::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+
+void BrowserPanel::changeListenerCallback (ChangeBroadcaster* source) {
+    processor->setCurrentProgram(patchBrowser->getSelectedProgram());
+}
+
+void BrowserPanel::addProgram(String name)
+{
+	patchBrowser->addValue(name);		
+}
 //[/MiscUserCode]
 
 
@@ -98,7 +113,7 @@ void BrowserPanel::resized()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="BrowserPanel" componentName=""
-                 parentClasses="public Component" constructorParams="TrioAudioProcessor* p"
+                 parentClasses="public Component, public ChangeListener" constructorParams="TrioAudioProcessor* p"
                  variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
                  overlayOpacity="0.330" fixedSize="0" initialWidth="910" initialHeight="600">
   <BACKGROUND backgroundColour="ffffffff">

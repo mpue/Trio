@@ -46,6 +46,11 @@ TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
     lf->setColour(TextButton::textColourOnId, Colours::black);
     lf->setColour(CaretComponent::caretColourId, Colours::darkorange);
     
+    lf->setColour (ScrollBar::thumbColourId,Colours::darkorange);
+    lf->setColour (ScrollBar::backgroundColourId,Colour::fromRGBA(0x5a,0x5a,0x5a,0xff));
+    lf->setColour (Slider::thumbColourId,Colours::darkorange);
+    lf->setColour (Slider::trackColourId,Colour::fromRGBA(0x5a,0x5a,0x5a,0xff));
+    
     // LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     
     // Make sure that before the constructor has finished, you've set the

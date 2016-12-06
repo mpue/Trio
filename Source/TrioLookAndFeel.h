@@ -13,8 +13,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-
-
 class TrioLookAndFeel : public LookAndFeel_V1 {
     
 public:
@@ -23,16 +21,6 @@ public:
     
     ~TrioLookAndFeel();
     
-	void drawShinyButtonShape(Graphics& g,
-		float x, float y, float w, float h,
-		float maxCornerSize,
-		const Colour& baseColour,
-		const float strokeWidth,
-		const bool flatOnLeft,
-		const bool flatOnRight,
-		const bool flatOnTop,
-		const bool flatOnBottom);
-
     void drawRotarySlider	(	Graphics & 	g,
                              int 	x,
                              int 	y,
@@ -58,6 +46,24 @@ public:
     
     Font getPopupMenuFont() override;
     void drawLabel (Graphics& g, Label& label) override;
+    
+    void drawScrollbarButton (Graphics&, ScrollBar&, int width, int height,
+                              int buttonDirection, bool isScrollbarVertical,
+                              bool isMouseOverButton, bool isButtonDown) override;
+    
+    void drawScrollbar (Graphics&, ScrollBar&, int x, int y, int width, int height,
+                        bool isScrollbarVertical, int thumbStartPosition, int thumbSize,
+                        bool isMouseOver, bool isMouseDown) override;
+
+	void drawShinyButtonShape(Graphics& g,
+		float x, float y, float w, float h,
+		float maxCornerSize,
+		const Colour& baseColour,
+		const float strokeWidth,
+		const bool flatOnLeft,
+		const bool flatOnRight,
+		const bool flatOnTop,
+		const bool flatOnBottom);
 };
 
 

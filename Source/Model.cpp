@@ -18,29 +18,25 @@
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices, MultimodeFilter* leftFilter, MultimodeFilter* rightFilter, ADSR* filterEnv, Sine* lfo1, Sine* lfo2, int sampleRate) {
+Model::Model(vector<Voice*> voices, MultimodeFilter* mainFilter, ADSR* filterEnv, Sine* lfo1, Sine* lfo2, int sampleRate) {
     this->voices = voices;
-    this->leftFilter = leftFilter;
-    this->rightFilter = rightFilter;
+    this->mainFilter = mainFilter;
     this->filterEnv = filterEnv;
     this->sampleRate = sampleRate;
     this->lfo1 = lfo1;
     this->lfo2 = lfo2;
     this->volume = 1.0f;
     this->filterResonance = 0.1f;
-    this->filtermode = 1;
 }
 
 Model::~Model() {
-    cout << "Model destroyed." << endl;
 }
 
-int Model::getOsc1Pitch() {
+float Model::getOsc1Pitch() {
     return this->osc1Pitch;
 }
 
 void Model::setOsc1Pitch(int pitch) {
-    cout << "Pitch : " << pitch << endl;
     this->osc1Pitch = pitch;
     
     for (int i = 0; i < voices.size();i++) {
@@ -51,12 +47,12 @@ void Model::setOsc1Pitch(int pitch) {
 
 }
 
-int Model::getOsc2Pitch() {
+float Model::getOsc2Pitch() {
     return this->osc2Pitch;
 }
 
 void Model::setOsc2Pitch(int pitch) {
-    cout << "Pitch : " << pitch << endl;
+
     this->osc2Pitch = pitch;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(1)->setPitch(pitch);
@@ -65,12 +61,11 @@ void Model::setOsc2Pitch(int pitch) {
     }
 }
 
-int Model::getOsc3Pitch() {
+float Model::getOsc3Pitch() {
     return this->osc1Pitch;
 }
 
 void Model::setOsc3Pitch(int pitch) {
-    cout << "Pitch : " << pitch << endl;
     this->osc3Pitch = pitch;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(2)->setPitch(pitch);
@@ -79,12 +74,11 @@ void Model::setOsc3Pitch(int pitch) {
     }
 }
 
-int Model::getOsc1Fine() {
+float Model::getOsc1Fine() {
     return this->osc1Fine;
 }
 
 void Model::setOsc1Fine(float fine) {
-    cout << "Osc 1 fine : " << fine << endl;
     this->osc1Fine = fine;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(0)->setFine(fine);
@@ -93,12 +87,11 @@ void Model::setOsc1Fine(float fine) {
     }
 }
 
-int Model::getOsc2Fine() {
+float Model::getOsc2Fine() {
     return this->osc2Fine;
 }
 
 void Model::setOsc2Fine(float fine) {
-    cout << "Osc 2 fine : " << fine << endl;
     this->osc2Fine = fine;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(1)->setFine(fine);
@@ -107,12 +100,11 @@ void Model::setOsc2Fine(float fine) {
     }
 }
 
-int Model::getOsc3Fine() {
+float Model::getOsc3Fine() {
     return this->osc3Fine;
 }
 
 void Model::setOsc3Fine(float fine) {
-    cout << "Osc 3 fine : " << fine << endl;
     this->osc3Fine = fine;
     for (int i = 0; i < voices.size();i++) {
         voices.at(i)->getOszillators().at(2)->setFine(fine);
@@ -122,7 +114,7 @@ void Model::setOsc3Fine(float fine) {
         
 }
 
-int Model::getOsc1Volume() {
+float Model::getOsc1Volume() {
     return this->osc1Volume;
 }
 
@@ -133,7 +125,7 @@ void Model::setOsc1Volume(float volume) {
     }
 }
 
-int Model::getOsc2Volume() {
+float Model::getOsc2Volume() {
     return this->osc2Volume;
 }
 
@@ -144,7 +136,7 @@ void Model::setOsc2Volume(float Volume) {
     }
 }
 
-int Model::getOsc3Volume() {
+float Model::getOsc3Volume() {
     return this->osc3Volume;
 }
 
@@ -209,8 +201,7 @@ float Model::getFilterCutoff() {
 
 void Model::setFilterCutoff(float cutoff) {
     this->filterCutoff = cutoff;
-    leftFilter->coefficients(filterCutoff * 1000, filterResonance);
-    rightFilter->coefficients(filterCutoff * 1000, filterResonance);
+    mainFilter->coefficients(filterCutoff * 1000, filterResonance);
 }
 
 float Model::getFilterResonance() {
@@ -219,8 +210,7 @@ float Model::getFilterResonance() {
 
 void Model::setFilterResonance(float resonance) {
     this->filterResonance = resonance;
-    leftFilter->coefficients(filterCutoff * 1000, filterResonance);
-    rightFilter->coefficients(filterCutoff * 1000, filterResonance);
+    mainFilter->coefficients(filterCutoff * 1000, filterResonance);
 }
 
 
@@ -228,8 +218,8 @@ float Model::getVolume() {
     return this->volume;
 }
 
-void Model::setVolume(float volume) {
-    this->volume = volume;
+void Model::setVolume(float _volume) {
+    this->volume = _volume;
 }
 
 float Model::getFilterEnvAttack() {
@@ -270,27 +260,14 @@ void Model::setFilterEnvRelease(float release) {
 
 }
 
-float Model::getFilterMode() {
-    return this->filtermode;
-}
-
-void Model::setFilterMode(float mode) {
-    this->filtermode = mode;
-    
-    if (mode == 0) {
-        this->leftFilter->setMode(MultimodeFilter::LOWPASS);
-        this->rightFilter->setMode(MultimodeFilter::LOWPASS);
-    }
-    else {
-        this->leftFilter->setMode(MultimodeFilter::HIGHPASS);
-        this->rightFilter->setMode(MultimodeFilter::HIGHPASS);
-    }
+float Model::getFilterModAmount()
+{
+	return 0.0f;
 }
 
 void Model::setFilterModAmount(float amount) {
     this->filterModAmount = amount;
-    this->leftFilter->setModAmount(amount);
-    this->rightFilter->setModAmount(amount);
+    this->mainFilter->setModAmount(amount);
 }
 
 float Model::getLfo1Rate() {

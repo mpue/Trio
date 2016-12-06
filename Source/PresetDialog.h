@@ -40,7 +40,7 @@ class PresetDialog  : public Component,
 {
 public:
     //==============================================================================
-    PresetDialog (ComboBox* presetBox, Model* model);
+    PresetDialog (ComboBox* presetBox);
     ~PresetDialog();
 
     //==============================================================================
@@ -60,7 +60,6 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     ComboBox* presetBox;
     ScopedPointer<XmlElement> xml;
-    Model* model;
     //[/UserVariables]
 
     //==============================================================================

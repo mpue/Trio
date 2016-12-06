@@ -19,6 +19,7 @@ Sine::Sine(float sampleRate) : Oszillator(sampleRate) {
     this->fine = 0.0f;
     this->step = (frequency * 2 * M_PI) / sampleRate;
     this->phase = 0;
+	this->value = 0;
 }
 
 float Sine::getOutput() {

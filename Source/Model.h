@@ -28,28 +28,28 @@ class Model {
     
 public:
 
-    Model(vector<Voice*> voices, MultimodeFilter* leftFilter, MultimodeFilter* rightFilter, ADSR* filterEnv,Sine* lfo1, Sine* lfo2, int sampleRate);
+    Model(vector<Voice*> voices, MultimodeFilter* mainFilter, ADSR* filterEnv,Sine* lfo1, Sine* lfo2, int sampleRate);
     ~Model();
     
-    int getOsc1Pitch();
+	float getOsc1Pitch();
     void setOsc1Pitch(int pitch);
-    int getOsc2Pitch();
+	float getOsc2Pitch();
     void setOsc2Pitch(int pitch);
-    int getOsc3Pitch();
+	float getOsc3Pitch();
     void setOsc3Pitch(int pitch);
     
-    int getOsc1Fine();
+    float getOsc1Fine();
     void setOsc1Fine(float fine);
-    int getOsc2Fine();
+	float getOsc2Fine();
     void setOsc2Fine(float fine);
-    int getOsc3Fine();
+	float getOsc3Fine();
     void setOsc3Fine(float fine);
     
-    int getOsc1Volume();
+	float getOsc1Volume();
     void setOsc1Volume(float volume);
-    int getOsc2Volume();
+	float getOsc2Volume();
     void setOsc2Volume(float volume);
-    int getOsc3Volume();
+	float getOsc3Volume();
     void setOsc3Volume(float volume);
     
     float getAmpEnvAttack();
@@ -79,8 +79,8 @@ public:
     float getFilterModAmount();
     void setFilterModAmount(float amount);
     
-    float getFilterMode();
-    void setFilterMode(float mode);
+    int getFilterMode();
+    void setFilterMode(int mode);
     
     float getVolume();
     void setVolume(float volume);
@@ -137,8 +137,7 @@ private:
     float filterModAmount;
     
     vector<Voice*> voices;
-    MultimodeFilter* leftFilter;
-    MultimodeFilter* rightFilter;
+    MultimodeFilter* mainFilter;
     ADSR* filterEnv;
     Sine* lfo1;
     Sine* lfo2;
@@ -154,7 +153,7 @@ private:
     int mod1target;
     int mod2target;
     
-    int filtermode;
+    
 };
 
 

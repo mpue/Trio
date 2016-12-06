@@ -79,7 +79,7 @@ bool Sequencer::isPlaying() {
 }
 
 float Sequencer::process() {
-	tick();
+    tick();
     return (1.0f / 127.0f) * this->offsets.at(currentStep);
 }
 

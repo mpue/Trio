@@ -12,15 +12,20 @@
 
 MultimodeFilter::MultimodeFilter() {
 
-    this->filter1 = new LowPassFilter();
-    this->filter2 = new HighPassFilter();
+    this->lowPassLeft = new LowPassFilter();
+    this->highPassLeft = new HighPassFilter();
+
+    this->lowPassRight = new LowPassFilter();
+    this->highPassRight = new HighPassFilter();
     
     this->mode = LOWPASS;
 }
 
 MultimodeFilter::~MultimodeFilter() {
-    this->filter1 = nullptr;
-    this->filter2 = nullptr;
+    this->lowPassLeft = nullptr;
+    this->lowPassRight = nullptr;
+    this->highPassLeft = nullptr;
+    this->highPassRight = nullptr;
 }
 
 
@@ -29,25 +34,36 @@ void MultimodeFilter::setMode(Mode mode) {
 }
 
 void MultimodeFilter::coefficients(float frequency, float resonance) {
-    this->filter1->coefficients( frequency, resonance);
-    this->filter2->coefficients( frequency, resonance);
+    this->lowPassLeft->coefficients( frequency, resonance);
+    this->lowPassRight->coefficients( frequency, resonance);
+    this->highPassLeft->coefficients( frequency, resonance);
+    this->highPassRight->coefficients( frequency, resonance);
 }
 
-void MultimodeFilter::process(float *in, float *out, int numSamples) {    
-    if (this->mode == Mode::LOWPASS) {
-        this->filter1->process(in, out, numSamples);
-    }
-    else {
-        this->filter2->process(in, out, numSamples);
+void MultimodeFilter::processStereo(float *const left, float *const right, const int numSamples) {
+    if (this->enabled) {
+        if (this->mode == Mode::LOWPASS) {
+            this->lowPassLeft->process(left, 0, numSamples);
+            this->lowPassRight->process(right, 0, numSamples);
+        }
+        else {
+            this->highPassLeft->process(left, 0, numSamples);
+            this->highPassRight->process(right, 0, numSamples);
+        }
+   
     }
 }
 
 void MultimodeFilter::setModulator(Modulator* mod) {
-    this->filter1->setModulator(mod);
-    this->filter2->setModulator(mod);
+    this->lowPassLeft->setModulator(mod);
+    this->lowPassRight->setModulator(mod);
+    this->highPassLeft->setModulator(mod);
+    this->highPassRight->setModulator(mod);
 }
 
 void MultimodeFilter::setModAmount(float amount) {
-    this->filter1->setModAmount(amount);
-    this->filter2->setModAmount(amount);
+    this->lowPassLeft->setModAmount(amount);
+    this->lowPassRight->setModAmount(amount);
+    this->highPassLeft->setModAmount(amount);
+    this->highPassRight->setModAmount(amount);
 }

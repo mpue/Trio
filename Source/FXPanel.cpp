@@ -700,40 +700,35 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     notesCombo->setSelectedItemIndex(0);
     octavesCombo->setSelectedItemIndex(0);
     glow = new GlowEffect();
-
-	processor->addListener(this);
-
     //[/Constructor]
 }
 
 FXPanel::~FXPanel()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-
-	this->fxreverb_enabled_att = nullptr;
-	this->fxreverb_size_att = nullptr;
-	this->fxreverb_width_att = nullptr;
-	this->fxreverb_freeze_att = nullptr;
-	this->fxreverb_damping_att = nullptr;
-	this->fxreverb_drylevel_att = nullptr;
-	this->fxreverb_wetlevel_att = nullptr;
-
-	this->fxdelay_enabled_att = nullptr;
-	this->fxdelay_mixleft_att = nullptr;
-	this->fxdelay_mixright_att = nullptr;
-	this->fxdelay_fbleft_att = nullptr;
-	this->fxdelay_fbright_att = nullptr;
-	this->fxdelay_timeleft_att = nullptr;
-	this->fxdelay_timeright_att = nullptr;
-
-	this->fxdist_enabled_att = nullptr;
-	this->fxdist_mode_att = nullptr;
-	this->fxdist_mix_att = nullptr;
-	this->fxdist_drive_att = nullptr;
-
     stepButtons.clear();
     offsetFields.clear();
     velocityFields.clear();
+    this->fxreverb_enabled_att = nullptr;
+    this->fxreverb_size_att = nullptr;
+    this->fxreverb_width_att = nullptr;
+    this->fxreverb_freeze_att = nullptr;
+    this->fxreverb_damping_att = nullptr;
+    this->fxreverb_drylevel_att = nullptr;
+    this->fxreverb_wetlevel_att = nullptr;
+
+    this->fxdelay_enabled_att = nullptr;
+    this->fxdelay_mixleft_att = nullptr;
+    this->fxdelay_mixright_att = nullptr;
+    this->fxdelay_fbleft_att = nullptr;
+    this->fxdelay_fbright_att = nullptr;
+    this->fxdelay_timeleft_att = nullptr;
+    this->fxdelay_timeright_att = nullptr;
+
+    this->fxdist_enabled_att = nullptr;
+    this->fxdist_mode_att = nullptr;
+    this->fxdist_mix_att = nullptr;
+    this->fxdist_drive_att = nullptr;
     //[/Destructor_pre]
 
     dampSlider = nullptr;
@@ -814,9 +809,6 @@ FXPanel::~FXPanel()
     //[Destructor]. You can add your own custom destruction code here..
     popup = nullptr;
     glow = nullptr;
-
-	processor->removeListener(this);
-
     //[/Destructor]
 }
 
@@ -964,42 +956,41 @@ void FXPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == delayTimeLeftSlider)
     {
         //[UserSliderCode_delayTimeLeftSlider] -- add your slider handling code here..
-        processor->getLeftDelay()->setDelay(delayTimeLeftSlider->getValue() * 1000);
+        processor->getStereoDelay()->setDelay(StereoDelay::Channel::LEFT,delayTimeLeftSlider->getValue() * 1000);
         // processor->getLeftDelay()->resetDelay();
         //[/UserSliderCode_delayTimeLeftSlider]
     }
     else if (sliderThatWasMoved == delayTimeRightSlider)
     {
         //[UserSliderCode_delayTimeRightSlider] -- add your slider handling code here..
-        processor->getRightDelay()->setDelay(delayTimeRightSlider->getValue() * 1000);
-        Logger::getCurrentLogger()->writeToLog(String(processor->getRightDelay()->getDelayTimeMS()));
+        processor->getStereoDelay()->setDelay(StereoDelay::Channel::RIGHT,delayTimeRightSlider->getValue() * 1000);
         //processor->getRightDelay()->resetDelay();
         //[/UserSliderCode_delayTimeRightSlider]
     }
     else if (sliderThatWasMoved == delayFBLeftSlider)
     {
         //[UserSliderCode_delayFBLeftSlider] -- add your slider handling code here..
-        processor->getLeftDelay()->setFeedback(delayFBLeftSlider->getValue());
+        processor->getStereoDelay()->setFeedback(StereoDelay::Channel::LEFT,delayFBLeftSlider->getValue());
         //processor->getRightDelay()->resetDelay();
         //[/UserSliderCode_delayFBLeftSlider]
     }
     else if (sliderThatWasMoved == delayFBRightSlider)
     {
         //[UserSliderCode_delayFBRightSlider] -- add your slider handling code here..
-        processor->getRightDelay()->setFeedback(delayFBRightSlider->getValue());
+        processor->getStereoDelay()->setFeedback(StereoDelay::Channel::RIGHT,delayFBRightSlider->getValue());
         //processor->getRightDelay()->resetDelay();
         //[/UserSliderCode_delayFBRightSlider]
     }
     else if (sliderThatWasMoved == delayMixLeftSlider)
     {
         //[UserSliderCode_delayMixLeftSlider] -- add your slider handling code here..
-        processor->getLeftDelay()->setMix(delayMixLeftSlider->getValue());;
+        processor->getStereoDelay()->setMix(StereoDelay::Channel::LEFT,delayMixLeftSlider->getValue());;
         //[/UserSliderCode_delayMixLeftSlider]
     }
     else if (sliderThatWasMoved == delayMixRightSlider)
     {
         //[UserSliderCode_delayMixRightSlider] -- add your slider handling code here..
-        processor->getRightDelay()->setMix(delayMixRightSlider->getValue());
+        processor->getStereoDelay()->setMix(StereoDelay::Channel::RIGHT,delayMixRightSlider->getValue());
         //[/UserSliderCode_delayMixRightSlider]
     }
     else if (sliderThatWasMoved == driveSlider)
@@ -1164,10 +1155,6 @@ void FXPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     {
         //[UserComboBoxCode_modeCombo] -- add your combo box handling code here..
         processor->getDistortion()->controls.mode = modeCombo->getSelectedId();
-
-		String id = "fxdist_mode";
-		float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(modeCombo->getSelectedId());
-		processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserComboBoxCode_modeCombo]
     }
     else if (comboBoxThatHasChanged == octavesCombo)
@@ -1271,25 +1258,6 @@ void FXPanel::changeListenerCallback(juce::ChangeBroadcaster *source) {
 
 }
 
-void FXPanel::audioProcessorParameterChanged(AudioProcessor* processor,
-	int parameterIndex,
-	float newValue) {
-
-	String id = processor->getParameterID(parameterIndex);
-
-	float value = processor->getParameter(parameterIndex);
-	float nval = this->processor->getValueTreeState()->getParameterRange(id).convertFrom0to1(value);
-
-	if (id == "fxdist_mode") {
-		modeCombo->setSelectedId(nval);
-	}
-
-}
-
-void FXPanel::audioProcessorChanged(AudioProcessor * processor)
-{
-}
-
 
 bool FXPanel::keyPressed (const KeyPress& key, Component* originatingComponent) {
 
@@ -1372,7 +1340,7 @@ void FXPanel::valueDown(TextEditor* editor) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="FXPanel" componentName=""
-                 parentClasses="public Component, public ChangeListener, public KeyListener, public AudioProcessorListener"
+                 parentClasses="public Component, public ChangeListener, public KeyListener"
                  constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">

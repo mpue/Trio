@@ -454,7 +454,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->ampDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampdecay", *this->ampDecaySlider);
     this->ampSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampsustain", *this->ampSustainSlider);
     this->ampReleaseAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"amprelease", *this->ampReleaseSlider);
-    this->filtermodeAttachment = new AudioProcessorValueTreeState::ButtonAttachment(*processor->getValueTreeState(),"filtermode", *this->lowPassPutton);
+    // this->filtermodeAttachment = new AudioProcessorValueTreeState::ButtonAttachment(*processor->getValueTreeState(),"filtermode", *this->lowPassPutton);
 
     /*
     this->modSourceAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"modsource", *this->modCombo);
@@ -464,13 +464,15 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     int x = getScreenX();
     int y = getScreenY();
 
-    presetPanel = new PresetDialog(this->presetCombo.get(), processor->getModel());
+    presetPanel = new PresetDialog(this->presetCombo.get());
     presetPanel->setBounds(x,y,getWidth(),getHeight());
 
     this->fxPanel = new FXPanel(processor);
     fxPanel->setBounds(x,y,getWidth(),getHeight());
+    p->addChangeListener(this);
     p->addChangeListener(this->fxPanel);
     p->getSequencer()->addChangeListener(this->fxPanel);
+
 
     this->browserPanel = new BrowserPanel(processor);
     browserPanel->setBounds(x,y,getWidth(),getHeight());
@@ -591,7 +593,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     lfo2ModCombo->setSelectedId(nval);
 
     processor->addListener(this);
-    
+    // processor->addListener(fxPanel);
+
     statusLabel->setColour(Label::textColourId, Colours::darkorange);
 
     /*
@@ -620,41 +623,41 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 MainWindow::~MainWindow()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    processor->removeListener(this);
+    processor->removeAllChangeListeners();
 
-	processor->removeListener(this);
-	processor->removeAllChangeListeners();
-
-	this->volumeAttachement = nullptr;
-	this->osc1VolAttachment = nullptr;
-	this->osc2VolAttachment = nullptr;
-	this->osc3VolAttachment = nullptr;
-	this->osc1PitchAttachment = nullptr;
-	this->osc2PitchAttachment = nullptr;
-	this->osc3PitchAttachment = nullptr;
-	this->osc1FineAttachment = nullptr;
-	this->osc2FineAttachment = nullptr;
-	this->osc3FineAttachment = nullptr;
-	this->filterModAttachment = nullptr;
-	this->cutoffAttachment = nullptr;
-	this->resoAttachment = nullptr;
-	this->lfo1RateAttachment = nullptr;
-	this->lfo1ShapeAttachment = nullptr;
-	this->lfo1AmountAttachment = nullptr;
-	this->lfo2RateAttachment = nullptr;
-	this->lfo2ShapeAttachment = nullptr;
-	this->lfo2AmountAttachment = nullptr;
-	this->filterAttackAttachment = nullptr;
-	this->filterDecayAttachment = nullptr;
-	this->filterSustainAttachment = nullptr;
-	this->filterReleaseAttachment = nullptr;
-	this->ampAttackAttachment = nullptr;
-	this->ampDecayAttachment = nullptr;
-	this->ampSustainAttachment = nullptr;
-	this->ampReleaseAttachment = nullptr;
-	this->presetPanel = nullptr;
-	this->animator = nullptr;
-	this->browserPanel = nullptr;
-	this->filtermodeAttachment = nullptr;
+    this->volumeAttachement = nullptr;
+    this->osc1VolAttachment = nullptr;
+    this->osc2VolAttachment = nullptr;
+    this->osc3VolAttachment = nullptr;
+    this->osc1PitchAttachment = nullptr;
+    this->osc2PitchAttachment = nullptr;
+    this->osc3PitchAttachment = nullptr;
+    this->osc1FineAttachment = nullptr;
+    this->osc2FineAttachment = nullptr;
+    this->osc3FineAttachment = nullptr;
+    this->filterModAttachment = nullptr;
+    this->cutoffAttachment = nullptr;
+    this->resoAttachment = nullptr;
+    this->lfo1RateAttachment = nullptr;
+    this->lfo1ShapeAttachment = nullptr;
+    this->lfo1AmountAttachment = nullptr;
+    this->lfo2RateAttachment = nullptr;
+    this->lfo2ShapeAttachment = nullptr;
+    this->lfo2AmountAttachment = nullptr;
+    this->filterAttackAttachment = nullptr;
+    this->filterDecayAttachment = nullptr;
+    this->filterSustainAttachment = nullptr;
+    this->filterReleaseAttachment = nullptr;
+    this->ampAttackAttachment = nullptr;
+    this->ampDecayAttachment = nullptr;
+    this->ampSustainAttachment = nullptr;
+    this->ampReleaseAttachment = nullptr;
+    this->presetPanel = nullptr;
+    this->animator = nullptr;
+    this->browserPanel = nullptr;
+    this->fxPanel = nullptr;
+    this->filtermodeAttachment = nullptr;
 
     //[/Destructor_pre]
 
@@ -709,15 +712,9 @@ MainWindow::~MainWindow()
 
 
     //[Destructor]. You can add your own custom destruction code here..
-    
-	processor->removeListener(this);
-	this->fxPanel = nullptr;
 
-    // this->modSourceAttachment = nullptr;
-    // this->mod1TargetAttachment = nullptr;
-    // this->mod2TargetAttachment = nullptr;
-    
-    
+
+
 
     //[/Destructor]
 }
@@ -1058,27 +1055,55 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         processor->getValueTreeState()->getParameter("modsource")->setValueNotifyingHost(nval);
         this->processor->getModel()->setModsource(modCombo->getSelectedId());
         if (modCombo->getSelectedId() == 1) {
-            lfo1ModCombo->setEnabled(false);
-            lfo2ModCombo->setEnabled(false);
             processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
         }
         else if (modCombo->getSelectedId() == 2) {
-            lfo1ModCombo->setEnabled(true);
-            lfo2ModCombo->setEnabled(false);
         }
         else if (modCombo->getSelectedId() == 3) {
-            lfo1ModCombo->setEnabled(false);
-            lfo2ModCombo->setEnabled(true);
         }
         else if (modCombo->getSelectedId() == 4) {
-            lfo1ModCombo->setEnabled(true);
-            lfo2ModCombo->setEnabled(true);
+        }
+        else if (modCombo->getSelectedId() == 5) {
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::SEQUENCER);
         }
         //[/UserComboBoxCode_modCombo]
     }
     else if (comboBoxThatHasChanged == presetCombo)
     {
         //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
+
+        if (comboBoxThatHasChanged->getName() == "presetCombo")
+        {
+
+            String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+            String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+
+			String name = comboBoxThatHasChanged->getText();
+
+            String filename = name + ".xml";
+            File preset = File(presetPath+filename);
+
+            if (preset.exists()) {
+                ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
+                ValueTree state = ValueTree::fromXml(*xml.get());
+                processor->setState(&state, true);
+                xml = nullptr;
+            }
+
+			vector<String> v = processor->getProgramNames();
+
+			if (std::find(v.begin(), v.end(), name) == v.end()) {
+				processor->addProgram(name);
+				browserPanel->addProgram(name);
+			}
+
+            processor->setSelectedProgram(name);
+            processor->setCurrentProgram(comboBoxThatHasChanged->getItemId(comboBoxThatHasChanged->getSelectedItemIndex()) - 1);
+
+            processor->updateHostDisplay();
+
+        }
+
         //[/UserComboBoxCode_presetCombo]
     }
 
@@ -1095,9 +1120,16 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_storeButton] -- add your button handler code here..
 
-        ValueTree seq = ValueTree (Identifier ("sequencer"));
+        ValueTree seq = processor->getValueTreeState()->state.getChildWithName("sequencer");
 
+        while (seq.isValid()) {
+            processor->getValueTreeState()->state.removeChild(seq, nullptr);
+            seq = processor->getValueTreeState()->state.getChildWithName("sequencer");
+        }
+
+        seq = ValueTree (Identifier ("sequencer"));
         processor->getValueTreeState()->state.addChild(seq, 0, nullptr);
+
 
         seq.setProperty("raster", processor->getSequencer()->getRaster(), nullptr);
         seq.setProperty("octaves", processor->getSequencer()->getNumOctaves(), nullptr);
@@ -1110,12 +1142,14 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
             offsets.setProperty("offset_"+String(i), processor->getSequencer()->getOffsetAt(i), nullptr);
         }
 
+        seq.removeAllChildren(nullptr);
+
         seq.addChild(offsets, 0, nullptr);
 
         ValueTree velocities = ValueTree (Identifier ("velocities"));
 
         for (int i = 0; i < 16;i++ ) {
-            offsets.setProperty("velocity_"+String(i), processor->getSequencer()->getVelocityAt(i), nullptr);
+            velocities.setProperty("velocity_"+String(i), processor->getSequencer()->getVelocityAt(i), nullptr);
         }
 
         seq.addChild(velocities, 0, nullptr);
@@ -1167,7 +1201,6 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == imageButton4)
     {
         //[UserButtonCode_imageButton4] -- add your button handler code here..
-        cout << "imageButton4" << endl;
         mode2 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
 
@@ -1179,7 +1212,6 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == imageButton5)
     {
         //[UserButtonCode_imageButton5] -- add your button handler code here..
-        cout << "imageButton5" << endl;
         mode2 = Oszillator::OscMode::PULSE;
         processor->setupOscillators(mode1,mode2,mode3);
 
@@ -1191,7 +1223,6 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == imageButton6)
     {
         //[UserButtonCode_imageButton6] -- add your button handler code here..
-        cout << "imageButton6" << endl;
         mode2 = Oszillator::OscMode::SINE;
         processor->setupOscillators(mode1,mode2,mode3);
 
@@ -1203,11 +1234,8 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == imageButton7)
     {
         //[UserButtonCode_imageButton7] -- add your button handler code here..
-        cout << "imageButton7" << endl;
-
         mode3 = Oszillator::OscMode::SAW;
         processor->setupOscillators(mode1,mode2,mode3);
-
         String id = "osc3shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
@@ -1229,11 +1257,8 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == imageButton9)
     {
         //[UserButtonCode_imageButton9] -- add your button handler code here..
-        cout << "imageButton9" << endl;
-
         mode3 = Oszillator::OscMode::SINE;
         processor->setupOscillators(mode1,mode2,mode3);
-
         String id = "osc3shape";
         float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
@@ -1268,18 +1293,35 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_noiseButton]
     }
+
     else if (buttonThatWasClicked == lowPassPutton)
     {
         //[UserButtonCode_lowPassPutton] -- add your button handler code here..
-        processor->getLeftFilter()->setMode(MultimodeFilter::Mode::LOWPASS);
-        processor->getRightFilter()->setMode(MultimodeFilter::Mode::LOWPASS);
+        
+		float nval;
+		String id = "filtermode";
+
+		if (lowPassPutton->getToggleState()) {
+			processor->getFilter()->setMode(MultimodeFilter::Mode::LOWPASS);
+			nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(0.0f);
+		}
+		else {
+			processor->getFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
+			nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
+		}
+        
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_lowPassPutton]
     }
     else if (buttonThatWasClicked == highPassButton)
     {
         //[UserButtonCode_highPassButton] -- add your button handler code here..
-        processor->getLeftFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
-        processor->getRightFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
+		/*
+        processor->getFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
+        String id = "filtermode";
+        float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
+        processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
+		*/
         //[/UserButtonCode_highPassButton]
     }
 
@@ -1296,13 +1338,13 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 void MainWindow::timerCallback() {
     animator->fadeOut(statusLabel, 500);
     stopTimer();
-    Logger::getCurrentLogger()->writeToLog("Animator stopped.");
 }
 
 void MainWindow::visibilityChanged() {
 
-    String currentProgram = processor->getSelectedProgram();
-    
+    // String currentProgram = processor->getSelectedProgram();
+
+    /*
     if (currentProgram == "") {
         for (int i = 0; i < processor->getNumPrograms();i++) {
             if (processor->getProgramName(i) == "init") {
@@ -1310,10 +1352,12 @@ void MainWindow::visibilityChanged() {
                 break;
             }
         }
-        
+
     }
-    
+     */
+
     presetCombo->setText(processor->getSelectedProgram(),NotificationType::dontSendNotification);
+    // processor->updateHostDisplay();
 }
 
 void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int parameterIndex, float newValue) {
@@ -1380,6 +1424,14 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
     else if (id == "mod2target") {
         lfo2ModCombo->setSelectedId(nval);
     }
+    else if (id == "filtermode") {
+        if (nval == 0) {
+            lowPassPutton->setToggleState(true,NotificationType::dontSendNotification);
+        }
+        else {
+            highPassButton->setToggleState(true,NotificationType::dontSendNotification);
+        }
+    }
 
 }
 
@@ -1422,13 +1474,16 @@ void MainWindow::toggleView(MainWindow::PanelDisplay display) {
 
     }
 
-
     this->currentDisplay = display;
 
 }
 
 bool MainWindow::keyPressed (const KeyPress& key, Component* originatingComponent) {
     return true;
+}
+
+void MainWindow::changeListenerCallback (ChangeBroadcaster* source) {
+    presetCombo->setText(processor->getSelectedProgram());
 }
 
 //[/MiscUserCode]
@@ -1444,7 +1499,7 @@ bool MainWindow::keyPressed (const KeyPress& key, Component* originatingComponen
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer, public ChangeBroadcaster, public KeyListener"
+                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer, public ChangeBroadcaster, public KeyListener, public ChangeListener"
                  constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">

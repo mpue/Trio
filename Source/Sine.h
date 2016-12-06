@@ -27,7 +27,7 @@ private:
     float fine;
     double step;
     double phase;
-    double value;
+    float value;
 };
 
 #endif /* Sine_hpp */

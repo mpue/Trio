@@ -13,6 +13,8 @@
 #include <math.h>
 #include <iostream>
 
+#include "../JuceLibraryCode/JuceHeader.h"
+
 Pulse::Pulse(float sampleRate) : Oszillator(sampleRate) {
     this->volume = 1.0f;
     this->frequency = 440.0f;
@@ -32,7 +34,7 @@ float Pulse::process() {
     this->value = (float)(sin(phase) * this->volume);
     
     if (value < 0) {
-        value = 0;
+        value = -1;
     }
     else {
         value = 1;

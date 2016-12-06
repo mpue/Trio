@@ -4,28 +4,41 @@
               bundleIdentifier="de.pueski.Trio" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="0" buildAU="1" buildAUv3="0" buildRTAS="0"
               buildAAX="0" pluginName="Trio" pluginDesc="Trio" pluginManufacturer="pueski"
-              pluginManufacturerCode="Manu" pluginCode="Uvki" pluginChannelConfigs="{0,2}"
+              pluginManufacturerCode="Manu" pluginCode="Uvki" pluginChannelConfigs=""
               pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="TrioAU"
               pluginRTASCategory="" aaxIdentifier="com.yourcompany.Trio" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
               jucerVersion="4.3.0">
   <MAINGROUP id="spDKWA" name="Trio">
     <GROUP id="{2A1EAFF9-2CF2-6681-400F-6E51A93E25C9}" name="Resources">
-      <FILE id="QqRSsi" name="Knob_48.png" compile="0" resource="1" file="Knob_48.png"/>
-      <FILE id="P9JoJF" name="Knob_64.png" compile="0" resource="1" file="Knob_64.png"/>
+      <FILE id="h9VOvo" name="Knob_48.png" compile="0" resource="1" file="Knob_48.png"/>
+      <FILE id="rHwWAE" name="Knob_64.png" compile="0" resource="1" file="Knob_64.png"/>
     </GROUP>
     <GROUP id="{973A5F90-B82E-4BC1-6D49-78E790BACA7B}" name="Source">
+      <FILE id="ZYttDe" name="PatchBrowserComponent.cpp" compile="1" resource="0"
+            file="Source/PatchBrowserComponent.cpp"/>
+      <FILE id="hCwaXA" name="PatchBrowserComponent.h" compile="0" resource="0"
+            file="Source/PatchBrowserComponent.h"/>
+      <GROUP id="{06ECFD99-A1E1-7763-3A4A-354D3264CA67}" name="Effects">
+        <FILE id="d9SLof" name="StereoReverb.cpp" compile="1" resource="0"
+              file="Source/StereoReverb.cpp"/>
+        <FILE id="rYNXiF" name="StereoReverb.h" compile="0" resource="0" file="Source/StereoReverb.h"/>
+        <FILE id="NcVPmc" name="MonoEffect.h" compile="0" resource="0" file="Source/MonoEffect.h"/>
+        <FILE id="MNEOr9" name="StereoEffect.h" compile="0" resource="0" file="Source/StereoEffect.h"/>
+        <FILE id="kTkCzC" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
+        <FILE id="aVLJMY" name="BasicDelayLine.cpp" compile="1" resource="0"
+              file="Source/BasicDelayLine.cpp"/>
+        <FILE id="bwersk" name="BasicDelayLine.h" compile="0" resource="0"
+              file="Source/BasicDelayLine.h"/>
+        <FILE id="DNMYmI" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
+        <FILE id="Pp7QVN" name="StereoDelay.cpp" compile="1" resource="0" file="Source/StereoDelay.cpp"/>
+        <FILE id="MgsQFk" name="StereoDelay.h" compile="0" resource="0" file="Source/StereoDelay.h"/>
+      </GROUP>
       <FILE id="FQn9W1" name="BrowserPanel.cpp" compile="1" resource="0"
             file="Source/BrowserPanel.cpp"/>
       <FILE id="BoULQs" name="BrowserPanel.h" compile="0" resource="0" file="Source/BrowserPanel.h"/>
-      <FILE id="aVLJMY" name="BasicDelayLine.cpp" compile="1" resource="0"
-            file="Source/BasicDelayLine.cpp"/>
-      <FILE id="bwersk" name="BasicDelayLine.h" compile="0" resource="0"
-            file="Source/BasicDelayLine.h"/>
       <FILE id="PjPigK" name="FXPanel.cpp" compile="1" resource="0" file="Source/FXPanel.cpp"/>
       <FILE id="aJljOP" name="FXPanel.h" compile="0" resource="0" file="Source/FXPanel.h"/>
-      <FILE id="kTkCzC" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
-      <FILE id="DNMYmI" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
       <FILE id="RUPcKe" name="PresetDialog.cpp" compile="1" resource="0"
             file="Source/PresetDialog.cpp"/>
       <FILE id="Qnksaj" name="PresetDialog.h" compile="0" resource="0" file="Source/PresetDialog.h"/>
@@ -136,12 +149,12 @@
         <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
-    <VS2015 targetFolder="Builds/VisualStudio2015" vst3Folder="">
+    <VS2015 targetFolder="Builds/VisualStudio2015">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
-                       isDebug="1" optimisation="1" targetName="Trio"/>
+                       isDebug="1" optimisation="3" targetName="Trio" postbuildCommand="copy /Y $(SolutionDir)$(Platform)\$(Configuration)\Trio.dll d:\vstplugins"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
-                       isDebug="0" optimisation="3" targetName="Trio"/>
+                       isDebug="0" optimisation="3" targetName="Trio" postbuildCommand="copy /Y $(SolutionDir)$(Platform)\$(Configuration)\Trio.dll d:\vstplugins"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_video" path="..\..\JUCE\modules"/>

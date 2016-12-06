@@ -19,7 +19,7 @@ class HighPassFilter : public Filter {
     
 public:
     virtual void coefficients(float frequency, float resonance) override;
-    virtual void process(float *in, float *out,int numSamples) override;
+    virtual void process(float *in, float *out,int numSamples);
     virtual void setModulator(Modulator* mod) override;
     virtual void setModAmount(float amount) override;
     

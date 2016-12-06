@@ -28,6 +28,7 @@ private:
     double step;
     double phase;
     double value;
+    bool on = false;
 };
 
 #endif /* Pulse_hpp */

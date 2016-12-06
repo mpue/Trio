@@ -20,18 +20,12 @@
 #include <cstdlib>
 #include <iostream>
 
-//////////////////////////////////////////////////////////
-//  BASIC DELAY LINE CLASS (feedback optional)
-//////////////////////////////////////////////////////////
-
 class BasicDelayLine{
 
 public:
-    //constructor / destructor
     BasicDelayLine(const int sr = 44100, const float d_ms = 0.0f, const float feedback = 0.0f, const float mixLevel = 0.5f);
     ~BasicDelayLine();
     
-    //getters
     float getDelayTimeMS();
     float getMaxDelayTimeMS();
     float getFeedback();
@@ -39,7 +33,6 @@ public:
     bool getByPass();
     float getCurrentFeedbackOutput();
     
-    //setters
     void setDelayTimeMS(const int sr, const float d_ms);
     void setDelay(float d_ms);
     void setFeedback(float f_pct);
@@ -48,7 +41,6 @@ public:
     void setCurrentFeedbackInput(float fb);
     void setUseExternalFeedback(bool b);
     
-    //business functions
     float next(const float in);
     void resetBuffer();
     void resetDelay();

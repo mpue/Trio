@@ -23,6 +23,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "PatchBrowserComponent.h"
 //[/Headers]
 
 
@@ -35,7 +36,8 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class BrowserPanel  : public Component
+class BrowserPanel  : public Component,
+                      public ChangeListener
 {
 public:
     //==============================================================================
@@ -44,6 +46,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+	void addProgram(String name);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -57,6 +61,8 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     TrioAudioProcessor* processor;
+    ScopedPointer<PatchBrowserComponent> patchBrowser;
+
     //[/UserVariables]
 
     //==============================================================================

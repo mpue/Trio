@@ -50,8 +50,9 @@ void LowPassFilter::process(float *in, float *out, int numSamples) {
             
         }
         else {
+            // f =  this->frequency * modulator->getOutput() * this->modAmount;
             f =  this->frequency + (modulator->getOutput() * this->modAmount * 1000);
-            // modulator->process();
+            // f = this->frequency * modulator->getOutput();
         }
 
         if (f <= 0) {

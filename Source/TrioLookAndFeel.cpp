@@ -69,43 +69,6 @@ void TrioLookAndFeel::drawRotarySlider	(	Graphics & 	g,
     
 }
 
-void TrioLookAndFeel::drawShinyButtonShape(Graphics& g,
-	float x, float y, float w, float h,
-	float maxCornerSize,
-	const Colour& baseColour,
-	const float strokeWidth,
-	const bool flatOnLeft,
-	const bool flatOnRight,
-	const bool flatOnTop,
-	const bool flatOnBottom) 
-{
-	if (w <= strokeWidth * 1.1f || h <= strokeWidth * 1.1f)
-		return;
-
-	const float cs = jmin(maxCornerSize, w * 0.5f, h * 0.5f);
-
-	Path outline;
-	outline.addRoundedRectangle(x, y, w, h, cs, cs,
-		!(flatOnLeft || flatOnTop),
-		!(flatOnRight || flatOnTop),
-		!(flatOnLeft || flatOnBottom),
-		!(flatOnRight || flatOnBottom));
-
-	ColourGradient cg(baseColour, 0.0f, y,
-		baseColour.overlaidWith(Colour(0x070000ff)), 0.0f, y + h,
-		false);
-
-	cg.addColour(0.5, baseColour.overlaidWith(Colour(0x33ffffff)));
-	cg.addColour(0.51, baseColour.overlaidWith(Colour(0x110000ff)));
-
-	g.setGradientFill(cg);
-	g.fillPath(outline);
-
-	g.setColour(Colour(0x80000000));
-	g.strokePath(outline, PathStrokeType(strokeWidth));
-}
-
-
 
 void TrioLookAndFeel::drawToggleButton (Graphics& g, ToggleButton& button,
                                         bool isMouseOverButton, bool isButtonDown)
@@ -329,4 +292,150 @@ void TrioLookAndFeel::drawComboBox (Graphics& g, int width, int height, const bo
         g.fillPath (p);
     }
      */
+}
+
+void TrioLookAndFeel::drawScrollbarButton (Graphics& g, ScrollBar& bar,
+                                          int width, int height, int buttonDirection,
+                                          bool isScrollbarVertical,
+                                          bool isMouseOverButton,
+                                          bool isButtonDown)
+{
+
+    
+    if (isScrollbarVertical)
+        width -= 2;
+    else
+        height -= 2;
+    
+    Path p;
+    
+    if (buttonDirection == 0)
+        p.addTriangle (width * 0.5f, height * 0.2f,
+                       width * 0.1f, height * 0.7f,
+                       width * 0.9f, height * 0.7f);
+    else if (buttonDirection == 1)
+        p.addTriangle (width * 0.8f, height * 0.5f,
+                       width * 0.3f, height * 0.1f,
+                       width * 0.3f, height * 0.9f);
+    else if (buttonDirection == 2)
+        p.addTriangle (width * 0.5f, height * 0.8f,
+                       width * 0.1f, height * 0.3f,
+                       width * 0.9f, height * 0.3f);
+    else if (buttonDirection == 3)
+        p.addTriangle (width * 0.2f, height * 0.5f,
+                       width * 0.7f, height * 0.1f,
+                       width * 0.7f, height * 0.9f);
+    
+    if (isButtonDown)
+        g.setColour (Colours::white);
+    else if (isMouseOverButton)
+        g.setColour (Colours::white.withAlpha (0.7f));
+    else
+        g.setColour (bar.findColour (ScrollBar::thumbColourId).withAlpha (0.5f));
+    
+    g.fillPath (p);
+    
+    g.setColour (Colours::black.withAlpha (0.5f));
+    g.strokePath (p, PathStrokeType (0.5f));
+}
+
+void TrioLookAndFeel::drawScrollbar (Graphics& g, ScrollBar& bar,
+                                    int x, int y, int width, int height,
+                                    bool isScrollbarVertical, int thumbStartPosition, int thumbSize,
+                                    bool isMouseOver, bool isMouseDown)
+{
+    g.fillAll (bar.findColour (ScrollBar::backgroundColourId));
+    
+    g.setColour (bar.findColour (ScrollBar::thumbColourId)
+                 .withAlpha ((isMouseOver || isMouseDown) ? 0.4f : 0.15f));
+    
+    if (thumbSize > 0.0f)
+    {
+        Rectangle<int> thumb;
+        
+        if (isScrollbarVertical)
+        {
+            width -= 2;
+            g.fillRect (x + roundToInt (width * 0.35f), y,
+                        roundToInt (width * 0.3f), height);
+            
+            thumb.setBounds (x + 1, thumbStartPosition,
+                             width - 2, thumbSize);
+        }
+        else
+        {
+            height -= 2;
+            g.fillRect (x, y + roundToInt (height * 0.35f),
+                        width, roundToInt (height * 0.3f));
+            
+            thumb.setBounds (thumbStartPosition, y + 1,
+                             thumbSize, height - 2);
+        }
+        
+        g.setColour (bar.findColour (ScrollBar::thumbColourId)
+                     .withAlpha ((isMouseOver || isMouseDown) ? 0.95f : 0.7f));
+        
+        g.fillRect (thumb);
+        
+        g.setColour (Colours::black.withAlpha ((isMouseOver || isMouseDown) ? 0.4f : 0.25f));
+        g.drawRect (thumb.getX(), thumb.getY(), thumb.getWidth(), thumb.getHeight());
+        
+        if (thumbSize > 16)
+        {
+            for (int i = 3; --i >= 0;)
+            {
+                const float linePos = thumbStartPosition + thumbSize / 2 + (i - 1) * 4.0f;
+                g.setColour (Colours::black.withAlpha (0.15f));
+                
+                if (isScrollbarVertical)
+                {
+                    g.drawLine (x + width * 0.2f, linePos, width * 0.8f, linePos);
+                    g.setColour (Colours::white.withAlpha (0.15f));
+                    g.drawLine (width * 0.2f, linePos - 1, width * 0.8f, linePos - 1);
+                }
+                else
+                {
+                    g.drawLine (linePos, height * 0.2f, linePos, height * 0.8f);
+                    g.setColour (Colours::white.withAlpha (0.15f));
+                    g.drawLine (linePos - 1, height * 0.2f, linePos - 1, height * 0.8f);
+                }
+            }
+        }
+    }
+}
+
+void TrioLookAndFeel::drawShinyButtonShape(Graphics& g,
+	float x, float y, float w, float h,
+	float maxCornerSize,
+	const Colour& baseColour,
+	const float strokeWidth,
+	const bool flatOnLeft,
+	const bool flatOnRight,
+	const bool flatOnTop,
+	const bool flatOnBottom) 
+{
+	if (w <= strokeWidth * 1.1f || h <= strokeWidth * 1.1f)
+		return;
+
+	const float cs = jmin(maxCornerSize, w * 0.5f, h * 0.5f);
+
+	Path outline;
+	outline.addRoundedRectangle(x, y, w, h, cs, cs,
+		!(flatOnLeft || flatOnTop),
+		!(flatOnRight || flatOnTop),
+		!(flatOnLeft || flatOnBottom),
+		!(flatOnRight || flatOnBottom));
+
+	ColourGradient cg(baseColour, 0.0f, y,
+		baseColour.overlaidWith(Colour(0x070000ff)), 0.0f, y + h,
+		false);
+
+	cg.addColour(0.5, baseColour.overlaidWith(Colour(0x33ffffff)));
+	cg.addColour(0.51, baseColour.overlaidWith(Colour(0x110000ff)));
+
+	g.setGradientFill(cg);
+	g.fillPath(outline);
+
+	g.setColour(Colour(0x80000000));
+	g.strokePath(outline, PathStrokeType(strokeWidth));
 }

@@ -23,7 +23,8 @@
 #include <vector>
 #include "ADSR.h"
 #include "Distortion.h"
-#include "BasicDelayLine.h"
+#include "StereoDelay.h"
+#include "StereoReverb.h"
 #include "Sequencer.h"
 
 
@@ -39,7 +40,8 @@ public:
     enum ModulatorType {
         ENV,
         LFO1,
-        LFO2
+        LFO2,
+        SEQUENCER
     };
     
     //==============================================================================
@@ -55,7 +57,12 @@ public:
    #endif
 
     void processBlock (AudioSampleBuffer&, MidiBuffer&) override;
-
+    void processSequencer(double sampleRate, int numSamples);
+    void processMidi(MidiBuffer& midiMessages);
+    void processModulation();
+    void processFX(float* left, float* right, int numSamples);
+    void processLFOs();
+    
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
@@ -81,20 +88,18 @@ public:
     void parameterChanged(const String &parameterID, float newValue) override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
-    BasicDelayLine* getLeftDelay();
-    BasicDelayLine* getRightDelay();
+    StereoDelay* getStereoDelay();
 
-    MultimodeFilter* getLeftFilter();
-    MultimodeFilter* getRightFilter();
+    MultimodeFilter* getFilter();
     ADSR* getFilterEnv();
     Model* getModel();
-    ScopedPointer<Reverb> reverb;
+    ScopedPointer<StereoReverb> reverb;
     ScopedPointer<Distortion> distortion;
     Reverb::Parameters reverbParams;    
     
     AudioProcessorValueTreeState* getValueTreeState();
     void setState(ValueTree* state, bool notify);
-    Reverb* getReverb();
+    StereoReverb* getReverb();
     Distortion* getDistortion();
     
     vector<String> getProgramNames();
@@ -105,13 +110,17 @@ public:
     
     void configureOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
     void setupOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
+	void setupOscillator(int osc,Oszillator::OscMode mode);
     Oszillator* createOscillator(Oszillator::OscMode mode);
     void cleanupVoices();
     
     void setFxReverbEnabled(bool enabled);
     void setFxDelayEnabled(bool enabled);
     void setFxDistEnabled(bool enabled);
-    
+	void addProgram(String name);
+
+	void updateParam(const juce::String &parameterID, float newValue);
+
     Sequencer* getSequencer();
     vector<AudioProcessorParameter*> registeredParams;
    
@@ -137,14 +146,13 @@ private:
     int tick;
     int lastTick;
     
-    ScopedPointer<MultimodeFilter> leftFilter;
-    ScopedPointer<MultimodeFilter>rightFilter;
+    vector<StereoEffect*> effects;
     
-    ScopedPointer<IIRFilter> outputFilterL;
-    ScopedPointer<IIRFilter> outputFilterR;
+    ScopedPointer<MultimodeFilter> multimodeFilter;
+    ScopedPointer<MultimodeFilter> outputFilter;
+
     
-    ScopedPointer<BasicDelayLine> delayLeft;
-    ScopedPointer<BasicDelayLine> delayRight;
+    ScopedPointer<StereoDelay> stereoDelay;
     
     IIRCoefficients ic;
     
