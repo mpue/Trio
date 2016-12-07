@@ -19,7 +19,6 @@ Voice::Voice(float sampleRate) {
     this->ampEnvelope = new ADSR();
     this->modulator = 0;
     this->pitchBend = 1;
-    this->note = NULL;
     
     ampEnvelope->setAttackRate(0 * sampleRate);  // 1 second
     ampEnvelope->setDecayRate(0 * sampleRate);
@@ -28,7 +27,8 @@ Voice::Voice(float sampleRate) {
 }
 
 Voice::~Voice() {
-    delete this->ampEnvelope;
+	if (ampEnvelope != NULL)
+		delete ampEnvelope;
     
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         delete *it;
@@ -36,28 +36,32 @@ Voice::~Voice() {
     oscillators.clear();
 }
 
-void Voice::setNote(Note* note) {
-    this->note = note;
-    this->noteNumber = note->getMidiNote();
-    this->velocity = note->getVelocity();
+void Voice::setNoteAndVelocity(int note, int velocity) {
+
+	this->noteNumber = note;
+	this->velocity = velocity;
+
+	oscillators.at(0)->setFrequency((midiNote[noteNumber + oscillators.at(0)->getPitch()]) * pitchBend);
+	oscillators.at(1)->setFrequency((midiNote[noteNumber + oscillators.at(1)->getPitch()]) * pitchBend);
+	oscillators.at(2)->setFrequency((midiNote[noteNumber + oscillators.at(2)->getPitch()]) * pitchBend);
+
+	/*
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
         
         if (note != NULL)
-            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch()]) * pitchBend);
+            o->setFrequency((midiNote[noteNumber + o->getPitch()]) * pitchBend);
     }
+	*/
 }
 
-Note* Voice::getNote() const {
-    return this->note;
-}
+
 
 void Voice::setPitchBend(float bend) {
     this->pitchBend = bend;
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
-        if (note != NULL)
-            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch()]) * pitchBend);
+        o->setFrequency((midiNote[noteNumber + o->getPitch()]) * pitchBend);
     }
 }
 
@@ -71,17 +75,28 @@ vector<Oszillator*> Voice::getOszillators() const {
 
 float Voice::process() {
     
-    float value = 0;
+    value = 0;
     
     if(ampEnvelope->getState() != ADSR::env_idle) {
         
         float amplitude = (1.0f / (float) 127) * this->velocity;
-        
+
+        /*
         for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
             Oszillator* o = *it;
             value += o->process();
         }
+		*/
+		/*
+		for (int i = 0; i < oscillators.size(); i++) {
+			value += oscillators.at(i)->process();
+		}*/
+
         
+		value += oscillators.at(0)->process();
+		value += oscillators.at(1)->process();
+		value += oscillators.at(2)->process();
+
         value = (value / oscillators.size()) * amplitude * ampEnvelope->process();
         
     }
@@ -117,8 +132,7 @@ void Voice::setOctave(int number) {
     this->octave = number;
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
-        if (note != NULL)
-            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch() + this->offset + this->octave * 12]) * pitchBend);
+        o->setFrequency((midiNote[noteNumber + o->getPitch() + this->offset + this->octave * 12]) * pitchBend);
     }
 }
 
@@ -126,8 +140,7 @@ void Voice::setOffset(int number) {
     this->offset = number;
     for(std::vector<Oszillator*>::iterator it = oscillators.begin(); it != oscillators.end(); ++it) {
         Oszillator* o = *it;
-        if (note != NULL)
-            o->setFrequency((midiNote[note->getMidiNote() + o->getPitch() + this->offset + this->octave * 12]) * pitchBend);
+		o->setFrequency((midiNote[noteNumber + o->getPitch() + this->offset + this->octave * 12]) * pitchBend);
     }
 }
 
@@ -182,4 +195,12 @@ float Voice::getDuration() {
 
 void Voice::setDuration(float duration) {
     this->duration = duration;
+}
+
+void Voice::setVelocity(int velocity) {
+	this->velocity = velocity;
+}
+
+int Voice::getVelocity() const {
+	return this->velocity;
 }

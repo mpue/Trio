@@ -39,10 +39,10 @@ float Model::getOsc1Pitch() {
 void Model::setOsc1Pitch(int pitch) {
     this->osc1Pitch = pitch;
     
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(0)->setPitch(pitch);
-        if (!voices.at(i)->isPlaying()) continue;
-        voices.at(i)->updateOscillator(0);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(0)->setPitch(pitch);
+        if (!voices[i]->isPlaying()) continue;
+        voices[i]->updateOscillator(0);
     }
 
 }
@@ -54,10 +54,10 @@ float Model::getOsc2Pitch() {
 void Model::setOsc2Pitch(int pitch) {
 
     this->osc2Pitch = pitch;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(1)->setPitch(pitch);
-        if (!voices.at(i)->isPlaying()) continue;
-        voices.at(i)->updateOscillator(1);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(1)->setPitch(pitch);
+        if (!voices[i]->isPlaying()) continue;
+        voices[i]->updateOscillator(1);
     }
 }
 
@@ -67,10 +67,10 @@ float Model::getOsc3Pitch() {
 
 void Model::setOsc3Pitch(int pitch) {
     this->osc3Pitch = pitch;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(2)->setPitch(pitch);
-        if (!voices.at(i)->isPlaying()) continue;
-        voices.at(i)->updateOscillator(2);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(2)->setPitch(pitch);
+        if (!voices[i]->isPlaying()) continue;
+        voices[i]->updateOscillator(2);
     }
 }
 
@@ -80,10 +80,10 @@ float Model::getOsc1Fine() {
 
 void Model::setOsc1Fine(float fine) {
     this->osc1Fine = fine;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(0)->setFine(fine);
-        if (!voices.at(i)->isPlaying()) continue;
-        voices.at(i)->updateOscillator(0);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(0)->setFine(fine);
+        if (!voices[i]->isPlaying()) continue;
+        voices[i]->updateOscillator(0);
     }
 }
 
@@ -93,10 +93,10 @@ float Model::getOsc2Fine() {
 
 void Model::setOsc2Fine(float fine) {
     this->osc2Fine = fine;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(1)->setFine(fine);
-        if (!voices.at(i)->isPlaying()) continue;
-        voices.at(i)->updateOscillator(1);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(1)->setFine(fine);
+        if (!voices[i]->isPlaying()) continue;
+        voices[i]->updateOscillator(1);
     }
 }
 
@@ -106,10 +106,10 @@ float Model::getOsc3Fine() {
 
 void Model::setOsc3Fine(float fine) {
     this->osc3Fine = fine;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(2)->setFine(fine);
-        if (!voices.at(i)->isPlaying()) continue;
-        voices.at(i)->updateOscillator(2);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(2)->setFine(fine);
+        if (!voices[i]->isPlaying()) continue;
+        voices[i]->updateOscillator(2);
     }
         
 }
@@ -120,8 +120,8 @@ float Model::getOsc1Volume() {
 
 void Model::setOsc1Volume(float volume) {
     this->osc1Volume = volume;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(0)->setVolume(volume);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(0)->setVolume(volume);
     }
 }
 
@@ -131,8 +131,8 @@ float Model::getOsc2Volume() {
 
 void Model::setOsc2Volume(float Volume) {
     this->osc2Volume = Volume;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(1)->setVolume(Volume);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(1)->setVolume(Volume);
     }
 }
 
@@ -142,8 +142,8 @@ float Model::getOsc3Volume() {
 
 void Model::setOsc3Volume(float Volume) {
     this->osc3Volume = Volume;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getOszillators().at(2)->setVolume(Volume);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getOszillators().at(2)->setVolume(Volume);
     }
     
 }
@@ -154,8 +154,8 @@ float Model::getAmpEnvAttack() {
 
 void Model::setAmpEnvAttack(float attack) {
     this->ampEnvAttack = attack;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getAmpEnvelope()->setAttackRate(attack * voices.at(i)->getSampleRate());
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getAmpEnvelope()->setAttackRate(attack * voices[i]->getSampleRate());
     }
 }
 
@@ -165,8 +165,8 @@ float Model::getAmpEnvDecay() {
 
 void Model::setAmpEnvDecay(float decay) {
     this->ampEnvDecay = decay;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getAmpEnvelope()->setDecayRate(decay * voices.at(i)->getSampleRate());
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getAmpEnvelope()->setDecayRate(decay * voices[i]->getSampleRate());
     }
     
 }
@@ -177,8 +177,8 @@ float Model::getAmpEnvSustain() {
 
 void Model::setAmpEnvSustain(float sustain) {
     this->ampEnvSustain = sustain;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getAmpEnvelope()->setSustainLevel(sustain);
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getAmpEnvelope()->setSustainLevel(sustain);
     }
     
 }
@@ -189,8 +189,8 @@ float Model::getAmpEnvRelease() {
 
 void Model::setAmpEnvRelease(float release) {
     this->ampEnvRelease = release;
-    for (int i = 0; i < voices.size();i++) {
-        voices.at(i)->getAmpEnvelope()->setReleaseRate(release * voices.at(i)->getSampleRate());
+    for (int i = 0; i < 127;i++) {
+        voices[i]->getAmpEnvelope()->setReleaseRate(release * voices[i]->getSampleRate());
     }
     
 }

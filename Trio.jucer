@@ -152,7 +152,7 @@
     <VS2015 targetFolder="Builds/VisualStudio2015">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
-                       isDebug="1" optimisation="3" targetName="Trio" postbuildCommand="copy /Y $(SolutionDir)$(Platform)\$(Configuration)\Trio.dll d:\vstplugins"/>
+                       isDebug="1" optimisation="3" targetName="Trio" postbuildCommand="copy /Y $(SolutionDir)$(Platform)\$(Configuration)\Trio.dll d:\vstdebug"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
                        isDebug="0" optimisation="3" targetName="Trio" postbuildCommand="copy /Y $(SolutionDir)$(Platform)\$(Configuration)\Trio.dll d:\vstplugins"/>
       </CONFIGURATIONS>

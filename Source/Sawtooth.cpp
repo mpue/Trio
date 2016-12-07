@@ -27,6 +27,7 @@ Sawtooth::Sawtooth(float sampleRate) : Oszillator(sampleRate) {
     this->pmax = 0.5f * sampleRate / (frequency + this->fine);
     this->dc = -0.498f / this->pmax;
     this->lastValue = 0;
+	this->saw = 0;
 }
 
 float Sawtooth::process() {
@@ -55,7 +56,6 @@ float Sawtooth::process() {
         saw = lastValue;
     else
         lastValue = saw;
-    
     
     return saw * this->volume;
 }

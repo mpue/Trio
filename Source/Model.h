@@ -136,7 +136,8 @@ private:
     float filterEnvRelease;
     float filterModAmount;
     
-    vector<Voice*> voices;
+	vector<Voice*> voices;
+
     MultimodeFilter* mainFilter;
     ADSR* filterEnv;
     Sine* lfo1;

@@ -56,7 +56,7 @@ public:
     // bool setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet) override;
    #endif
 
-    void processBlock (AudioSampleBuffer&, MidiBuffer&) override;
+    void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
     void processSequencer(double sampleRate, int numSamples);
     void processMidi(MidiBuffer& midiMessages);
     void processModulation();
@@ -145,6 +145,8 @@ private:
     
     int tick;
     int lastTick;
+
+	int samplesProcessed = 0;
     
     vector<StereoEffect*> effects;
     
@@ -158,6 +160,7 @@ private:
     
     float filterCutoff;
     
+	
     vector<Voice*> voices;
     int getVoicesPlaying();
     ScopedPointer<ADSR> filterEnvelope;
@@ -170,7 +173,7 @@ private:
     
     vector<String> programNames;
     String selectedProgram;
-    vector<Voice*> getVoices() const;
+	vector<Voice*> getVoices();
     int currentProgramNumber;
     
     ComboBox* programCombo = 0;
@@ -182,7 +185,7 @@ private:
     bool fxReverbEnabled;
     bool fxDelayEnabled;
     bool fxDistortionEnabled;
-    
+	std::deque<Voice*> stack;
 };
 
 

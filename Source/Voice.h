@@ -30,9 +30,6 @@ public:
     Voice(float sampleRate);
     ~Voice();
     
-    void setNote(Note* note);
-    Note* getNote() const;
-    
     void addOszillator(Oszillator* o);
     vector<Oszillator*> getOszillators() const;
     
@@ -51,8 +48,6 @@ public:
     
     void setPlaying(bool playing);
     bool isPlaying() const;
-    void setPending(bool pending);
-    bool isPending() const;
 
     void setModulator(Modulator* modulator);
     
@@ -67,9 +62,12 @@ public:
     void setTime(float time);
     float getTime();
     
+	void setVelocity(int velocity);
+	int getVelocity() const;
+	void setNoteAndVelocity(int note, int velocity);
+
 private:
     vector<Oszillator*> oscillators;
-    Note* note;
     float sampleRate;
     int noteNumber;
     int pitch;
@@ -84,7 +82,8 @@ private:
     float time;
     int octave = 0;
     int offset = 0;
-    
+	float value = 0;
+
 };
 
 
