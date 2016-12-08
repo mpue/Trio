@@ -137,13 +137,15 @@ TrioAudioProcessor::TrioAudioProcessor()
     filterEnvelope = new ADSR();
     multimodeFilter->setModulator(filterEnvelope);
 
+	/*
     reverbParams.damping = 0.0;
     reverbParams.dryLevel = 0.0;
     reverbParams.freezeMode = 0.0;
     reverbParams.roomSize = 0.0;
     reverbParams.wetLevel = 0.0;
     reverbParams.width = 0.0;
-    
+    */
+
     reverb = new StereoReverb();
     reverb->setParameters(reverbParams);
     
@@ -307,8 +309,7 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     multimodeFilter->coefficients(filterCutoff, 0.1f );    
     outputFilter->coefficients(30,0.1);
-    
-    stereoDelay->resetDelay();
+
 }
 
 Oszillator* TrioAudioProcessor::createOscillator(Oszillator::OscMode mode) {
@@ -583,7 +584,7 @@ void TrioAudioProcessor::processModulation() {
                     voices[i]->getOszillators().at(1)->setFine(lfo1->process() * 10);
                 }
             }
-            // Osc 1 pitch
+            // Osc 3 pitch
             else if (model->getMod1Target() == 5) {
                 for (int i = 0; i < 127;i++) {
                     voices[i]->getOszillators().at(2)->setFine(lfo1->process() * 10);
@@ -775,7 +776,7 @@ void TrioAudioProcessor::setFxReverbEnabled(bool enabled) {
 void TrioAudioProcessor::setFxDelayEnabled(bool enabled) {
     this->fxDelayEnabled = enabled;
     this->stereoDelay->setEnabled(enabled);
-    this->stereoDelay->resetDelay();
+    // this->stereoDelay->resetDelay();
  }
 
 void TrioAudioProcessor::setFxDistEnabled(bool enabled) {
@@ -825,6 +826,14 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 	}
 	else if (parameterID == "modsource") {
 		model->setModsource(newValue);
+		if (newValue == 1) {
+			selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
+			multimodeFilter->setModulator(filterEnvelope);				
+		}
+		else if (newValue == 5) {
+			selectFilterModulator(TrioAudioProcessor::ModulatorType::SEQUENCER);
+			multimodeFilter->setModulator(sequencer);
+		}
 	}
 
 	if (parameterID == "volume") {
