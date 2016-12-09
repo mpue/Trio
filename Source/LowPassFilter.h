@@ -12,10 +12,11 @@
 #include <stdio.h>
 #include "Filter.h"
 #include "Modulator.h"
+#include "ModTarget.h"
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class LowPassFilter : public Filter {
+class LowPassFilter : public Filter, public ModTarget {
     
 public:
     virtual void coefficients(float frequency, float resonance) override;

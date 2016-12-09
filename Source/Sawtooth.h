@@ -13,18 +13,20 @@
 
 
 #include "Oszillator.h"
+#include "Modulator.h"
 
-class Sawtooth : public Oszillator {
+class Sawtooth : public Oszillator, public Modulator {
     
 public:
     virtual float process() override;
-    
+    virtual float getOutput() override;
     virtual void setFine(float fine) override;
     virtual float getFine() const override;
     
     Sawtooth(float sampleRate);
     float fine;
     virtual void setFrequency(double frequency) override;
+    
     
     float p;      //current position
     float dp;     //change in postion per sample

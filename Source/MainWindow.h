@@ -28,6 +28,7 @@
 #include "Oszillator.h"
 #include "FXPanel.h"
 #include "BrowserPanel.h"
+
 //[/Headers]
 
 

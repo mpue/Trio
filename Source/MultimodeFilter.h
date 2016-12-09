@@ -14,10 +14,11 @@
 #include "LowPassFilter.h"
 #include "HighPassFilter.h"
 #include "StereoEffect.h"
+#include "ModTarget.h"
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class MultimodeFilter : public Filter, public StereoEffect {
+class MultimodeFilter : public Filter, public StereoEffect, public ModTarget {
 
 public:
     enum Mode {

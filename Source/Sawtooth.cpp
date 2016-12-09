@@ -30,6 +30,11 @@ Sawtooth::Sawtooth(float sampleRate) : Oszillator(sampleRate) {
 	this->saw = 0;
 }
 
+float Sawtooth::getOutput() {
+    return this->saw;
+}
+
+
 float Sawtooth::process() {
     
     p += dp;

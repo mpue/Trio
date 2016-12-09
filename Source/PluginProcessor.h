@@ -27,7 +27,6 @@
 #include "StereoReverb.h"
 #include "Sequencer.h"
 
-
 using namespace std;
 
 //==============================================================================
@@ -38,10 +37,11 @@ class TrioAudioProcessor  : public AudioProcessor, public AudioProcessorValueTre
 public:
     
     enum ModulatorType {
-        ENV,
-        LFO1,
-        LFO2,
-        SEQUENCER
+        ENV = 1,
+        LFO1 = 2,
+        LFO2 = 3,
+        LFO1LFO2 = 4,
+        SEQUENCER = 5
     };
     
     //==============================================================================
@@ -123,7 +123,6 @@ public:
 
     Sequencer* getSequencer();
     vector<AudioProcessorParameter*> registeredParams;
-   
     
 private:
     //==============================================================================

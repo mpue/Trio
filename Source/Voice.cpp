@@ -91,7 +91,6 @@ float Voice::process() {
 		for (int i = 0; i < oscillators.size(); i++) {
 			value += oscillators.at(i)->process();
 		}*/
-
         
 		value += oscillators.at(0)->process();
 		value += oscillators.at(1)->process();

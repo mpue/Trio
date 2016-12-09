@@ -130,21 +130,13 @@ TrioAudioProcessor::TrioAudioProcessor()
     
     multimodeFilter = new MultimodeFilter();
     multimodeFilter->setMode(MultimodeFilter::LOWPASS);
+
     outputFilter = new MultimodeFilter();
     outputFilter->setMode(MultimodeFilter::HIGHPASS);
     
     filterCutoff = 12000.0f;
     filterEnvelope = new ADSR();
     multimodeFilter->setModulator(filterEnvelope);
-
-	/*
-    reverbParams.damping = 0.0;
-    reverbParams.dryLevel = 0.0;
-    reverbParams.freezeMode = 0.0;
-    reverbParams.roomSize = 0.0;
-    reverbParams.wetLevel = 0.0;
-    reverbParams.width = 0.0;
-    */
 
     reverb = new StereoReverb();
     reverb->setParameters(reverbParams);
@@ -155,6 +147,7 @@ TrioAudioProcessor::TrioAudioProcessor()
     distortion = new Distortion();
     stereoDelay = new StereoDelay();
     sequencer = new Sequencer();
+    sequencer->setModulator(false);
     
     this->effects.push_back(multimodeFilter);
     this->effects.push_back(stereoDelay);
@@ -230,30 +223,8 @@ int TrioAudioProcessor::getCurrentProgram()
 void TrioAudioProcessor::setCurrentProgram (int index)
 {
     String name = programNames.at(index);
-    
     this->currentProgramNumber = index;
-    
-    String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
-    String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
-    
-    String filename = name + ".xml";
-    File preset = File(presetPath+filename);
-    
-    if (preset.exists()) {
-        ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
-        ValueTree state = ValueTree::fromXml(*xml.get());
-        setState(&state, true);
-		getValueTreeState()->state = state;
-
-        xml = nullptr;
-        
-        if (this->programCombo != 0) {
-            this->programCombo->setText(name, NotificationType::dontSendNotification);
-        }
-        
-        setSelectedProgram(name);
-        sendChangeMessage();
-    }
+    this->setSelectedProgram(name);
     
 }
 
@@ -278,20 +249,40 @@ String TrioAudioProcessor::getSelectedProgram() {
     return this->selectedProgram;
 }
 
-void TrioAudioProcessor::setSelectedProgram(juce::String program) {
-    this->selectedProgram = program;
-    updateHostDisplay();
+void TrioAudioProcessor::setSelectedProgram(juce::String name) {
+    this->selectedProgram = name;
+    
+    String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+    String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+    
+    String filename = name + ".xml";
+    File preset = File(presetPath+filename);
+    
+    if (preset.exists()) {
+        
+        ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
+        ValueTree state = ValueTree::fromXml(*xml.get());
+        setState(&state, true);
+        getValueTreeState()->state = state;
+        
+        xml = nullptr;
+        
+        if (this->programCombo != 0) {
+            this->programCombo->setText(name, NotificationType::dontSendNotification);
+        }
+        
+        updateHostDisplay();
+        sendChangeMessage();
+    }
+    
+
 }
 
 //==============================================================================
 void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
 	Logger::getCurrentLogger()->writeToLog("SampleRate : " + String(sampleRate) + ", SamplesPerBlock : " + String(samplesPerBlock));
-		
-	#if _HAS_ITERATOR_DEBUGGING
-		
-	#endif
-
+    
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
     
@@ -310,6 +301,10 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     multimodeFilter->coefficients(filterCutoff, 0.1f );    
     outputFilter->coefficients(30,0.1);
 
+    if (this->selectedProgram == "") {
+        setSelectedProgram("init");
+    }
+    
 }
 
 Oszillator* TrioAudioProcessor::createOscillator(Oszillator::OscMode mode) {
@@ -487,6 +482,7 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
 			
 			voices[m.getNoteNumber()]->setNoteAndVelocity(m.getNoteNumber(), m.getVelocity());
 			voices[m.getNoteNumber()]->setPlaying(true);
+            voices[m.getNoteNumber()]->getAmpEnvelope()->reset();
 			voices[m.getNoteNumber()]->getAmpEnvelope()->gate(true);
 			voices[m.getNoteNumber()]->setDuration(250);
 			voices[m.getNoteNumber()]->setTime(elapsed);
@@ -675,11 +671,16 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
 		float value = 0;
 
 		for (int i = 0; i < 127; i++) {
-			if (voices[i]->isPlaying()) {
+			if (voices[i]->isPlaying() || voices[i]->getAmpEnvelope()->getState() != ADSR::env_idle) {
 				value += voices[i]->process();
 			}
 		}
 
+        if (fxDistortionEnabled) {
+            value = distortion->processSample(value);
+            value = distortion->processSample(value);
+        }
+        
 		buffer.addSample(0, sample, value * model->getVolume());
 		buffer.addSample(1, sample, value * model->getVolume());
 
@@ -703,8 +704,9 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
     
     processModulation();
 	processFX(leftOut, rightOut, buffer.getNumSamples());
-    
+
 }
+
 
 //==============================================================================
 bool TrioAudioProcessor::hasEditor() const
@@ -826,14 +828,13 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 	}
 	else if (parameterID == "modsource") {
 		model->setModsource(newValue);
+
 		if (newValue == 1) {
 			selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
-			multimodeFilter->setModulator(filterEnvelope);				
-		}
+        }
 		else if (newValue == 5) {
 			selectFilterModulator(TrioAudioProcessor::ModulatorType::SEQUENCER);
-			multimodeFilter->setModulator(sequencer);
-		}
+        }
 	}
 
 	if (parameterID == "volume") {

@@ -18,6 +18,8 @@
 */
 
 //[Headers] You can add your own extra header files here...
+
+
 //[/Headers]
 
 #include "MainWindow.h"
@@ -423,6 +425,9 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     presetCombo->addListener(processor);
     modCombo->addItem (TRANS("Sequencer"), 5);
 
+    lfo1ModCombo->setEnabled(false);
+    lfo2ModCombo->setEnabled(false);
+    
     modCombo->setSelectedItemIndex(0);
     lfo1ModCombo->setSelectedItemIndex(0);
     lfo2ModCombo->setSelectedItemIndex(0);
@@ -486,6 +491,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     browseButton->toFront(false);
     setupButton->toFront(false);
     presetCombo->toFront(false);
+    statusLabel->toFront(false);
 
     for(int i = 0; i < processor->getProgramNames().size();i++) {
         presetCombo->addItem(processor->getProgramNames().at(i), i + 1);
@@ -577,6 +583,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
         noiseButton->setToggleState(true, NotificationType::dontSendNotification);
     }
 
+    /*
     val = processor->getValueTreeState()->getParameter("modsource")->getValue() ;
     nval = processor->getValueTreeState()->getParameterRange("modsource").convertFrom0to1(val);
 
@@ -592,6 +599,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     lfo2ModCombo->setSelectedId(nval);
 
+    */
+     
     processor->addListener(this);
     // processor->addListener(fxPanel);
 
@@ -625,7 +634,6 @@ MainWindow::~MainWindow()
     //[Destructor_pre]. You can add your own custom destruction code here..
     processor->removeListener(this);
     processor->removeAllChangeListeners();
-
     this->volumeAttachement = nullptr;
     this->osc1VolAttachment = nullptr;
     this->osc2VolAttachment = nullptr;
@@ -1056,15 +1064,28 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         this->processor->getModel()->setModsource(modCombo->getSelectedId());
         if (modCombo->getSelectedId() == 1) {
             processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
+            lfo1ModCombo->setEnabled(false);
+            lfo2ModCombo->setEnabled(false);
         }
         else if (modCombo->getSelectedId() == 2) {
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
+            lfo1ModCombo->setEnabled(true);
+            lfo2ModCombo->setEnabled(false);
         }
         else if (modCombo->getSelectedId() == 3) {
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO2);
+            lfo1ModCombo->setEnabled(false);
+            lfo2ModCombo->setEnabled(true);
         }
         else if (modCombo->getSelectedId() == 4) {
+            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1LFO2);
+            lfo1ModCombo->setEnabled(true);
+            lfo2ModCombo->setEnabled(true);
         }
         else if (modCombo->getSelectedId() == 5) {
             processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::SEQUENCER);
+            lfo1ModCombo->setEnabled(false);
+            lfo2ModCombo->setEnabled(false);
         }
         //[/UserComboBoxCode_modCombo]
     }
@@ -1293,11 +1314,10 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_noiseButton]
     }
-
     else if (buttonThatWasClicked == lowPassPutton)
     {
         //[UserButtonCode_lowPassPutton] -- add your button handler code here..
-        
+
 		float nval;
 		String id = "filtermode";
 
@@ -1309,7 +1329,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 			processor->getFilter()->setMode(MultimodeFilter::Mode::HIGHPASS);
 			nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(1.0f);
 		}
-        
+
         processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
         //[/UserButtonCode_lowPassPutton]
     }

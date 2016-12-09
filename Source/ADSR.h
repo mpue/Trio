@@ -104,6 +104,9 @@ inline float ADSR::process() {
 }
 
 inline void ADSR::gate(int gate) {
+    
+    // cout << "ADSR gate " << gate << endl;
+    
 	if (gate)
 		state = env_attack;
 	else if (state != env_idle)
@@ -115,6 +118,7 @@ inline int ADSR::getState() {
 }
 
 inline void ADSR::reset() {
+    // cout << "ADSR reset" << endl;
     state = env_idle;
     output = 0.0;
 }

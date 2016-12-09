@@ -12,9 +12,10 @@
 #define WHITENOISE_H_INCLUDED
 
 #include "Oszillator.h"
+#include "Modulator.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class WhiteNoise : public Oszillator {
+class WhiteNoise : public Oszillator, public Modulator {
     
 public:
     
@@ -22,7 +23,7 @@ public:
     ~WhiteNoise();
     
     virtual float process() override;
-  
+    virtual float getOutput() override;
     virtual void setFine(float fine) override;
     virtual float getFine() const override;
     

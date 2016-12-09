@@ -42,6 +42,25 @@ void MultimodeOscillator::setVolume(float volume) {
     this->noise->setVolume(volume);
 }
 
+
+float MultimodeOscillator::getOutput() {
+    if (this->mode == SAW) {
+        return this->saw->getOutput();
+    }
+    else if (this->mode == SINE) {
+        return this->sine->getOutput();
+    }
+    else if (this->mode == PULSE) {
+        return this->pulse->getOutput();
+    }
+    else if(this->mode == NOISE) {
+        return this->noise->getOutput();
+    }
+    else {
+        return 0;
+    }
+}
+
 float MultimodeOscillator::process() {
     
     if (this->mode == SAW) {

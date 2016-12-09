@@ -17,7 +17,7 @@
 #include "Pulse.h"
 #include "WhiteNoise.h"
 
-class MultimodeOscillator : public Oszillator{
+class MultimodeOscillator : public Oszillator, public Modulator{
     
     
 public:
@@ -28,6 +28,7 @@ public:
     virtual float getFine() const override;
     virtual void setFrequency(double frequency) override;
     virtual void setVolume(float volume) override;
+    virtual float getOutput() override;
     
 private:
     float fine;

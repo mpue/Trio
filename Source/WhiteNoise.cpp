@@ -24,6 +24,10 @@ float WhiteNoise::process() {
     return (random->nextFloat() * 0.25f - 0.125f) * volume;
 }
 
+float WhiteNoise::getOutput() {
+    return this->process();
+}
+
 void WhiteNoise::setFine(float fine) {
     this->fine = fine;
 }
