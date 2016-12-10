@@ -86,6 +86,8 @@
       <FILE id="ErxGhk" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
       <FILE id="TrpiD7" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
       <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
+      <FILE id="XMxXXo" name="ModPanel.cpp" compile="1" resource="0" file="Source/ModPanel.cpp"/>
+      <FILE id="azKaBY" name="ModPanel.h" compile="0" resource="0" file="Source/ModPanel.h"/>
       <FILE id="ZYttDe" name="PatchBrowserComponent.cpp" compile="1" resource="0"
             file="Source/PatchBrowserComponent.cpp"/>
       <FILE id="hCwaXA" name="PatchBrowserComponent.h" compile="0" resource="0"

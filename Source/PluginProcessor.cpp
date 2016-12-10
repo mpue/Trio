@@ -349,12 +349,13 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     multimodeFilter->setModAmount(1.0f);
     modMatrix->addModulation(mod);
     
+    /*
     Modulation* seqMod = new Modulation();
     seqMod->setModulator(sequencer);
     seqMod->addTarget(multimodeFilter);
     multimodeFilter->setModAmount(1.0f);
     modMatrix->addModulation(seqMod);
-    
+    */
 
     
 
@@ -528,6 +529,7 @@ void TrioAudioProcessor::processSequencer(double sampleRate, int numSamples) {
                         voices[0]->setPlaying(true);
                         voices[0]->getAmpEnvelope()->reset();
                         voices[0]->getAmpEnvelope()->gate(true);
+                        filterEnvelope->gate(true);
 
                     }
 
@@ -784,6 +786,9 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
     // processModulation();
 	processFX(leftOut, rightOut, buffer.getNumSamples());
 
+    this->magnitudeLeft = buffer.getMagnitude(0, 0, buffer.getNumSamples());
+    this->magnitudeRight = buffer.getMagnitude(1, 0, buffer.getNumSamples());
+    
 }
 
 
@@ -1238,3 +1243,10 @@ void TrioAudioProcessor::selectFilterModulator(TrioAudioProcessor::ModulatorType
     }
 }
 
+float TrioAudioProcessor::getMagnitudeLeft() {
+    return this->magnitudeLeft;
+}
+
+float TrioAudioProcessor::getMagnitudeRight() {
+    return this->magnitudeRight;
+}

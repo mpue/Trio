@@ -28,6 +28,7 @@
 #include "Oszillator.h"
 #include "FXPanel.h"
 #include "BrowserPanel.h"
+#include "ModPanel.h"
 
 //[/Headers]
 
@@ -62,6 +63,7 @@ public:
     enum PanelDisplay {
         MAIN,
         FX,
+        MOD,
         BROWSER,
         SETUP
     };
@@ -132,6 +134,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod2TargetAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> filtermodeAttachment;
 
+    ScopedPointer<ModPanel> modPanel;
     ScopedPointer<PresetDialog> presetPanel;
     ScopedPointer<FXPanel> fxPanel;
     ScopedPointer<BrowserPanel> browserPanel;
@@ -150,9 +153,6 @@ private:
     ScopedPointer<Slider> resoSlider;
     ScopedPointer<Slider> osc1PitchSlider;
     ScopedPointer<Slider> osc1FineSlider;
-    ScopedPointer<ComboBox> lfo1ModCombo;
-    ScopedPointer<ComboBox> lfo2ModCombo;
-    ScopedPointer<ComboBox> modCombo;
     ScopedPointer<Slider> osc1VolumeSlider;
     ScopedPointer<Slider> osc2PitchSlider;
     ScopedPointer<Slider> osc2FineSlider;
@@ -226,12 +226,11 @@ private:
     ScopedPointer<Label> decayLabel2;
     ScopedPointer<Label> sustainLabel2;
     ScopedPointer<Label> releaseLabel2;
-    ScopedPointer<Label> fineLabel4;
-    ScopedPointer<Label> fineLabel5;
-    ScopedPointer<Label> fineLabel6;
     ScopedPointer<Slider> leftVolSLider;
     ScopedPointer<Slider> rightVolSlider;
     ScopedPointer<Label> volumeLabel4;
+    ScopedPointer<TextButton> modEditButton;
+    ScopedPointer<TextButton> mainButton;
     Image cachedImage_trio_png_1;
 
 

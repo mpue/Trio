@@ -125,6 +125,9 @@ public:
     Sequencer* getSequencer();
     vector<AudioProcessorParameter*> registeredParams;
     
+    float getMagnitudeLeft();
+    float getMagnitudeRight();
+    
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrioAudioProcessor)
@@ -187,6 +190,9 @@ private:
     bool fxDelayEnabled;
     bool fxDistortionEnabled;
 	std::deque<Voice*> stack;
+    
+    float magnitudeLeft;
+    float magnitudeRight;
 };
 
 

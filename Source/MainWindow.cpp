@@ -70,41 +70,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     osc1FineSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
     osc1FineSlider->addListener (this);
 
-    addAndMakeVisible (lfo1ModCombo = new ComboBox ("lfo1ModCombo"));
-    lfo1ModCombo->setEditableText (false);
-    lfo1ModCombo->setJustificationType (Justification::centredLeft);
-    lfo1ModCombo->setTextWhenNothingSelected (String());
-    lfo1ModCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    lfo1ModCombo->addItem (TRANS("Filter Cutoff"), 1);
-    lfo1ModCombo->addItem (TRANS("Filter Resonance"), 2);
-    lfo1ModCombo->addItem (TRANS("Osc 1 Pitch"), 3);
-    lfo1ModCombo->addItem (TRANS("Osc 2 Pitch"), 4);
-    lfo1ModCombo->addItem (TRANS("Osc 3 Pitch"), 5);
-    lfo1ModCombo->addListener (this);
-
-    addAndMakeVisible (lfo2ModCombo = new ComboBox ("lfo2ModCombo"));
-    lfo2ModCombo->setEditableText (false);
-    lfo2ModCombo->setJustificationType (Justification::centredLeft);
-    lfo2ModCombo->setTextWhenNothingSelected (String());
-    lfo2ModCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    lfo2ModCombo->addItem (TRANS("Filter Cutoff"), 1);
-    lfo2ModCombo->addItem (TRANS("Filter Resonance"), 2);
-    lfo2ModCombo->addItem (TRANS("Osc 1 Pitch"), 3);
-    lfo2ModCombo->addItem (TRANS("Osc 2 Pitch"), 4);
-    lfo2ModCombo->addItem (TRANS("Osc 3 Pitch"), 5);
-    lfo2ModCombo->addListener (this);
-
-    addAndMakeVisible (modCombo = new ComboBox ("modCombo"));
-    modCombo->setEditableText (false);
-    modCombo->setJustificationType (Justification::centredLeft);
-    modCombo->setTextWhenNothingSelected (String());
-    modCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    modCombo->addItem (TRANS("none"), 1);
-    modCombo->addItem (TRANS("LFO1"), 2);
-    modCombo->addItem (TRANS("LFO2"), 3);
-    modCombo->addItem (TRANS("LFO1+LFO2"), 4);
-    modCombo->addListener (this);
-
     addAndMakeVisible (osc1VolumeSlider = new Slider ("osc1VolumeSlider"));
     osc1VolumeSlider->setRange (0, 1, 0.02);
     osc1VolumeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
@@ -687,55 +652,36 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     releaseLabel2->setColour (TextEditor::textColourId, Colours::black);
     releaseLabel2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    addAndMakeVisible (fineLabel4 = new Label ("label",
-                                               TRANS("ModSource")));
-    fineLabel4->setFont (Font ("Verdana", 18.00f, Font::bold));
-    fineLabel4->setJustificationType (Justification::centredLeft);
-    fineLabel4->setEditable (false, false, false);
-    fineLabel4->setColour (Label::textColourId, Colours::white);
-    fineLabel4->setColour (TextEditor::textColourId, Colours::black);
-    fineLabel4->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
-    addAndMakeVisible (fineLabel5 = new Label ("label",
-                                               TRANS("Target 1")));
-    fineLabel5->setFont (Font ("Verdana", 18.00f, Font::bold));
-    fineLabel5->setJustificationType (Justification::centredLeft);
-    fineLabel5->setEditable (false, false, false);
-    fineLabel5->setColour (Label::textColourId, Colours::white);
-    fineLabel5->setColour (TextEditor::textColourId, Colours::black);
-    fineLabel5->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
-    addAndMakeVisible (fineLabel6 = new Label ("label",
-                                               TRANS("Target 2")));
-    fineLabel6->setFont (Font ("Verdana", 18.00f, Font::bold));
-    fineLabel6->setJustificationType (Justification::centredLeft);
-    fineLabel6->setEditable (false, false, false);
-    fineLabel6->setColour (Label::textColourId, Colours::white);
-    fineLabel6->setColour (TextEditor::textColourId, Colours::black);
-    fineLabel6->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
     addAndMakeVisible (leftVolSLider = new Slider ("leftVolSLider"));
-    leftVolSLider->setRange (0, 10, 0);
+    leftVolSLider->setRange (0, 1, 0.01);
     leftVolSLider->setSliderStyle (Slider::LinearBar);
     leftVolSLider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
     leftVolSLider->setColour (Slider::backgroundColourId, Colours::grey);
     leftVolSLider->setColour (Slider::thumbColourId, Colour (0xffe28600));
 
     addAndMakeVisible (rightVolSlider = new Slider ("rightVolSlider"));
-    rightVolSlider->setRange (0, 10, 0);
+    rightVolSlider->setRange (0, 1, 0.01);
     rightVolSlider->setSliderStyle (Slider::LinearBar);
     rightVolSlider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
     rightVolSlider->setColour (Slider::backgroundColourId, Colours::grey);
     rightVolSlider->setColour (Slider::thumbColourId, Colour (0xffe28600));
 
     addAndMakeVisible (volumeLabel4 = new Label ("label",
-                                                 TRANS("Output level")));
+                                                 TRANS("Output")));
     volumeLabel4->setFont (Font ("Verdana", 18.00f, Font::plain));
     volumeLabel4->setJustificationType (Justification::centredLeft);
     volumeLabel4->setEditable (false, false, false);
     volumeLabel4->setColour (Label::textColourId, Colours::white);
     volumeLabel4->setColour (TextEditor::textColourId, Colours::black);
     volumeLabel4->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (modEditButton = new TextButton ("modEditButton"));
+    modEditButton->setButtonText (TRANS("Modulation"));
+    modEditButton->addListener (this);
+
+    addAndMakeVisible (mainButton = new TextButton ("mainButton"));
+    mainButton->setButtonText (TRANS("Main"));
+    mainButton->addListener (this);
 
     cachedImage_trio_png_1 = ImageCache::getFromMemory (trio_png, trio_pngSize);
 
@@ -765,14 +711,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     //presetCombo->setSelectedItemIndex(0);
 
     presetCombo->addListener(processor);
-    modCombo->addItem (TRANS("Sequencer"), 5);
-
-    lfo1ModCombo->setEnabled(false);
-    lfo2ModCombo->setEnabled(false);
-
-    modCombo->setSelectedItemIndex(0);
-    lfo1ModCombo->setSelectedItemIndex(0);
-    lfo2ModCombo->setSelectedItemIndex(0);
 
     this->volumeAttachement = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"volume", *this->ampVolSlider);
     this->osc1VolAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"osc1vol", *this->osc1VolumeSlider);
@@ -818,18 +756,28 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     p->addChangeListener(this->fxPanel);
     p->getSequencer()->addChangeListener(this->fxPanel);
 
-
     this->browserPanel = new BrowserPanel(processor);
     browserPanel->setBounds(x,y,getWidth(),getHeight());
+
+    this->modPanel = new ModPanel();
+    this->modPanel->setBounds(x,y,getWidth(),getHeight());
 
     addChildComponent(fxPanel);
     addChildComponent(presetPanel);
     addChildComponent(browserPanel);
+    addChildComponent(modPanel);
 
+    mainButton->toFront(false);
     fxButton->toFront(false);
     storeButton->toFront(false);
+    modEditButton->toFront(false);
     browseButton->toFront(false);
     setupButton->toFront(false);
+    volumeLabel4->toFront(true);
+    
+    leftVolSLider->toFront(false);
+    rightVolSlider->toFront(false);
+
     presetCombo->toFront(false);
     statusLabel->toFront(false);
 
@@ -923,24 +871,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
         noiseButton->setToggleState(true, NotificationType::dontSendNotification);
     }
 
-    /*
-    val = processor->getValueTreeState()->getParameter("modsource")->getValue() ;
-    nval = processor->getValueTreeState()->getParameterRange("modsource").convertFrom0to1(val);
-
-    modCombo->setSelectedId(nval);
-
-    val = processor->getValueTreeState()->getParameter("mod1target")->getValue() ;
-    nval = processor->getValueTreeState()->getParameterRange("mod1target").convertFrom0to1(val);
-
-    lfo1ModCombo->setSelectedId(nval);
-
-    val = processor->getValueTreeState()->getParameter("mod2target")->getValue() ;
-    nval = processor->getValueTreeState()->getParameterRange("mod2target").convertFrom0to1(val);
-
-    lfo2ModCombo->setSelectedId(nval);
-
-    */
-
     processor->addListener(this);
     // processor->addListener(fxPanel);
 
@@ -965,6 +895,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     osc3VolumeSlider->setSkewFactorFromMidPoint(0.3f);
     ampVolSlider->setSkewFactorFromMidPoint(0.3f);
      */
+
+    startTimer(50);
 
     //[/Constructor]
 }
@@ -1013,9 +945,6 @@ MainWindow::~MainWindow()
     resoSlider = nullptr;
     osc1PitchSlider = nullptr;
     osc1FineSlider = nullptr;
-    lfo1ModCombo = nullptr;
-    lfo2ModCombo = nullptr;
-    modCombo = nullptr;
     osc1VolumeSlider = nullptr;
     osc2PitchSlider = nullptr;
     osc2FineSlider = nullptr;
@@ -1089,12 +1018,11 @@ MainWindow::~MainWindow()
     decayLabel2 = nullptr;
     sustainLabel2 = nullptr;
     releaseLabel2 = nullptr;
-    fineLabel4 = nullptr;
-    fineLabel5 = nullptr;
-    fineLabel6 = nullptr;
     leftVolSLider = nullptr;
     rightVolSlider = nullptr;
     volumeLabel4 = nullptr;
+    modEditButton = nullptr;
+    mainButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -1131,9 +1059,6 @@ void MainWindow::resized()
     resoSlider->setBounds (392, 96, 64, 64);
     osc1PitchSlider->setBounds (32, 96, 64, 64);
     osc1FineSlider->setBounds (109, 96, 64, 64);
-    lfo1ModCombo->setBounds (328, 548, 200, 24);
-    lfo2ModCombo->setBounds (640, 548, 200, 24);
-    modCombo->setBounds (128, 547, 104, 24);
     osc1VolumeSlider->setBounds (184, 96, 64, 64);
     osc2PitchSlider->setBounds (32, 256, 64, 64);
     osc2FineSlider->setBounds (109, 256, 64, 64);
@@ -1156,7 +1081,7 @@ void MainWindow::resized()
     ampReleaseSlider->setBounds (819, 256, 64, 64);
     ampVolSlider->setBounds (616, 416, 64, 64);
     presetCombo->setBounds (600, 16, 296, 24);
-    storeButton->setBounds (286, 16, 64, 24);
+    storeButton->setBounds (24, 544, 100, 24);
     imageButton->setBounds (96, 64, 24, 24);
     imageButton3->setBounds (160, 64, 24, 24);
     imageButton2->setBounds (128, 64, 24, 24);
@@ -1166,10 +1091,10 @@ void MainWindow::resized()
     imageButton7->setBounds (104, 384, 24, 24);
     imageButton8->setBounds (168, 384, 24, 24);
     imageButton9->setBounds (136, 384, 24, 24);
-    statusLabel->setBounds (704, 379, 150, 24);
-    browseButton->setBounds (441, 16, 64, 24);
-    setupButton->setBounds (516, 16, 64, 24);
-    fxButton->setBounds (364, 16, 64, 24);
+    statusLabel->setBounds (728, 544, 150, 24);
+    browseButton->setBounds (472, 544, 100, 24);
+    setupButton->setBounds (584, 544, 104, 24);
+    fxButton->setBounds (248, 544, 100, 24);
     noiseButton->setBounds (200, 384, 24, 24);
     lowPassPutton->setBounds (446, 64, 48, 24);
     highPassButton->setBounds (494, 64, 48, 24);
@@ -1207,12 +1132,11 @@ void MainWindow::resized()
     decayLabel2->setBounds (696, 320, 32, 32);
     sustainLabel2->setBounds (765, 320, 32, 32);
     releaseLabel2->setBounds (834, 320, 32, 32);
-    fineLabel4->setBounds (24, 544, 104, 32);
-    fineLabel5->setBounds (240, 544, 80, 32);
-    fineLabel6->setBounds (544, 544, 80, 32);
-    leftVolSLider->setBounds (704, 432, 176, 8);
-    rightVolSlider->setBounds (704, 448, 176, 8);
-    volumeLabel4->setBounds (704, 480, 144, 32);
+    leftVolSLider->setBounds (360, 16, 208, 8);
+    rightVolSlider->setBounds (360, 32, 208, 8);
+    volumeLabel4->setBounds (296, 12, 64, 32);
+    modEditButton->setBounds (360, 544, 100, 24);
+    mainButton->setBounds (136, 544, 100, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1221,11 +1145,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
 
-    if (!isTimerRunning()) {
-        animator->fadeIn(statusLabel, 100);
-        startTimer(3000);
 
-    }
     //[/UsersliderValueChanged_Pre]
 
     if (sliderThatWasMoved == cutoffSlider)
@@ -1413,89 +1333,7 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     //[UsercomboBoxChanged_Pre]
     //[/UsercomboBoxChanged_Pre]
 
-    if (comboBoxThatHasChanged == lfo1ModCombo)
-    {
-        //[UserComboBoxCode_lfo1ModCombo] -- add your combo box handling code here..
-        float nval = processor->getValueTreeState()->getParameterRange("mod1target").convertTo0to1(lfo1ModCombo->getSelectedIdAsValue().toString().getFloatValue());
-        processor->getValueTreeState()->getParameter("mod1target")->setValueNotifyingHost(nval);
-        this->processor->getModel()->setMod1Target(lfo1ModCombo->getSelectedId());
-
-        for (int i = 0; i < lfo2ModCombo->getNumItems();i++) {
-            lfo2ModCombo->setItemEnabled(lfo2ModCombo->getItemId(i),true);
-        }
-
-        if (modCombo->getSelectedId() == 4)
-            lfo2ModCombo->setItemEnabled(lfo1ModCombo->getSelectedId(), false);
-
-        if (!lfo1ModCombo->isEnabled()) {
-            return;
-        }
-
-        if (lfo1ModCombo->getSelectedId() == 1) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
-        }
-
-
-        //[/UserComboBoxCode_lfo1ModCombo]
-    }
-    else if (comboBoxThatHasChanged == lfo2ModCombo)
-    {
-        //[UserComboBoxCode_lfo2ModCombo] -- add your combo box handling code here..
-        float nval = processor->getValueTreeState()->getParameterRange("mod2target").convertTo0to1(lfo2ModCombo->getSelectedIdAsValue().toString().getFloatValue());
-        processor->getValueTreeState()->getParameter("mod2target")->setValueNotifyingHost(nval);
-        this->processor->getModel()->setMod2Target(lfo2ModCombo->getSelectedId());
-
-        for (int i = 0; i < lfo1ModCombo->getNumItems();i++) {
-            lfo1ModCombo->setItemEnabled(lfo1ModCombo->getItemId(i),true);
-        }
-
-        if (modCombo->getSelectedId() == 4)
-            lfo1ModCombo->setItemEnabled(lfo2ModCombo->getSelectedId(), false);
-
-        if (!lfo2ModCombo->isEnabled()) {
-            return;
-        }
-
-        if (lfo2ModCombo->getSelectedId() == 1) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO2);
-        }
-
-        //[/UserComboBoxCode_lfo2ModCombo]
-    }
-    else if (comboBoxThatHasChanged == modCombo)
-    {
-        //[UserComboBoxCode_modCombo] -- add your combo box handling code here..
-        float nval = processor->getValueTreeState()->getParameterRange("modsource").convertTo0to1(modCombo->getSelectedIdAsValue().toString().getFloatValue());
-        processor->getValueTreeState()->getParameter("modsource")->setValueNotifyingHost(nval);
-        this->processor->getModel()->setModsource(modCombo->getSelectedId());
-        if (modCombo->getSelectedId() == 1) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
-            lfo1ModCombo->setEnabled(false);
-            lfo2ModCombo->setEnabled(false);
-        }
-        else if (modCombo->getSelectedId() == 2) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1);
-            lfo1ModCombo->setEnabled(true);
-            lfo2ModCombo->setEnabled(false);
-        }
-        else if (modCombo->getSelectedId() == 3) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO2);
-            lfo1ModCombo->setEnabled(false);
-            lfo2ModCombo->setEnabled(true);
-        }
-        else if (modCombo->getSelectedId() == 4) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::LFO1LFO2);
-            lfo1ModCombo->setEnabled(true);
-            lfo2ModCombo->setEnabled(true);
-        }
-        else if (modCombo->getSelectedId() == 5) {
-            processor->selectFilterModulator(TrioAudioProcessor::ModulatorType::SEQUENCER);
-            lfo1ModCombo->setEnabled(false);
-            lfo2ModCombo->setEnabled(false);
-        }
-        //[/UserComboBoxCode_modCombo]
-    }
-    else if (comboBoxThatHasChanged == presetCombo)
+    if (comboBoxThatHasChanged == presetCombo)
     {
         //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
 
@@ -1750,6 +1588,18 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 		*/
         //[/UserButtonCode_highPassButton]
     }
+    else if (buttonThatWasClicked == modEditButton)
+    {
+        //[UserButtonCode_modEditButton] -- add your button handler code here..
+        toggleView(PanelDisplay::MOD);
+        //[/UserButtonCode_modEditButton]
+    }
+    else if (buttonThatWasClicked == mainButton)
+    {
+        //[UserButtonCode_mainButton] -- add your button handler code here..
+        toggleView(PanelDisplay::MAIN);
+        //[/UserButtonCode_mainButton]
+    }
 
     //[UserbuttonClicked_Post]
 
@@ -1762,8 +1612,8 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
 void MainWindow::timerCallback() {
-    animator->fadeOut(statusLabel, 500);
-    stopTimer();
+    this->leftVolSLider->setValue(processor->getMagnitudeLeft());
+    this->rightVolSlider->setValue(processor->getMagnitudeRight());
 }
 
 void MainWindow::visibilityChanged() {
@@ -1841,15 +1691,6 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
             noiseButton->setToggleState(true, NotificationType::dontSendNotification);
         }
     }
-    else if (id == "modsource") {
-        modCombo->setSelectedId(nval);
-    }
-    else if (id == "mod1target") {
-        lfo1ModCombo->setSelectedId(nval);
-    }
-    else if (id == "mod2target") {
-        lfo2ModCombo->setSelectedId(nval);
-    }
     else if (id == "filtermode") {
         if (nval == 0) {
             lowPassPutton->setToggleState(true,NotificationType::dontSendNotification);
@@ -1863,40 +1704,47 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
 
 void MainWindow::toggleView(MainWindow::PanelDisplay display) {
 
-    if (display == PanelDisplay::BROWSER) {
-
+    if (display == PanelDisplay::MAIN) {
         if (fxPanel->isVisible()) {
             animator->fadeOut(fxPanel, 100);
-            fxButton->setButtonText("FX");
-            animator->fadeIn(browserPanel, 100);
-            browseButton->setButtonText("Main");
         }
-        else if (browserPanel->isVisible()) {
+        if(modPanel->isVisible()){
+            animator->fadeOut(modPanel, 100);
+        }
+        if(browserPanel->isVisible()){
             animator->fadeOut(browserPanel, 100);
-            browseButton->setButtonText("Browser");
         }
-        else {
-            animator->fadeIn(browserPanel, 100);
-            browseButton->setButtonText("Main");
-        }
-
     }
     else if (display == PanelDisplay::FX) {
+        if(modPanel->isVisible()){
+            animator->fadeOut(modPanel, 100);
+        }
+        if(browserPanel->isVisible()){
+            animator->fadeOut(modPanel, 100);
+        }
+        animator->fadeIn(fxPanel, 100);
 
-        if (browserPanel->isVisible()) {
-            animator->fadeOut(browserPanel, 100);
-            browseButton->setButtonText("Browser");
-            animator->fadeIn(fxPanel, 100);
-            fxButton->setButtonText("Main");
-        }
-        else if (fxPanel->isVisible()) {
+    }
+    else if (display == PanelDisplay::MOD) {
+        if (fxPanel->isVisible()) {
             animator->fadeOut(fxPanel, 100);
-            fxButton->setButtonText("FX");
         }
-        else {
-            animator->fadeIn(fxPanel, 100);
-            fxButton->setButtonText("Main");
+        if(browserPanel->isVisible()){
+            animator->fadeOut(modPanel, 100);
         }
+        animator->fadeIn(modPanel, 100);
+    }
+    else if (display == PanelDisplay::BROWSER) {
+        if (fxPanel->isVisible()) {
+            animator->fadeOut(fxPanel, 100);
+        }
+        if(modPanel->isVisible()){
+            animator->fadeOut(modPanel, 100);
+        }
+        animator->fadeIn(browserPanel, 100);
+    }
+    else if (display == PanelDisplay::SETUP) {
+
 
     }
 
@@ -1952,18 +1800,6 @@ BEGIN_JUCER_METADATA
           min="-2" max="2" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
-  <COMBOBOX name="lfo1ModCombo" id="a03e8efa0f965685" memberName="lfo1ModCombo"
-            virtualName="" explicitFocusOrder="0" pos="328 548 200 24" editable="0"
-            layout="33" items="Filter Cutoff&#10;Filter Resonance&#10;Osc 1 Pitch&#10;Osc 2 Pitch&#10;Osc 3 Pitch"
-            textWhenNonSelected="" textWhenNoItems="(no choices)"/>
-  <COMBOBOX name="lfo2ModCombo" id="c75702e0ae315fed" memberName="lfo2ModCombo"
-            virtualName="" explicitFocusOrder="0" pos="640 548 200 24" editable="0"
-            layout="33" items="Filter Cutoff&#10;Filter Resonance&#10;Osc 1 Pitch&#10;Osc 2 Pitch&#10;Osc 3 Pitch"
-            textWhenNonSelected="" textWhenNoItems="(no choices)"/>
-  <COMBOBOX name="modCombo" id="2cdaa14b45ae0270" memberName="modCombo" virtualName=""
-            explicitFocusOrder="0" pos="128 547 104 24" editable="0" layout="33"
-            items="none&#10;LFO1&#10;LFO2&#10;LFO1+LFO2" textWhenNonSelected=""
-            textWhenNoItems="(no choices)"/>
   <SLIDER name="osc1VolumeSlider" id="4c562bc5b4c27b9" memberName="osc1VolumeSlider"
           virtualName="" explicitFocusOrder="0" pos="184 96 64 64" rotaryslideroutline="66ffffff"
           min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
@@ -2073,7 +1909,7 @@ BEGIN_JUCER_METADATA
             virtualName="" explicitFocusOrder="0" pos="600 16 296 24" editable="0"
             layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TEXTBUTTON name="storeButton" id="7f02553932604ec2" memberName="storeButton"
-              virtualName="" explicitFocusOrder="0" pos="286 16 64 24" buttonText="Store"
+              virtualName="" explicitFocusOrder="0" pos="24 544 100 24" buttonText="Store"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <IMAGEBUTTON name="new button" id="ee7a53baa21af566" memberName="imageButton"
                virtualName="" explicitFocusOrder="0" pos="96 64 24 24" buttonText="Sawtooth"
@@ -2130,18 +1966,18 @@ BEGIN_JUCER_METADATA
                resourceOver="oscillator_sine_48_png" opacityOver="1" colourOver="ffff7e00"
                resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <LABEL name="statusLabel" id="f241e45e174945c6" memberName="statusLabel"
-         virtualName="" explicitFocusOrder="0" pos="704 379 150 24" textCol="ffffffff"
+         virtualName="" explicitFocusOrder="0" pos="728 544 150 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="&#10;" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
   <TEXTBUTTON name="browseButton" id="f48c01fdd9a33988" memberName="browseButton"
-              virtualName="" explicitFocusOrder="0" pos="441 16 64 24" buttonText="Browser"
+              virtualName="" explicitFocusOrder="0" pos="472 544 100 24" buttonText="Browser"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTBUTTON name="setupButton" id="2f8adecb1d3124d2" memberName="setupButton"
-              virtualName="" explicitFocusOrder="0" pos="516 16 64 24" buttonText="Setup"
+              virtualName="" explicitFocusOrder="0" pos="584 544 104 24" buttonText="Setup"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTBUTTON name="fxButton" id="8928dfb414abfd9e" memberName="fxButton" virtualName=""
-              explicitFocusOrder="0" pos="364 16 64 24" buttonText="FX" connectedEdges="0"
+              explicitFocusOrder="0" pos="248 544 100 24" buttonText="FX" connectedEdges="0"
               needsCallback="1" radioGroupId="0"/>
   <IMAGEBUTTON name="noiseButton" id="7351ad630e1b98c0" memberName="noiseButton"
                virtualName="" explicitFocusOrder="0" pos="200 384 24 24" buttonText="Pulse"
@@ -2327,36 +2163,27 @@ BEGIN_JUCER_METADATA
          edTextCol="ff000000" edBkgCol="0" labelText="R" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="18" bold="1" italic="0" justification="36"/>
-  <LABEL name="label" id="581abc9d017510c2" memberName="fineLabel4" virtualName=""
-         explicitFocusOrder="0" pos="24 544 104 32" textCol="ffffffff"
-         edTextCol="ff000000" edBkgCol="0" labelText="ModSource" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Verdana"
-         fontsize="18" bold="1" italic="0" justification="33"/>
-  <LABEL name="label" id="4163d76ea050f461" memberName="fineLabel5" virtualName=""
-         explicitFocusOrder="0" pos="240 544 80 32" textCol="ffffffff"
-         edTextCol="ff000000" edBkgCol="0" labelText="Target 1" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Verdana"
-         fontsize="18" bold="1" italic="0" justification="33"/>
-  <LABEL name="label" id="f8dd542a4ecc3d01" memberName="fineLabel6" virtualName=""
-         explicitFocusOrder="0" pos="544 544 80 32" textCol="ffffffff"
-         edTextCol="ff000000" edBkgCol="0" labelText="Target 2" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Verdana"
-         fontsize="18" bold="1" italic="0" justification="33"/>
   <SLIDER name="leftVolSLider" id="71b1221c67299992" memberName="leftVolSLider"
-          virtualName="" explicitFocusOrder="0" pos="704 432 176 8" bkgcol="ff808080"
-          thumbcol="ffe28600" min="0" max="10" int="0" style="LinearBar"
-          textBoxPos="NoTextBox" textBoxEditable="0" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1" needsCallback="0"/>
+          virtualName="" explicitFocusOrder="0" pos="360 16 208 8" bkgcol="ff808080"
+          thumbcol="ffe28600" min="0" max="1" int="0.010000000000000000208"
+          style="LinearBar" textBoxPos="NoTextBox" textBoxEditable="0"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="0"/>
   <SLIDER name="rightVolSlider" id="331b71603552f421" memberName="rightVolSlider"
-          virtualName="" explicitFocusOrder="0" pos="704 448 176 8" bkgcol="ff808080"
-          thumbcol="ffe28600" min="0" max="10" int="0" style="LinearBar"
-          textBoxPos="NoTextBox" textBoxEditable="0" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1" needsCallback="0"/>
+          virtualName="" explicitFocusOrder="0" pos="360 32 208 8" bkgcol="ff808080"
+          thumbcol="ffe28600" min="0" max="1" int="0.010000000000000000208"
+          style="LinearBar" textBoxPos="NoTextBox" textBoxEditable="0"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="0"/>
   <LABEL name="label" id="afe8f48f522c2c88" memberName="volumeLabel4"
-         virtualName="" explicitFocusOrder="0" pos="704 480 144 32" textCol="ffffffff"
-         edTextCol="ff000000" edBkgCol="0" labelText="Output level" editableSingleClick="0"
+         virtualName="" explicitFocusOrder="0" pos="296 12 64 32" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="Output" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Verdana"
          fontsize="18" bold="0" italic="0" justification="33"/>
+  <TEXTBUTTON name="modEditButton" id="725f3066f30ed3b3" memberName="modEditButton"
+              virtualName="" explicitFocusOrder="0" pos="360 544 100 24" buttonText="Modulation"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <TEXTBUTTON name="mainButton" id="247303c92b11a794" memberName="mainButton"
+              virtualName="" explicitFocusOrder="0" pos="136 544 100 24" buttonText="Main"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

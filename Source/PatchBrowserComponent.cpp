@@ -31,7 +31,7 @@ PatchBrowserComponent::PatchBrowserComponent()
 	table->updateContent();
     
     const Rectangle<int> rect = Rectangle<int>(0,0,910,600);
-    table->setBounds(rect.reduced(40));
+    table->setBounds(rect.reduced(40).removeFromBottom(470));
     table->setTopLeftPosition(table->getX(), 60);
     
 	table->addKeyListener(this);
