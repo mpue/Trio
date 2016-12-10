@@ -17,6 +17,7 @@
 #include "ADSR.h"
 #include "Oszillator.h"
 #include "Sine.h"
+#include "MultimodeOscillator.h"
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
@@ -28,7 +29,7 @@ class Model {
     
 public:
 
-    Model(vector<Voice*> voices, MultimodeFilter* mainFilter, ADSR* filterEnv,Sine* lfo1, Sine* lfo2, int sampleRate);
+    Model(vector<Voice*> voices, MultimodeFilter* mainFilter, ADSR* filterEnv,MultimodeOscillator* lfo1, MultimodeOscillator* lfo2, int sampleRate);
     ~Model();
     
 	float getOsc1Pitch();
@@ -106,6 +107,13 @@ public:
     int getMod2Target();
     void setMod2Target(int target);
     
+    ADSR* getFilterEnvelope();
+    MultimodeFilter* getFilter();
+    MultimodeOscillator* getLfo1();
+    MultimodeOscillator* getLfo2();
+    
+    vector<Voice*> getVoices();
+    
 private:
     
     float volume;
@@ -140,8 +148,8 @@ private:
 
     MultimodeFilter* mainFilter;
     ADSR* filterEnv;
-    Sine* lfo1;
-    Sine* lfo2;
+    MultimodeOscillator* lfo1;
+    MultimodeOscillator* lfo2;
     int sampleRate;
     
     float lfo1Rate;

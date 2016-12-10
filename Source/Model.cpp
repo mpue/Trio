@@ -18,7 +18,7 @@
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices, MultimodeFilter* mainFilter, ADSR* filterEnv, Sine* lfo1, Sine* lfo2, int sampleRate) {
+Model::Model(vector<Voice*> voices, MultimodeFilter* mainFilter, ADSR* filterEnv, MultimodeOscillator* lfo1, MultimodeOscillator* lfo2, int sampleRate) {
     this->voices = voices;
     this->mainFilter = mainFilter;
     this->filterEnv = filterEnv;
@@ -328,5 +328,25 @@ void Model::setMod2Target(int target) {
 
 int Model::getMod2Target() {
     return this->mod2target;
+}
+
+ADSR* Model::getFilterEnvelope() {
+    return this->filterEnv;
+}
+
+MultimodeFilter* Model::getFilter() {
+    return mainFilter;
+}
+
+MultimodeOscillator* Model::getLfo1() {
+    return lfo1;
+}
+
+MultimodeOscillator* Model::getLfo2() {
+    return lfo2;
+}
+
+vector<Voice*> Model::getVoices() {
+    return this->voices;
 }
 

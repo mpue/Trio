@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "ModMatrix.h"
 //[/Headers]
 
 #include "ModPanel.h"
@@ -27,27 +28,28 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-ModPanel::ModPanel ()
+ModPanel::ModPanel (ModMatrix*  m)
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    this->matrix = m;
     //[/Constructor_pre]
 
-    addAndMakeVisible (modSlot1 = new ModSlot());
+    addAndMakeVisible (modSlot1 = new ModSlot (m,0));
     modSlot1->setName ("modSlot1");
 
-    addAndMakeVisible (modSlot2 = new ModSlot());
+    addAndMakeVisible (modSlot2 = new ModSlot (m,1));
     modSlot2->setName ("modSlot1");
 
-    addAndMakeVisible (modSlot3 = new ModSlot());
+    addAndMakeVisible (modSlot3 = new ModSlot (m,2));
     modSlot3->setName ("modSlot1");
 
-    addAndMakeVisible (modSlot4 = new ModSlot());
+    addAndMakeVisible (modSlot4 = new ModSlot (m,3));
     modSlot4->setName ("modSlot1");
 
-    addAndMakeVisible (modSlot5 = new ModSlot());
+    addAndMakeVisible (modSlot5 = new ModSlot (m,4));
     modSlot5->setName ("modSlot1");
 
-    addAndMakeVisible (modSlot6 = new ModSlot());
+    addAndMakeVisible (modSlot6 = new ModSlot (m,5));
     modSlot6->setName ("modSlot1");
 
     cachedImage_mod_panel_jpg_1 = ImageCache::getFromMemory (mod_panel_jpg, mod_panel_jpgSize);
@@ -57,6 +59,7 @@ ModPanel::ModPanel ()
 
     setSize (910, 600);
 
+
     //[Constructor] You can add your own custom stuff here..
     modSlot1->setTitle("Slot 1");
     modSlot2->setTitle("Slot 2");
@@ -64,14 +67,14 @@ ModPanel::ModPanel ()
     modSlot4->setTitle("Slot 4");
     modSlot5->setTitle("Slot 5");
     modSlot6->setTitle("Slot 6");
-    
+
     slots.push_back(modSlot1);
     slots.push_back(modSlot2);
     slots.push_back(modSlot3);
     slots.push_back(modSlot4);
     slots.push_back(modSlot5);
     slots.push_back(modSlot6);
-    
+
     //[/Constructor]
 }
 
@@ -117,10 +120,10 @@ void ModPanel::resized()
 
     modSlot1->setBounds (80, 72, 225, 225);
     modSlot2->setBounds (336, 72, 225, 225);
-    modSlot3->setBounds (592, 72, 225, 225);
+    modSlot3->setBounds (576, 72, 225, 225);
     modSlot4->setBounds (80, 304, 225, 225);
     modSlot5->setBounds (336, 304, 225, 225);
-    modSlot6->setBounds (592, 304, 225, 225);
+    modSlot6->setBounds (576, 304, 225, 225);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -146,26 +149,26 @@ std::vector<ModSlot*> ModPanel::getSlots() {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ModPanel" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="910" initialHeight="600">
+                 parentClasses="public Component" constructorParams="ModMatrix*  m"
+                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
+                 overlayOpacity="0.330" fixedSize="0" initialWidth="910" initialHeight="600">
   <BACKGROUND backgroundColour="ffffffff">
     <IMAGE pos="0 0 910 600" resource="mod_panel_jpg" opacity="1" mode="0"/>
   </BACKGROUND>
   <GENERICCOMPONENT name="modSlot1" id="62f7dee8abf2c630" memberName="modSlot1" virtualName="ModSlot"
-                    explicitFocusOrder="0" pos="80 72 225 225" class="ModSlot" params=""/>
+                    explicitFocusOrder="0" pos="80 72 225 225" class="ModSlot" params="m,0"/>
   <GENERICCOMPONENT name="modSlot1" id="e503d55eaa4ec2ef" memberName="modSlot2" virtualName="ModSlot"
-                    explicitFocusOrder="0" pos="336 72 225 225" class="ModSlot" params=""/>
+                    explicitFocusOrder="0" pos="336 72 225 225" class="ModSlot" params="m,1"/>
   <GENERICCOMPONENT name="modSlot1" id="e10daf255a3a710d" memberName="modSlot3" virtualName="ModSlot"
-                    explicitFocusOrder="0" pos="592 72 225 225" class="ModSlot" params=""/>
+                    explicitFocusOrder="0" pos="576 72 225 225" class="ModSlot" params="m,2"/>
   <GENERICCOMPONENT name="modSlot1" id="690355258f0303bf" memberName="modSlot4" virtualName="ModSlot"
-                    explicitFocusOrder="0" pos="80 304 225 225" class="ModSlot" params=""/>
+                    explicitFocusOrder="0" pos="80 304 225 225" class="ModSlot" params="m,3"/>
   <GENERICCOMPONENT name="modSlot1" id="73712d4e9bbeea5" memberName="modSlot5" virtualName="ModSlot"
                     explicitFocusOrder="0" pos="336 304 225 225" class="ModSlot"
-                    params=""/>
+                    params="m,4"/>
   <GENERICCOMPONENT name="modSlot1" id="2f82a6626d362685" memberName="modSlot6" virtualName="ModSlot"
-                    explicitFocusOrder="0" pos="592 304 225 225" class="ModSlot"
-                    params=""/>
+                    explicitFocusOrder="0" pos="576 304 225 225" class="ModSlot"
+                    params="m,5"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

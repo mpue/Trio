@@ -128,6 +128,7 @@ public:
     
     float getMagnitudeLeft();
     float getMagnitudeRight();
+    MultimodeOscillator* getLfo1();
     
 private:
     //==============================================================================
@@ -169,8 +170,8 @@ private:
     int getVoicesPlaying();
     ScopedPointer<ADSR> filterEnvelope;
     Model* model;
-    Sine* lfo1;
-    Sine* lfo2;
+    MultimodeOscillator* lfo1;
+    MultimodeOscillator* lfo2;
     
     ScopedPointer<AudioProcessorValueTreeState> parameters;
     juce::AudioPlayHead::CurrentPositionInfo result;

@@ -22,7 +22,7 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
-
+#include "ModMatrix.h"
 //[/Headers]
 
 
@@ -42,7 +42,7 @@ class ModSlot  : public Component,
 {
 public:
     //==============================================================================
-    ModSlot ();
+    ModSlot (ModMatrix*  m, int index);
     ~ModSlot();
 
     //==============================================================================
@@ -50,15 +50,16 @@ public:
     void setTitle(String text);
     void addSource(int id, String source);
     void addTarget(int id, String target);
-    
+
     void setSelectedSource(int id);
     void setSelectedTarget1(int id);
     void setSelectedTarget2(int id);
-    
+
     int getSelectedSource();
     int getSelectedTarget1();
     int getSelectedTarget2();
     bool isSlotEnabled();
+    int getIndex();
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -67,9 +68,13 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
+
+
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     bool slotEnabled;
+    ModMatrix* matrix;
+    int index;
     //[/UserVariables]
 
     //==============================================================================

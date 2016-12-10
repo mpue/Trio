@@ -45,14 +45,14 @@ class ModPanel  : public Component
 {
 public:
     //==============================================================================
-    ModPanel ();
+    ModPanel (ModMatrix*  m);
     ~ModPanel();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    
+
     std::vector<ModSlot*> getSlots();
-    
+
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -66,6 +66,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     std::vector<ModSlot*> slots;
+    ModMatrix* matrix;
     //[/UserVariables]
 
     //==============================================================================

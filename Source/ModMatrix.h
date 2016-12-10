@@ -16,13 +16,14 @@
 #include "Modulation.h"
 #include <vector>
 #include <map>
+#include "Model.h"
 
 using namespace std;
 
 class ModMatrix {
   
 public:
-    ModMatrix();
+    ModMatrix(double sampleRate, Model* m);
     ~ModMatrix();
     
     void addModulation(Modulation* mod);
@@ -36,12 +37,17 @@ public:
     map<int,String>* getSources();
     map<int,String>* getTargets();
     
+    double getSampleRate();
+    Model* getModel();
+    
 private:
     vector<Modulation*> modulations;
     
     map<int,String>* modSources;
     map<int,String>* modTargets;
     
+    double sampleRate;
+    Model* model;
 };
 
 

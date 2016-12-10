@@ -29,7 +29,13 @@ Modulation::Modulation(Modulator* modulator, ModTarget* target) {
 }
 
 void Modulation::process() {
-    this->modulator->process();
+    if (this->modulator != NULL) {
+        this->modulator->process();
+    }
+}
+
+Modulator* Modulation::getModulator() {
+    return this->modulator;
 }
 
 void Modulation::setModulator(Modulator *modulator) {
@@ -43,4 +49,12 @@ void Modulation::addTarget(ModTarget* target) {
 
 vector<ModTarget*> Modulation::getTargets() {
     return targets;
+}
+
+void Modulation::setEnabled(bool enabled) {
+    this->enabled = enabled;
+}
+
+bool Modulation::isEnabled() {
+    return this->enabled;
 }

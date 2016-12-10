@@ -153,20 +153,7 @@ TrioAudioProcessor::TrioAudioProcessor()
     this->effects.push_back(reverb);
     this->effects.push_back(outputFilter);
     
-    this->modMatrix = new ModMatrix();
-    
-    this->modMatrix->registerSource("none", 1);
-    this->modMatrix->registerSource("LFO1", 2);
-    this->modMatrix->registerSource("LFO2", 3);
-    this->modMatrix->registerSource("AmpEnv", 4);
-    this->modMatrix->registerSource("FilterEnv", 5);
-    this->modMatrix->registerSource("Sequencer", 6);
-    
-    this->modMatrix->registerTarget("none", 1);
-    this->modMatrix->registerTarget("Filter1Cutoff", 2);
-    this->modMatrix->registerTarget("Osc1Pitch", 3);
-    this->modMatrix->registerTarget("Osc2Pitch", 4);
-    this->modMatrix->registerTarget("Osc3Pitch", 5);
+
     
 }
 
@@ -308,8 +295,10 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     
     configureOscillators(Oszillator::OscMode::SAW, Oszillator::OscMode::SAW, Oszillator::OscMode::SAW);
     
-    lfo1 = new Sine(sampleRate);
-    lfo2 = new Sine(sampleRate);
+    lfo1 = new MultimodeOscillator(sampleRate);
+    lfo1->setMode(Oszillator::SINE);
+    lfo2 = new MultimodeOscillator(sampleRate);
+    lfo1->setMode(Oszillator::SINE);
     
     this->model = new Model(voices, multimodeFilter ,getFilterEnv(), lfo1, lfo2, 44100);
     
@@ -319,6 +308,21 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     if (this->selectedProgram == "") {
         setSelectedProgram("init");
     }
+    
+    this->modMatrix = new ModMatrix(sampleRate, model);
+    
+    this->modMatrix->registerSource("none", 1);
+    this->modMatrix->registerSource("LFO1", 2);
+    this->modMatrix->registerSource("LFO2", 3);
+    this->modMatrix->registerSource("AmpEnv", 4);
+    this->modMatrix->registerSource("FilterEnv", 5);
+    this->modMatrix->registerSource("Sequencer", 6);
+    
+    this->modMatrix->registerTarget("none", 1);
+    this->modMatrix->registerTarget("Filter1Cutoff", 2);
+    this->modMatrix->registerTarget("Osc1Pitch", 3);
+    this->modMatrix->registerTarget("Osc2Pitch", 4);
+    this->modMatrix->registerTarget("Osc3Pitch", 5);
     
     /*
     Modulation* filterMod = new Modulation();
@@ -355,12 +359,13 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     modMatrix->addModulation(pitchOsc2);
     */
    
-    
+   /*
     Modulation* mod = new Modulation();
     mod->setModulator(filterEnvelope);
     mod->addTarget(multimodeFilter);
     multimodeFilter->setModAmount(1.0f);
     modMatrix->addModulation(mod);
+    */
     
     /*
     Modulation* seqMod = new Modulation();
@@ -1266,4 +1271,8 @@ float TrioAudioProcessor::getMagnitudeRight() {
 
 ModMatrix* TrioAudioProcessor::getModMatrix() {
     return this->modMatrix;
+}
+
+MultimodeOscillator* TrioAudioProcessor::getLfo1() {
+    return  this->lfo1;
 }

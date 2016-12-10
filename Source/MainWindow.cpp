@@ -691,6 +691,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     setSize (910, 600);
 
+
     //[Constructor] You can add your own custom stuff here..
 
     animator = new ComponentAnimator();
@@ -759,7 +760,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->browserPanel = new BrowserPanel(processor);
     browserPanel->setBounds(x,y,getWidth(),getHeight());
 
-    this->modPanel = new ModPanel();
+    this->modPanel = new ModPanel(processor->getModMatrix());
     this->modPanel->setBounds(x,y,getWidth(),getHeight());
 
     addChildComponent(fxPanel);
@@ -903,31 +904,31 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
         pair<int,String> p = *it;
         int id = p.first;
         String name = p.second;
-        
+
         for (int i = 0; i < modPanel->getSlots().size();i++) {
             modPanel->getSlots().at(i)->addSource(id, name);
         }
-        
+
     }
 
     for(std::map<int,String>::iterator it = processor->getModMatrix()->getTargets()->begin(); it != processor->getModMatrix()->getTargets()->end(); ++it) {
-        
+
         pair<int,String> p = *it;
         int id = p.first;
         String name = p.second;
-        
+
         for (int i = 0; i < modPanel->getSlots().size();i++) {
             modPanel->getSlots().at(i)->addTarget(id, name);
         }
-        
+
     }
-    
+
     for (int i = 0; i < modPanel->getSlots().size();i++) {
         modPanel->getSlots().at(i)->setSelectedSource(1);
         modPanel->getSlots().at(i)->setSelectedTarget1(1);
         modPanel->getSlots().at(i)->setSelectedTarget2(1);
     }
-    
+
     //[/Constructor]
 }
 

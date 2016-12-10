@@ -10,9 +10,11 @@
 
 #include "ModMatrix.h"
 
-ModMatrix::ModMatrix() {
+ModMatrix::ModMatrix(double sampleRate, Model* m) {
     this->modSources = new std::map<int,String>();
     this->modTargets = new std::map<int,String>();
+    this->sampleRate = sampleRate;
+    this->model = m;
 }
 
 ModMatrix::~ModMatrix() {
@@ -27,7 +29,9 @@ ModMatrix::~ModMatrix() {
 
 void ModMatrix::process() {
     for (int i = 0; i < modulations.size();i++) {
-        this->modulations.at(i)->process();
+        if (this->modulations.at(i)->isEnabled()) {
+            this->modulations.at(i)->process();
+        }
     }
 }
 
@@ -53,4 +57,12 @@ map<int,String>* ModMatrix::getSources() {
 
 map<int,String>* ModMatrix::getTargets() {
     return this->modTargets;
+}
+
+double ModMatrix::getSampleRate(){
+    return this->sampleRate;
+}
+
+Model* ModMatrix::getModel() {
+    return this->model;
 }

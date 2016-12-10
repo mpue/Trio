@@ -18,18 +18,23 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "Modulator.h"
+#include "ADSR.h"
 //[/Headers]
 
 #include "ModSlot.h"
+#include "MultimodeOscillator.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
 //==============================================================================
-ModSlot::ModSlot ()
+ModSlot::ModSlot (ModMatrix*  m, int index)
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    this->matrix = m;
+    this->index = index;
     //[/Constructor_pre]
 
     addAndMakeVisible (label = new Label ("new label",
@@ -177,16 +182,66 @@ void ModSlot::resized()
 void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
     //[UsercomboBoxChanged_Pre]
+    
+    if (!slotEnabled) {
+        return;
+    }
+    
     //[/UsercomboBoxChanged_Pre]
 
     if (comboBoxThatHasChanged == sourceCombo)
     {
         //[UserComboBoxCode_sourceCombo] -- add your combo box handling code here..
+        
+        // LFO 1
+        if (sourceCombo->getSelectedId() == 2) {
+            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo1());
+        }
+        // LFO 2
+        else if (sourceCombo->getSelectedId() == 3) {
+            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo2());
+        }
+        else if (sourceCombo->getSelectedId() == 5) {
+            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getFilterEnvelope());
+        }
+
         //[/UserComboBoxCode_sourceCombo]
     }
     else if (comboBoxThatHasChanged == targetCombo1)
     {
         //[UserComboBoxCode_targetCombo1] -- add your combo box handling code here..
+      
+        // Filter envelope
+        if (targetCombo1->getSelectedId() == 2) {
+            
+            ModTarget* target = matrix->getModel()->getFilter();
+            
+            if (matrix->getModulations().at(index)->getTargets().size() >= 1) {
+                matrix->getModulations().at(index)->getTargets()[0] = target;
+            }
+            else {
+                matrix->getModulations().at(index)->addTarget(target);
+            }
+            
+            target->setModAmount(modAmountSlider1->getValue());
+            target->setModulator(matrix->getModulations().at(index)->getModulator());
+        }
+        // Osc 1 Pitch        
+        if (targetCombo1->getSelectedId() == 3) {
+            
+            matrix->getModulations().at(index)->getTargets().clear();
+            
+            for (int i = 0; i < 127; i++) {
+                matrix->getModel()->getVoices().at(i)->setModAmount(0.5);
+                MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(0));
+                m->setModAmount(modAmountSlider1->getValue());
+                m->setModulator(matrix->getModulations().at(index)->getModulator());
+                matrix->getModulations().at(index)->addTarget(m);
+            }
+
+        }
+        
+        
         //[/UserComboBoxCode_targetCombo1]
     }
     else if (comboBoxThatHasChanged == targetCombo2)
@@ -207,6 +262,12 @@ void ModSlot::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == modAmountSlider1)
     {
         //[UserSliderCode_modAmountSlider1] -- add your slider handling code here..
+        
+        for (int i = 0; i <  matrix->getModulations().at(index)->getTargets().size(); i++) {
+            matrix->getModulations().at(index)->getTargets()[i]->setModAmount(modAmountSlider1->getValue());
+        }
+        
+        
         //[/UserSliderCode_modAmountSlider1]
     }
     else if (sliderThatWasMoved == modAmountSlider2)
@@ -231,6 +292,14 @@ void ModSlot::buttonClicked (Button* buttonThatWasClicked)
         targetCombo1->setEnabled(enableButton->getToggleState());
         targetCombo2->setEnabled(enableButton->getToggleState());
         this->slotEnabled = enableButton->getToggleState();
+        
+        // Modulation index does not exist
+        if (matrix->getModulations().size() <= index) {
+            Modulation* mod = new Modulation();
+            mod->setEnabled(true);
+            matrix->addModulation(mod);
+        }
+
         //[/UserButtonCode_enableButton]
     }
 
@@ -282,6 +351,10 @@ bool ModSlot::isSlotEnabled() {
     return this->slotEnabled;
 }
 
+int ModSlot::getIndex() {
+    return index;
+}
+
 //[/MiscUserCode]
 
 
@@ -295,9 +368,9 @@ bool ModSlot::isSlotEnabled() {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ModSlot" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="600" initialHeight="400">
+                 parentClasses="public Component" constructorParams="ModMatrix*  m, int index"
+                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
+                 overlayOpacity="0.330" fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ff5a5a5a">
     <ROUNDRECT pos="6 6 215 215" cornerSize="10" fill="solid: ffffff" hasStroke="1"
                stroke="2, mitered, butt" strokeColour="solid: ffff9c00"/>
