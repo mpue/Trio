@@ -27,7 +27,7 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-PresetDialog::PresetDialog (ComboBox* presetBox, Model* model)
+PresetDialog::PresetDialog (ComboBox* presetBox)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     this->presetBox = presetBox;
