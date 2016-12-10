@@ -27,7 +27,7 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-PresetDialog::PresetDialog (ComboBox* presetBox)
+PresetDialog::PresetDialog (ComboBox* presetBox, Model* model)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     this->presetBox = presetBox;
@@ -126,45 +126,45 @@ void PresetDialog::buttonClicked (Button* buttonThatWasClicked)
         String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
         String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
         File preset = File(presetPath + presetName+".xml");
-        
+
         bool proceed = true;
         bool presetExists = false;
-        
+
         if (preset.exists()) {
             proceed = false;
             presetExists = true;
         }
-        
+
         if (!proceed) {
             proceed = AlertWindow::showOkCancelBox(AlertWindow::QuestionIcon, "Warning", "A preset with this name exists already, overwrite?", "Ok", "Fuck! No!",this);
         }
-        
+
         if (proceed) {
 
             xml.get()->writeToFile(preset,"");
-            
+
             if (!presetExists) {
 
                 int itemId = 0;
-                
+
                 for (int i = 0; i < presetBox->getNumItems();i++) {
                     if (presetBox->getItemId(i) > itemId) {
                         itemId = presetBox->getItemId(i);
                     }
                 }
-                
+
                 itemId++;
-                
+
                 this->presetBox->addItem(presetName,itemId);
                 this->presetBox->setSelectedId(itemId);
-                
+
             }
-            
+
             xml = nullptr;
             setVisible(false);
-            
+
         }
-        
+
         //[/UserButtonCode_okButton]
     }
     else if (buttonThatWasClicked == cancelButton)

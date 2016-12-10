@@ -98,7 +98,7 @@ void BrowserPanel::changeListenerCallback (ChangeBroadcaster* source) {
 
 void BrowserPanel::addProgram(String name)
 {
-	patchBrowser->addValue(name);		
+	patchBrowser->addValue(name);
 }
 //[/MiscUserCode]
 

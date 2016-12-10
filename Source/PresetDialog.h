@@ -40,7 +40,7 @@ class PresetDialog  : public Component,
 {
 public:
     //==============================================================================
-    PresetDialog (ComboBox* presetBox);
+    PresetDialog (ComboBox* presetBox, Model* model);
     ~PresetDialog();
 
     //==============================================================================
