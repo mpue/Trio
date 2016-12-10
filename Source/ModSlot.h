@@ -17,17 +17,11 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_F9C1CBED713F89D8__
-#define __JUCE_HEADER_F9C1CBED713F89D8__
+#ifndef __JUCE_HEADER_2BAD1EB567EACD74__
+#define __JUCE_HEADER_2BAD1EB567EACD74__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "ModSlot.h"
-#include "ModTarget.h"
-#include "Modulator.h"
-#include "Modulation.h"
-#include "ModMatrix.h"
-#include <vector>
 
 //[/Headers]
 
@@ -41,48 +35,61 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class ModPanel  : public Component
+class ModSlot  : public Component,
+                 public ComboBoxListener,
+                 public SliderListener,
+                 public ButtonListener
 {
 public:
     //==============================================================================
-    ModPanel ();
-    ~ModPanel();
+    ModSlot ();
+    ~ModSlot();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void setTitle(String text);
+    void addSource(int id, String source);
+    void addTarget(int id, String target);
     
-    std::vector<ModSlot*> getSlots();
+    void setSelectedSource(int id);
+    void setSelectedTarget1(int id);
+    void setSelectedTarget2(int id);
     
+    int getSelectedSource();
+    int getSelectedTarget1();
+    int getSelectedTarget2();
+    bool isSlotEnabled();
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
-
-    // Binary resources:
-    static const char* mod_panel_jpg;
-    static const int mod_panel_jpgSize;
-
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    std::vector<ModSlot*> slots;
+    bool slotEnabled;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<ModSlot> modSlot1;
-    ScopedPointer<ModSlot> modSlot2;
-    ScopedPointer<ModSlot> modSlot3;
-    ScopedPointer<ModSlot> modSlot4;
-    ScopedPointer<ModSlot> modSlot5;
-    ScopedPointer<ModSlot> modSlot6;
-    Image cachedImage_mod_panel_jpg_1;
+    ScopedPointer<Label> label;
+    ScopedPointer<ComboBox> sourceCombo;
+    ScopedPointer<Label> targetLabel1;
+    ScopedPointer<ComboBox> targetCombo1;
+    ScopedPointer<Slider> modAmountSlider1;
+    ScopedPointer<Label> targetLabel2;
+    ScopedPointer<ComboBox> targetCombo2;
+    ScopedPointer<Slider> modAmountSlider2;
+    ScopedPointer<Label> titleLabel;
+    ScopedPointer<ToggleButton> enableButton;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModPanel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModSlot)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_F9C1CBED713F89D8__
+#endif   // __JUCE_HEADER_2BAD1EB567EACD74__

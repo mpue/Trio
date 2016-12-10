@@ -10,7 +10,7 @@
 #define ModTarget_hpp
 
 #include <stdio.h>
-
+#include "Modulator.h"
 
 class ModTarget {
 
@@ -20,6 +20,8 @@ public:
     
     virtual void setModulator(Modulator* mod) = 0;
     virtual void setModAmount(float amount) = 0;
+    
+    
     
 };
 

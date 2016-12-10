@@ -18,8 +18,9 @@
 */
 
 //[Headers] You can add your own extra header files here...
-
-
+#include "ModPanel.h"
+#include "ModMatrix.h"
+#include <map>
 //[/Headers]
 
 #include "MainWindow.h"
@@ -51,7 +52,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     addAndMakeVisible (resoSlider = new Slider ("resoSlider"));
     resoSlider->setRange (0, 10, 0);
-    resoSlider->setSliderStyle (Slider::Rotary);
+    resoSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     resoSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     resoSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     resoSlider->addListener (this);
@@ -121,35 +122,35 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     addAndMakeVisible (filterModSlider = new Slider ("resoSlider"));
     filterModSlider->setRange (0, 1, 0.02);
-    filterModSlider->setSliderStyle (Slider::Rotary);
+    filterModSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterModSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterModSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     filterModSlider->addListener (this);
 
     addAndMakeVisible (lfo1RateSlider = new Slider ("lfo1RateSlider"));
     lfo1RateSlider->setRange (0, 10, 0);
-    lfo1RateSlider->setSliderStyle (Slider::Rotary);
+    lfo1RateSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     lfo1RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     lfo1RateSlider->addListener (this);
 
     addAndMakeVisible (lfo1AmountSlider = new Slider ("lfo1AmountSlider"));
     lfo1AmountSlider->setRange (0, 1, 0.02);
-    lfo1AmountSlider->setSliderStyle (Slider::Rotary);
+    lfo1AmountSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     lfo1AmountSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1AmountSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     lfo1AmountSlider->addListener (this);
 
     addAndMakeVisible (lfo2RateSlider = new Slider ("lfo2RateSlider"));
     lfo2RateSlider->setRange (0, 10, 0);
-    lfo2RateSlider->setSliderStyle (Slider::Rotary);
+    lfo2RateSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     lfo2RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo2RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     lfo2RateSlider->addListener (this);
 
     addAndMakeVisible (lfo2AmountSlider = new Slider ("lfo2AmountSlider"));
     lfo2AmountSlider->setRange (0, 1, 0.02);
-    lfo2AmountSlider->setSliderStyle (Slider::Rotary);
+    lfo2AmountSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     lfo2AmountSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo2AmountSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     lfo2AmountSlider->addListener (this);
@@ -213,7 +214,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     addAndMakeVisible (ampVolSlider = new Slider ("ampVolSlider"));
     ampVolSlider->setRange (0, 1, 0.02);
-    ampVolSlider->setSliderStyle (Slider::Rotary);
+    ampVolSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     ampVolSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     ampVolSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     ampVolSlider->addListener (this);
@@ -690,7 +691,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     setSize (910, 600);
 
-
     //[Constructor] You can add your own custom stuff here..
 
     animator = new ComponentAnimator();
@@ -774,7 +774,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     browseButton->toFront(false);
     setupButton->toFront(false);
     volumeLabel4->toFront(true);
-    
+
     leftVolSLider->toFront(false);
     rightVolSlider->toFront(false);
 
@@ -898,6 +898,36 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     startTimer(50);
 
+    for(std::map<int,String>::iterator it = processor->getModMatrix()->getSources()->begin(); it != processor->getModMatrix()->getSources()->end(); ++it) {
+
+        pair<int,String> p = *it;
+        int id = p.first;
+        String name = p.second;
+        
+        for (int i = 0; i < modPanel->getSlots().size();i++) {
+            modPanel->getSlots().at(i)->addSource(id, name);
+        }
+        
+    }
+
+    for(std::map<int,String>::iterator it = processor->getModMatrix()->getTargets()->begin(); it != processor->getModMatrix()->getTargets()->end(); ++it) {
+        
+        pair<int,String> p = *it;
+        int id = p.first;
+        String name = p.second;
+        
+        for (int i = 0; i < modPanel->getSlots().size();i++) {
+            modPanel->getSlots().at(i)->addTarget(id, name);
+        }
+        
+    }
+    
+    for (int i = 0; i < modPanel->getSlots().size();i++) {
+        modPanel->getSlots().at(i)->setSelectedSource(1);
+        modPanel->getSlots().at(i)->setSelectedTarget1(1);
+        modPanel->getSlots().at(i)->setSelectedTarget2(1);
+    }
+    
     //[/Constructor]
 }
 
@@ -1787,7 +1817,7 @@ BEGIN_JUCER_METADATA
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="resoSlider" id="72ce21eac8eaa69c" memberName="resoSlider"
           virtualName="" explicitFocusOrder="0" pos="392 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
+          min="0" max="10" int="0" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <SLIDER name="osc1PitchSlider" id="860a64caafed9e9a" memberName="osc1PitchSlider"
@@ -1837,27 +1867,27 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="resoSlider" id="9160d334c6170269" memberName="filterModSlider"
           virtualName="" explicitFocusOrder="0" pos="488 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo1RateSlider" id="b826c2541264d4fa" memberName="lfo1RateSlider"
           virtualName="" explicitFocusOrder="0" pos="304 256 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
+          min="0" max="10" int="0" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <SLIDER name="lfo1AmountSlider" id="d652f9f030b1a4ca" memberName="lfo1AmountSlider"
           virtualName="" explicitFocusOrder="0" pos="488 256 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo2RateSlider" id="e181558ceae467cc" memberName="lfo2RateSlider"
           virtualName="" explicitFocusOrder="0" pos="304 416 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
+          min="0" max="10" int="0" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <SLIDER name="lfo2AmountSlider" id="d5b558442927d2fc" memberName="lfo2AmountSlider"
           virtualName="" explicitFocusOrder="0" pos="488 416 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterAttackSlider" id="dd143499d0f6a2f0" memberName="filterAttackSlider"
@@ -1902,7 +1932,7 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="ampVolSlider" id="8a583b1da0600bb3" memberName="ampVolSlider"
           virtualName="" explicitFocusOrder="0" pos="616 416 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.020000000000000000416" style="Rotary"
+          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <COMBOBOX name="presetCombo" id="dd92602a91bc7ca9" memberName="presetCombo"

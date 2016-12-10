@@ -88,6 +88,8 @@
       <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
       <FILE id="XMxXXo" name="ModPanel.cpp" compile="1" resource="0" file="Source/ModPanel.cpp"/>
       <FILE id="azKaBY" name="ModPanel.h" compile="0" resource="0" file="Source/ModPanel.h"/>
+      <FILE id="EOWJX9" name="ModSlot.cpp" compile="1" resource="0" file="Source/ModSlot.cpp"/>
+      <FILE id="Za7HyT" name="ModSlot.h" compile="0" resource="0" file="Source/ModSlot.h"/>
       <FILE id="ZYttDe" name="PatchBrowserComponent.cpp" compile="1" resource="0"
             file="Source/PatchBrowserComponent.cpp"/>
       <FILE id="hCwaXA" name="PatchBrowserComponent.h" compile="0" resource="0"

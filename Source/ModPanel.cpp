@@ -32,6 +32,24 @@ ModPanel::ModPanel ()
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
+    addAndMakeVisible (modSlot1 = new ModSlot());
+    modSlot1->setName ("modSlot1");
+
+    addAndMakeVisible (modSlot2 = new ModSlot());
+    modSlot2->setName ("modSlot1");
+
+    addAndMakeVisible (modSlot3 = new ModSlot());
+    modSlot3->setName ("modSlot1");
+
+    addAndMakeVisible (modSlot4 = new ModSlot());
+    modSlot4->setName ("modSlot1");
+
+    addAndMakeVisible (modSlot5 = new ModSlot());
+    modSlot5->setName ("modSlot1");
+
+    addAndMakeVisible (modSlot6 = new ModSlot());
+    modSlot6->setName ("modSlot1");
+
     cachedImage_mod_panel_jpg_1 = ImageCache::getFromMemory (mod_panel_jpg, mod_panel_jpgSize);
 
     //[UserPreSize]
@@ -39,16 +57,36 @@ ModPanel::ModPanel ()
 
     setSize (910, 600);
 
-
     //[Constructor] You can add your own custom stuff here..
+    modSlot1->setTitle("Slot 1");
+    modSlot2->setTitle("Slot 2");
+    modSlot3->setTitle("Slot 3");
+    modSlot4->setTitle("Slot 4");
+    modSlot5->setTitle("Slot 5");
+    modSlot6->setTitle("Slot 6");
+    
+    slots.push_back(modSlot1);
+    slots.push_back(modSlot2);
+    slots.push_back(modSlot3);
+    slots.push_back(modSlot4);
+    slots.push_back(modSlot5);
+    slots.push_back(modSlot6);
+    
     //[/Constructor]
 }
 
 ModPanel::~ModPanel()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    slots.clear();
     //[/Destructor_pre]
 
+    modSlot1 = nullptr;
+    modSlot2 = nullptr;
+    modSlot3 = nullptr;
+    modSlot4 = nullptr;
+    modSlot5 = nullptr;
+    modSlot6 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -77,6 +115,12 @@ void ModPanel::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
+    modSlot1->setBounds (80, 72, 225, 225);
+    modSlot2->setBounds (336, 72, 225, 225);
+    modSlot3->setBounds (592, 72, 225, 225);
+    modSlot4->setBounds (80, 304, 225, 225);
+    modSlot5->setBounds (336, 304, 225, 225);
+    modSlot6->setBounds (592, 304, 225, 225);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -84,6 +128,11 @@ void ModPanel::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+
+std::vector<ModSlot*> ModPanel::getSlots() {
+    return this->slots;
+}
+
 //[/MiscUserCode]
 
 
@@ -103,6 +152,20 @@ BEGIN_JUCER_METADATA
   <BACKGROUND backgroundColour="ffffffff">
     <IMAGE pos="0 0 910 600" resource="mod_panel_jpg" opacity="1" mode="0"/>
   </BACKGROUND>
+  <GENERICCOMPONENT name="modSlot1" id="62f7dee8abf2c630" memberName="modSlot1" virtualName="ModSlot"
+                    explicitFocusOrder="0" pos="80 72 225 225" class="ModSlot" params=""/>
+  <GENERICCOMPONENT name="modSlot1" id="e503d55eaa4ec2ef" memberName="modSlot2" virtualName="ModSlot"
+                    explicitFocusOrder="0" pos="336 72 225 225" class="ModSlot" params=""/>
+  <GENERICCOMPONENT name="modSlot1" id="e10daf255a3a710d" memberName="modSlot3" virtualName="ModSlot"
+                    explicitFocusOrder="0" pos="592 72 225 225" class="ModSlot" params=""/>
+  <GENERICCOMPONENT name="modSlot1" id="690355258f0303bf" memberName="modSlot4" virtualName="ModSlot"
+                    explicitFocusOrder="0" pos="80 304 225 225" class="ModSlot" params=""/>
+  <GENERICCOMPONENT name="modSlot1" id="73712d4e9bbeea5" memberName="modSlot5" virtualName="ModSlot"
+                    explicitFocusOrder="0" pos="336 304 225 225" class="ModSlot"
+                    params=""/>
+  <GENERICCOMPONENT name="modSlot1" id="2f82a6626d362685" memberName="modSlot6" virtualName="ModSlot"
+                    explicitFocusOrder="0" pos="592 304 225 225" class="ModSlot"
+                    params=""/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

@@ -11,12 +11,18 @@
 #include "ModMatrix.h"
 
 ModMatrix::ModMatrix() {
+    this->modSources = new std::map<int,String>();
+    this->modTargets = new std::map<int,String>();
 }
 
 ModMatrix::~ModMatrix() {
     for(std::vector<Modulation*>::iterator it = modulations.begin(); it != modulations.end(); ++it) {
         delete *it;
     }
+    modSources->clear();
+    modTargets->clear();
+    delete modSources;
+    delete modTargets;
 }
 
 void ModMatrix::process() {
@@ -33,4 +39,18 @@ vector<Modulation*> ModMatrix::getModulations() {
     return modulations;
 }
 
+void ModMatrix::registerSource(String source, int id) {
+    this->modSources->insert(std::make_pair(id,source));
+}
 
+void ModMatrix::registerTarget(String target, int id) {
+    this->modTargets->insert(std::make_pair(id,target));
+}
+
+map<int,String>* ModMatrix::getSources() {
+    return this->modSources;
+}
+
+map<int,String>* ModMatrix::getTargets() {
+    return this->modTargets;
+}

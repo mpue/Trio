@@ -136,7 +136,6 @@ TrioAudioProcessor::TrioAudioProcessor()
     
     filterCutoff = 12000.0f;
     filterEnvelope = new ADSR();
-    multimodeFilter->setModulator(filterEnvelope);
 
     reverb = new StereoReverb();
     reverb->setParameters(reverbParams);
@@ -155,6 +154,20 @@ TrioAudioProcessor::TrioAudioProcessor()
     this->effects.push_back(outputFilter);
     
     this->modMatrix = new ModMatrix();
+    
+    this->modMatrix->registerSource("none", 1);
+    this->modMatrix->registerSource("LFO1", 2);
+    this->modMatrix->registerSource("LFO2", 3);
+    this->modMatrix->registerSource("AmpEnv", 4);
+    this->modMatrix->registerSource("FilterEnv", 5);
+    this->modMatrix->registerSource("Sequencer", 6);
+    
+    this->modMatrix->registerTarget("none", 1);
+    this->modMatrix->registerTarget("Filter1Cutoff", 2);
+    this->modMatrix->registerTarget("Osc1Pitch", 3);
+    this->modMatrix->registerTarget("Osc2Pitch", 4);
+    this->modMatrix->registerTarget("Osc3Pitch", 5);
+    
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -1249,4 +1262,8 @@ float TrioAudioProcessor::getMagnitudeLeft() {
 
 float TrioAudioProcessor::getMagnitudeRight() {
     return this->magnitudeRight;
+}
+
+ModMatrix* TrioAudioProcessor::getModMatrix() {
+    return this->modMatrix;
 }

@@ -123,6 +123,7 @@ public:
 	void updateParam(const juce::String &parameterID, float newValue);
 
     Sequencer* getSequencer();
+    ModMatrix* getModMatrix();
     vector<AudioProcessorParameter*> registeredParams;
     
     float getMagnitudeLeft();
