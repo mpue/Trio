@@ -193,16 +193,22 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     {
         //[UserComboBoxCode_sourceCombo] -- add your combo box handling code here..
         
+        if (sourceCombo->getSelectedId() == 1) {
+            matrix->getModulations().at(index)->setModulator(NULL);
+        }
         // LFO 1
-        if (sourceCombo->getSelectedId() == 2) {
+        else if (sourceCombo->getSelectedId() == 2) {
             matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo1());
         }
         // LFO 2
         else if (sourceCombo->getSelectedId() == 3) {
             matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo2());
         }
+        else if (sourceCombo->getSelectedId() == 4) {
+            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(0));
+        }
         else if (sourceCombo->getSelectedId() == 5) {
-            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getFilterEnvelope());
+            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
         }
 
         //[/UserComboBoxCode_sourceCombo]
@@ -232,13 +238,41 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
             matrix->getModulations().at(index)->getTargets().clear();
             
             for (int i = 0; i < 127; i++) {
-                matrix->getModel()->getVoices().at(i)->setModAmount(0.5);
+                matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(0));
                 m->setModAmount(modAmountSlider1->getValue());
                 m->setModulator(matrix->getModulations().at(index)->getModulator());
                 matrix->getModulations().at(index)->addTarget(m);
             }
 
+        }
+        // Osc 2 Pitch
+        if (targetCombo1->getSelectedId() == 4) {
+            
+            matrix->getModulations().at(index)->getTargets().clear();
+            
+            for (int i = 0; i < 127; i++) {
+                matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
+                MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(1));
+                m->setModAmount(modAmountSlider1->getValue());
+                m->setModulator(matrix->getModulations().at(index)->getModulator());
+                matrix->getModulations().at(index)->addTarget(m);
+            }
+            
+        }
+        // Osc 3 Pitch
+        if (targetCombo1->getSelectedId() == 5) {
+            
+            matrix->getModulations().at(index)->getTargets().clear();
+            
+            for (int i = 0; i < 127; i++) {
+                matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
+                MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(2));
+                m->setModAmount(modAmountSlider1->getValue());
+                m->setModulator(matrix->getModulations().at(index)->getModulator());
+                matrix->getModulations().at(index)->addTarget(m);
+            }
+            
         }
         
         

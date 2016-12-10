@@ -61,8 +61,8 @@ TrioAudioProcessor::TrioAudioProcessor()
     registeredParams.push_back(parameters->createAndAddParameter("cutoff", "Filter cutoff", String(), NormalisableRange<float>(0.1f,20.0f), 12.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("reso", "Filter Resonance", String(), NormalisableRange<float>(0.1f,20.0f), 0.1f, nullptr, nullptr));
     
-    registeredParams.push_back(parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.1f,10.0f), 1.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("lfo1rate", "LFO 1 Rate", String(), NormalisableRange<float>(0.2f,20.0f), 0.2f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("lfo2rate", "LFO 2 Rate", String(), NormalisableRange<float>(0.2f,20.0f), 0.2f, nullptr, nullptr));
     
     registeredParams.push_back(parameters->createAndAddParameter("lfo1shape", "LFO 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("lfo2shape", "LFO 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
@@ -135,8 +135,18 @@ TrioAudioProcessor::TrioAudioProcessor()
     outputFilter->setMode(MultimodeFilter::HIGHPASS);
     
     filterCutoff = 12000.0f;
-    filterEnvelope = new ADSR();
-
+    
+    for (int i = 0 ; i < 3;i++) {
+        ADSR* env = new ADSR();
+        
+        env->setAttackRate(0 * sampleRate);  // 1 second
+        env->setDecayRate(0 * sampleRate);
+        env->setReleaseRate(0 * sampleRate);
+        env->setSustainLevel(.8);
+        
+        modEnvelopes.push_back(env);
+    }
+    
     reverb = new StereoReverb();
     reverb->setParameters(reverbParams);
     
@@ -164,12 +174,14 @@ TrioAudioProcessor::~TrioAudioProcessor()
     this->multimodeFilter = nullptr;
     this->outputFilter = nullptr;
     this->parameters = nullptr;
-    this->filterEnvelope = nullptr;
+    this->modEnvelopes.clear();
     this->reverb = nullptr;
     this->distortion = nullptr;
     this->stereoDelay = nullptr;
     this->sequencer = nullptr;
     this->cleanupVoices();
+    this->lfo1 = nullptr;
+    this->lfo2 = nullptr;
     
 }
 
@@ -288,11 +300,6 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
     
-    filterEnvelope->setAttackRate(0 * sampleRate);  // 1 second
-    filterEnvelope->setDecayRate(0 * sampleRate);
-    filterEnvelope->setReleaseRate(0 * sampleRate);
-    filterEnvelope->setSustainLevel(.8);
-    
     configureOscillators(Oszillator::OscMode::SAW, Oszillator::OscMode::SAW, Oszillator::OscMode::SAW);
     
     lfo1 = new MultimodeOscillator(sampleRate);
@@ -300,7 +307,7 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     lfo2 = new MultimodeOscillator(sampleRate);
     lfo1->setMode(Oszillator::SINE);
     
-    this->model = new Model(voices, multimodeFilter ,getFilterEnv(), lfo1, lfo2, 44100);
+    this->model = new Model(voices, multimodeFilter ,modEnvelopes, lfo1, lfo2, this->sequencer, 44100);
     
     multimodeFilter->coefficients(filterCutoff, 0.1f );    
     outputFilter->coefficients(30,0.1);
@@ -314,9 +321,8 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     this->modMatrix->registerSource("none", 1);
     this->modMatrix->registerSource("LFO1", 2);
     this->modMatrix->registerSource("LFO2", 3);
-    this->modMatrix->registerSource("AmpEnv", 4);
-    this->modMatrix->registerSource("FilterEnv", 5);
-    this->modMatrix->registerSource("Sequencer", 6);
+    this->modMatrix->registerSource("FilterEnv", 4);
+    this->modMatrix->registerSource("Sequencer", 5);
     
     this->modMatrix->registerTarget("none", 1);
     this->modMatrix->registerTarget("Filter1Cutoff", 2);
@@ -532,7 +538,11 @@ void TrioAudioProcessor::processSequencer(double sampleRate, int numSamples) {
                             if (voices[i]->isPlaying()) {
                                 voices[i]->setOctave(sequencer->getOctave());
                                 voices[i]->setOffset(sequencer->getOffset());
-                                filterEnvelope->gate(true);
+                                
+                                for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
+                                    modEnvelopes.at(envIdx)->gate(true);
+                                }
+    
                                 voices[i]->getAmpEnvelope()->gate(true);
                                 // Logger::getCurrentLogger()->writeToLog("on");
                             }
@@ -547,7 +557,9 @@ void TrioAudioProcessor::processSequencer(double sampleRate, int numSamples) {
                         voices[0]->setPlaying(true);
                         voices[0]->getAmpEnvelope()->reset();
                         voices[0]->getAmpEnvelope()->gate(true);
-                        filterEnvelope->gate(true);
+                        for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
+                            modEnvelopes.at(envIdx)->gate(false);
+                        }
 
                     }
 
@@ -571,8 +583,9 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
         
         if (m.isNoteOn())
         {
-            
-            filterEnvelope->gate(true);
+            for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
+                modEnvelopes.at(envIdx)->gate(true);
+            }
 			
 			voices[m.getNoteNumber()]->setNoteAndVelocity(m.getNoteNumber(), m.getVelocity());
 			voices[m.getNoteNumber()]->setPlaying(true);
@@ -591,7 +604,10 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
 				voices[m.getNoteNumber()]->getAmpEnvelope()->gate(false);
             }
             
-            filterEnvelope->gate(false);
+            for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
+                modEnvelopes.at(envIdx)->gate(false);
+            }
+            
 			return;
             
         }
@@ -928,16 +944,7 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 			this->setupOscillator(2, Oszillator::OscMode::NOISE);
 		}
 	}
-	else if (parameterID == "modsource") {
-		model->setModsource(newValue);
 
-		if (newValue == 1) {
-			selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
-        }
-		else if (newValue == 5) {
-			selectFilterModulator(TrioAudioProcessor::ModulatorType::SEQUENCER);
-        }
-	}
 
 	if (parameterID == "volume") {
 		model->setVolume(newValue);
@@ -1028,17 +1035,6 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 	}
 	if (parameterID == "amprelease") {
 		model->setAmpEnvRelease(newValue);
-	}
-	if (parameterID == "modsource") {
-		model->setModsource(newValue);
-
-		if (newValue == 1) {
-			selectFilterModulator(TrioAudioProcessor::ModulatorType::ENV);
-		}
-		else if (newValue == 5) {
-			selectFilterModulator(TrioAudioProcessor::ModulatorType::SEQUENCER);
-		}
-
 	}
 	if (parameterID == "mod1target") {
 		model->setMod1Target(newValue);
@@ -1155,8 +1151,8 @@ MultimodeFilter* TrioAudioProcessor::getFilter() {
     return multimodeFilter;
 }
 
-ADSR* TrioAudioProcessor::getFilterEnv() {
-    return this->filterEnvelope;
+vector<ADSR*> TrioAudioProcessor::getModEnvelopes() {
+    return this->modEnvelopes;
 }
 
 Model* TrioAudioProcessor::getModel() {
@@ -1233,32 +1229,7 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
 }
 
 void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
-
     
-}
-
-void TrioAudioProcessor::selectFilterModulator(TrioAudioProcessor::ModulatorType type) {
-    return;
-    switch(type) {
-        case ENV :
-            multimodeFilter->setModulator(filterEnvelope);
-            sequencer->setModulator(false);
-            break;
-        case LFO1:
-            multimodeFilter->setModulator(lfo1);
-            sequencer->setModulator(false);
-            break;
-        case LFO2:
-            multimodeFilter->setModulator(lfo2);
-            sequencer->setModulator(false);
-            break;
-        case SEQUENCER:
-            sequencer->setModulator(true);
-            multimodeFilter->setModulator(sequencer);
-            break;
-        default:
-            break;
-    }
 }
 
 float TrioAudioProcessor::getMagnitudeLeft() {

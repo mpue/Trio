@@ -231,6 +231,7 @@ private:
     ScopedPointer<Label> volumeLabel4;
     ScopedPointer<TextButton> modEditButton;
     ScopedPointer<TextButton> mainButton;
+    ScopedPointer<ComboBox> modEnvCombo;
     Image cachedImage_trio_png_1;
 
 

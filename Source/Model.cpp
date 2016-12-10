@@ -18,15 +18,16 @@
 
 using namespace std;
 
-Model::Model(vector<Voice*> voices, MultimodeFilter* mainFilter, ADSR* filterEnv, MultimodeOscillator* lfo1, MultimodeOscillator* lfo2, int sampleRate) {
+Model::Model(vector<Voice*> voices, MultimodeFilter* mainFilter, vector<ADSR*> modEnv, MultimodeOscillator* lfo1, MultimodeOscillator* lfo2, Sequencer* seq,int sampleRate) {
     this->voices = voices;
     this->mainFilter = mainFilter;
-    this->filterEnv = filterEnv;
+    this->modEnv = modEnv;
     this->sampleRate = sampleRate;
     this->lfo1 = lfo1;
     this->lfo2 = lfo2;
     this->volume = 1.0f;
     this->filterResonance = 0.1f;
+    this->seq = seq;
 }
 
 Model::~Model() {
@@ -228,7 +229,7 @@ float Model::getFilterEnvAttack() {
 
 void Model::setFilterEnvAttack(float attack) {
     this->filterEnvAttack = attack;
-    filterEnv->setAttackRate(this->sampleRate * attack);
+    modEnv.at(currentModEnvIdx)->setAttackRate(this->sampleRate * attack);
 }
 
 float Model::getFilterEnvDecay() {
@@ -237,7 +238,7 @@ float Model::getFilterEnvDecay() {
 
 void Model::setFilterEnvDecay(float decay) {
     this->filterEnvDecay = decay;
-    filterEnv->setDecayRate(this->sampleRate * decay);
+     modEnv.at(currentModEnvIdx)->setDecayRate(this->sampleRate * decay);
 }
 
 float Model::getFilterEnvSustain() {
@@ -246,7 +247,7 @@ float Model::getFilterEnvSustain() {
 
 void Model::setFilterEnvSustain(float sustain) {
     this->filterEnvSustain = sustain;
-    this->filterEnv->setSustainLevel(this->sampleRate * sustain);
+         modEnv.at(currentModEnvIdx)->setSustainLevel(this->sampleRate * sustain);
 
 }
 
@@ -256,7 +257,7 @@ float Model::getFilterEnvRelease() {
 
 void Model::setFilterEnvRelease(float release) {
     this->filterEnvRelease = release;
-    this->filterEnv->setReleaseRate(this->sampleRate * release);
+     modEnv.at(currentModEnvIdx)->setReleaseRate(this->sampleRate * release);
 
 }
 
@@ -330,8 +331,8 @@ int Model::getMod2Target() {
     return this->mod2target;
 }
 
-ADSR* Model::getFilterEnvelope() {
-    return this->filterEnv;
+vector<ADSR*> Model::getModEnvelopes() {
+    return this->modEnv;
 }
 
 MultimodeFilter* Model::getFilter() {
@@ -350,3 +351,14 @@ vector<Voice*> Model::getVoices() {
     return this->voices;
 }
 
+Sequencer* Model::getSequencer() {
+    return this->seq;
+}
+
+void Model::setCurrentModEnvIdx(int idx ) {
+    this->currentModEnvIdx = idx;
+}
+
+int Model::getCurrentModEnvIdx() {
+    return this->currentModEnvIdx;
+}

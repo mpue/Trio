@@ -128,7 +128,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     filterModSlider->addListener (this);
 
     addAndMakeVisible (lfo1RateSlider = new Slider ("lfo1RateSlider"));
-    lfo1RateSlider->setRange (0, 10, 0);
+    lfo1RateSlider->setRange (0, 20, 0.2);
     lfo1RateSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     lfo1RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo1RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -142,7 +142,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     lfo1AmountSlider->addListener (this);
 
     addAndMakeVisible (lfo2RateSlider = new Slider ("lfo2RateSlider"));
-    lfo2RateSlider->setRange (0, 10, 0);
+    lfo2RateSlider->setRange (0, 20, 0.2);
     lfo2RateSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     lfo2RateSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     lfo2RateSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -684,6 +684,16 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     mainButton->setButtonText (TRANS("Main"));
     mainButton->addListener (this);
 
+    addAndMakeVisible (modEnvCombo = new ComboBox ("new combo box"));
+    modEnvCombo->setEditableText (false);
+    modEnvCombo->setJustificationType (Justification::centredLeft);
+    modEnvCombo->setTextWhenNothingSelected (String());
+    modEnvCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    modEnvCombo->addItem (TRANS("1"), 1);
+    modEnvCombo->addItem (TRANS("2"), 2);
+    modEnvCombo->addItem (TRANS("3"), 3);
+    modEnvCombo->addListener (this);
+
     cachedImage_trio_png_1 = ImageCache::getFromMemory (trio_png, trio_pngSize);
 
     //[UserPreSize]
@@ -1054,6 +1064,7 @@ MainWindow::~MainWindow()
     volumeLabel4 = nullptr;
     modEditButton = nullptr;
     mainButton = nullptr;
+    modEnvCombo = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -1098,9 +1109,9 @@ void MainWindow::resized()
     osc3FineSlider->setBounds (109, 416, 64, 64);
     osc3VolumeSlider->setBounds (184, 416, 64, 64);
     filterModSlider->setBounds (488, 96, 64, 64);
-    lfo1RateSlider->setBounds (304, 256, 67, 64);
+    lfo1RateSlider->setBounds (304, 256, 64, 64);
     lfo1AmountSlider->setBounds (488, 256, 64, 64);
-    lfo2RateSlider->setBounds (304, 416, 67, 64);
+    lfo2RateSlider->setBounds (304, 416, 64, 64);
     lfo2AmountSlider->setBounds (488, 416, 64, 64);
     filterAttackSlider->setBounds (613, 96, 64, 64);
     filterDecaySlider->setBounds (681, 96, 64, 64);
@@ -1168,6 +1179,7 @@ void MainWindow::resized()
     volumeLabel4->setBounds (296, 12, 64, 32);
     modEditButton->setBounds (360, 544, 100, 24);
     mainButton->setBounds (136, 544, 100, 24);
+    modEnvCombo->setBounds (824, 61, 53, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1401,6 +1413,11 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         }
 
         //[/UserComboBoxCode_presetCombo]
+    }
+    else if (comboBoxThatHasChanged == modEnvCombo)
+    {
+        //[UserComboBoxCode_modEnvCombo] -- add your combo box handling code here..
+        //[/UserComboBoxCode_modEnvCombo]
     }
 
     //[UsercomboBoxChanged_Post]
@@ -1872,20 +1889,20 @@ BEGIN_JUCER_METADATA
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo1RateSlider" id="b826c2541264d4fa" memberName="lfo1RateSlider"
-          virtualName="" explicitFocusOrder="0" pos="304 256 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="304 256 64 64" rotaryslideroutline="66fff8f8"
+          min="0" max="20" int="0.2000000000000000111" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo1AmountSlider" id="d652f9f030b1a4ca" memberName="lfo1AmountSlider"
           virtualName="" explicitFocusOrder="0" pos="488 256 64 64" rotaryslideroutline="66fff8f8"
           min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo2RateSlider" id="e181558ceae467cc" memberName="lfo2RateSlider"
-          virtualName="" explicitFocusOrder="0" pos="304 416 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="304 416 64 64" rotaryslideroutline="66fff8f8"
+          min="0" max="20" int="0.2000000000000000111" style="RotaryVerticalDrag"
+          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="lfo2AmountSlider" id="d5b558442927d2fc" memberName="lfo2AmountSlider"
           virtualName="" explicitFocusOrder="0" pos="488 416 64 64" rotaryslideroutline="66fff8f8"
           min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
@@ -2215,6 +2232,9 @@ BEGIN_JUCER_METADATA
   <TEXTBUTTON name="mainButton" id="247303c92b11a794" memberName="mainButton"
               virtualName="" explicitFocusOrder="0" pos="136 544 100 24" buttonText="Main"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <COMBOBOX name="new combo box" id="45d3e099f97d2b3c" memberName="modEnvCombo"
+            virtualName="" explicitFocusOrder="0" pos="824 61 53 24" editable="0"
+            layout="33" items="1&#10;2&#10;3" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

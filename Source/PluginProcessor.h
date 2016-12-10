@@ -92,7 +92,7 @@ public:
     StereoDelay* getStereoDelay();
 
     MultimodeFilter* getFilter();
-    ADSR* getFilterEnv();
+    vector<ADSR*> getModEnvelopes();
     Model* getModel();
     ScopedPointer<StereoReverb> reverb;
     ScopedPointer<Distortion> distortion;
@@ -106,8 +106,6 @@ public:
     vector<String> getProgramNames();
     String getSelectedProgram();
     void setSelectedProgram(String program);
-    
-    void selectFilterModulator(ModulatorType type);
     
     void configureOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
     void setupOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3);
@@ -157,21 +155,20 @@ private:
     
     ScopedPointer<MultimodeFilter> multimodeFilter;
     ScopedPointer<MultimodeFilter> outputFilter;
-
     
     ScopedPointer<StereoDelay> stereoDelay;
     
     IIRCoefficients ic;
     
     float filterCutoff;
-    
 	
     vector<Voice*> voices;
     int getVoicesPlaying();
-    ScopedPointer<ADSR> filterEnvelope;
+    vector<ADSR*> modEnvelopes;
     Model* model;
-    MultimodeOscillator* lfo1;
-    MultimodeOscillator* lfo2;
+    
+    ScopedPointer<MultimodeOscillator> lfo1;
+    ScopedPointer<MultimodeOscillator> lfo2;
     
     ScopedPointer<AudioProcessorValueTreeState> parameters;
     juce::AudioPlayHead::CurrentPositionInfo result;

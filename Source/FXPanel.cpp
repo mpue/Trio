@@ -35,42 +35,42 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 
     addAndMakeVisible (dampSlider = new Slider ("dampSlider"));
     dampSlider->setRange (0, 1, 0.01);
-    dampSlider->setSliderStyle (Slider::Rotary);
+    dampSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     dampSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     dampSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     dampSlider->addListener (this);
 
     addAndMakeVisible (freezeSlider = new Slider ("freezeSlider"));
     freezeSlider->setRange (0, 1, 0.01);
-    freezeSlider->setSliderStyle (Slider::Rotary);
+    freezeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     freezeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     freezeSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     freezeSlider->addListener (this);
 
     addAndMakeVisible (sizeSlider = new Slider ("sizeSlider"));
     sizeSlider->setRange (0, 1, 0.01);
-    sizeSlider->setSliderStyle (Slider::Rotary);
+    sizeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     sizeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     sizeSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     sizeSlider->addListener (this);
 
     addAndMakeVisible (widthSlider = new Slider ("widthSlider"));
     widthSlider->setRange (0, 1, 0.01);
-    widthSlider->setSliderStyle (Slider::Rotary);
+    widthSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     widthSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     widthSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     widthSlider->addListener (this);
 
     addAndMakeVisible (wetSlider = new Slider ("wetSlider"));
     wetSlider->setRange (0, 1, 0.01);
-    wetSlider->setSliderStyle (Slider::Rotary);
+    wetSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     wetSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     wetSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     wetSlider->addListener (this);
 
     addAndMakeVisible (drySlider = new Slider ("drySlider"));
     drySlider->setRange (0, 1, 0.01);
-    drySlider->setSliderStyle (Slider::Rotary);
+    drySlider->setSliderStyle (Slider::RotaryVerticalDrag);
     drySlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     drySlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     drySlider->addListener (this);
@@ -82,7 +82,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 
     addAndMakeVisible (delayTimeLeftSlider = new Slider ("delayTimeLeftSlider"));
     delayTimeLeftSlider->setRange (0, 1, 0.01);
-    delayTimeLeftSlider->setSliderStyle (Slider::Rotary);
+    delayTimeLeftSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     delayTimeLeftSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     delayTimeLeftSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     delayTimeLeftSlider->addListener (this);
@@ -94,49 +94,49 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
 
     addAndMakeVisible (delayTimeRightSlider = new Slider ("delayTimeRightSlider"));
     delayTimeRightSlider->setRange (0, 1, 0.01);
-    delayTimeRightSlider->setSliderStyle (Slider::Rotary);
+    delayTimeRightSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     delayTimeRightSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     delayTimeRightSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     delayTimeRightSlider->addListener (this);
 
     addAndMakeVisible (delayFBLeftSlider = new Slider ("delayFBLeftSlider"));
     delayFBLeftSlider->setRange (0, 1, 0.01);
-    delayFBLeftSlider->setSliderStyle (Slider::Rotary);
+    delayFBLeftSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     delayFBLeftSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     delayFBLeftSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     delayFBLeftSlider->addListener (this);
 
     addAndMakeVisible (delayFBRightSlider = new Slider ("delayFBRightSlider"));
     delayFBRightSlider->setRange (0, 1, 0.01);
-    delayFBRightSlider->setSliderStyle (Slider::Rotary);
+    delayFBRightSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     delayFBRightSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     delayFBRightSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     delayFBRightSlider->addListener (this);
 
     addAndMakeVisible (delayMixLeftSlider = new Slider ("delayMixLeftSlider"));
     delayMixLeftSlider->setRange (0, 1, 0.01);
-    delayMixLeftSlider->setSliderStyle (Slider::Rotary);
+    delayMixLeftSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     delayMixLeftSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     delayMixLeftSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     delayMixLeftSlider->addListener (this);
 
     addAndMakeVisible (delayMixRightSlider = new Slider ("delayMixRightSlider"));
     delayMixRightSlider->setRange (0, 1, 0.01);
-    delayMixRightSlider->setSliderStyle (Slider::Rotary);
+    delayMixRightSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     delayMixRightSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     delayMixRightSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     delayMixRightSlider->addListener (this);
 
     addAndMakeVisible (driveSlider = new Slider ("driveSlider"));
     driveSlider->setRange (0, 10, 0.1);
-    driveSlider->setSliderStyle (Slider::Rotary);
+    driveSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     driveSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     driveSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     driveSlider->addListener (this);
 
     addAndMakeVisible (mixSlider = new Slider ("mixSlider"));
     mixSlider->setRange (0, 1, 0.01);
-    mixSlider->setSliderStyle (Slider::Rotary);
+    mixSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     mixSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     mixSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     mixSlider->addListener (this);
@@ -872,7 +872,7 @@ void FXPanel::resized()
     delayTimeRightSlider->setBounds (542, 96, 67, 64);
     delayFBLeftSlider->setBounds (608, 96, 67, 64);
     delayFBRightSlider->setBounds (675, 96, 67, 64);
-    delayMixLeftSlider->setBounds (738, 96, 67, 64);
+    delayMixLeftSlider->setBounds (741, 96, 67, 64);
     delayMixRightSlider->setBounds (808, 96, 67, 64);
     driveSlider->setBounds (25, 256, 67, 64);
     mixSlider->setBounds (92, 256, 67, 64);
@@ -1388,32 +1388,32 @@ BEGIN_JUCER_METADATA
   </BACKGROUND>
   <SLIDER name="dampSlider" id="b826c2541264d4fa" memberName="dampSlider"
           virtualName="" explicitFocusOrder="0" pos="25 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="freezeSlider" id="b69b0c1377d40574" memberName="freezeSlider"
           virtualName="" explicitFocusOrder="0" pos="92 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="sizeSlider" id="ced39f993ceb1166" memberName="sizeSlider"
           virtualName="" explicitFocusOrder="0" pos="159 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="widthSlider" id="9e84967676e4d764" memberName="widthSlider"
           virtualName="" explicitFocusOrder="0" pos="225 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="wetSlider" id="2ae1bcfd0e9e165" memberName="wetSlider"
           virtualName="" explicitFocusOrder="0" pos="291 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="drySlider" id="e1599158ba8f8e4a" memberName="drySlider"
           virtualName="" explicitFocusOrder="0" pos="358 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <TOGGLEBUTTON name="enableReverbButton" id="e0c503b73b90520" memberName="enableReverbButton"
@@ -1422,7 +1422,7 @@ BEGIN_JUCER_METADATA
                 state="0"/>
   <SLIDER name="delayTimeLeftSlider" id="8fe21bc37d6a94a9" memberName="delayTimeLeftSlider"
           virtualName="" explicitFocusOrder="0" pos="475 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <TOGGLEBUTTON name="enableDelayButton" id="e3d5c417258854cd" memberName="enableDelayButton"
@@ -1431,37 +1431,37 @@ BEGIN_JUCER_METADATA
                 state="0"/>
   <SLIDER name="delayTimeRightSlider" id="4c083077d0bd49f6" memberName="delayTimeRightSlider"
           virtualName="" explicitFocusOrder="0" pos="542 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="delayFBLeftSlider" id="554d21dada798c8b" memberName="delayFBLeftSlider"
           virtualName="" explicitFocusOrder="0" pos="608 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="delayFBRightSlider" id="40b6d0bb8595d8da" memberName="delayFBRightSlider"
           virtualName="" explicitFocusOrder="0" pos="675 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="delayMixLeftSlider" id="43d0918259355f3d" memberName="delayMixLeftSlider"
-          virtualName="" explicitFocusOrder="0" pos="738 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          virtualName="" explicitFocusOrder="0" pos="741 96 67 64" rotaryslideroutline="66fff8f8"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="delayMixRightSlider" id="43e2b34db49ee5ea" memberName="delayMixRightSlider"
           virtualName="" explicitFocusOrder="0" pos="808 96 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="driveSlider" id="b589cc15d635a996" memberName="driveSlider"
           virtualName="" explicitFocusOrder="0" pos="25 256 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="10" int="0.10000000000000000555" style="Rotary"
+          min="0" max="10" int="0.10000000000000000555" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="mixSlider" id="2f4d0926f2bbe1f0" memberName="mixSlider"
           virtualName="" explicitFocusOrder="0" pos="92 256 67 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.010000000000000000208" style="Rotary"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <COMBOBOX name="modeCombo" id="17f14059e267c560" memberName="modeCombo"
