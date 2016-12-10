@@ -18,12 +18,13 @@
 
 using namespace std;
 
-class Sequencer : public Modulator , public ChangeBroadcaster{
+class Sequencer : public Modulator , public ChangeBroadcaster, public Timer {
     
 public:
     Sequencer();
     ~Sequencer();
 
+    virtual void timerCallback() override;
     
     vector<int> getVelocities();
     vector<bool> getSteps();
@@ -56,6 +57,7 @@ public:
     int getNumOctaves();
     bool isModulator();
     void setModulator(bool modulator);
+    void update();
     
 private:
     vector<bool> steps;
@@ -68,6 +70,7 @@ private:
     int raster;
     int currentStep = 0;
     bool modulator;
+    int speed = 120;
     
     JUCE_LEAK_DETECTOR(Sequencer);
 };

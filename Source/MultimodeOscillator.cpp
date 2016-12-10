@@ -20,6 +20,7 @@ MultimodeOscillator::MultimodeOscillator(float sampleRate) : Oszillator(sampleRa
     this->pulse = new Pulse(sampleRate);
     this->noise = new WhiteNoise(sampleRate);
     this->mode = OscMode::SAW;
+    this->modulator = NULL;
 }
 
 MultimodeOscillator::~MultimodeOscillator() {
@@ -42,6 +43,13 @@ void MultimodeOscillator::setVolume(float volume) {
     this->noise->setVolume(volume);
 }
 
+void MultimodeOscillator::setModulator(Modulator* mod) {
+    this->modulator = mod;
+}
+
+void MultimodeOscillator::setModAmount(float amount) {
+    this->modAmount = amount;
+}
 
 float MultimodeOscillator::getOutput() {
     if (this->mode == SAW) {
@@ -62,6 +70,10 @@ float MultimodeOscillator::getOutput() {
 }
 
 float MultimodeOscillator::process() {
+    
+    if (this->modulator != NULL) {
+        setFine(modulator->getOutput() * 10 * modAmount);
+    }
     
     if (this->mode == SAW) {
         return this->saw->process();

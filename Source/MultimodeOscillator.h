@@ -16,8 +16,9 @@
 #include "Sawtooth.h"
 #include "Pulse.h"
 #include "WhiteNoise.h"
+#include "ModTarget.h"
 
-class MultimodeOscillator : public Oszillator, public Modulator{
+class MultimodeOscillator : public Oszillator, public Modulator, public ModTarget {
     
     
 public:
@@ -29,6 +30,8 @@ public:
     virtual void setFrequency(double frequency) override;
     virtual void setVolume(float volume) override;
     virtual float getOutput() override;
+    virtual void setModulator(Modulator* mod) override;
+    virtual void setModAmount(float amount) override;
     
 private:
     float fine;
@@ -36,6 +39,8 @@ private:
     Sine* sine;
     Pulse* pulse;
     WhiteNoise* noise;
+    float modAmount;
+    Modulator* modulator;
 };
 
 #endif /* MultimodeOscillator_hpp */

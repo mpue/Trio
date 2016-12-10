@@ -154,7 +154,7 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     enableDistButton->setColour (ToggleButton::textColourId, Colours::white);
 
     addAndMakeVisible (enableSeqButton = new ToggleButton ("enableSeqButton"));
-    enableSeqButton->setButtonText (TRANS("ON"));
+    enableSeqButton->setButtonText (String());
     enableSeqButton->addListener (this);
     enableSeqButton->setColour (ToggleButton::textColourId, Colours::white);
 
@@ -585,6 +585,29 @@ FXPanel::FXPanel (TrioAudioProcessor* p)
     notesLabel->setColour (TextEditor::textColourId, Colours::black);
     notesLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
+    addAndMakeVisible (enableRunButton = new ToggleButton ("enableRunButton"));
+    enableRunButton->setButtonText (String());
+    enableRunButton->addListener (this);
+    enableRunButton->setColour (ToggleButton::textColourId, Colours::white);
+
+    addAndMakeVisible (label4 = new Label ("new label",
+                                           TRANS("RUN")));
+    label4->setFont (Font (15.00f, Font::plain));
+    label4->setJustificationType (Justification::centredLeft);
+    label4->setEditable (false, false, false);
+    label4->setColour (Label::textColourId, Colours::white);
+    label4->setColour (TextEditor::textColourId, Colours::black);
+    label4->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (label5 = new Label ("new label",
+                                           TRANS("ON")));
+    label5->setFont (Font (15.00f, Font::plain));
+    label5->setJustificationType (Justification::centredLeft);
+    label5->setEditable (false, false, false);
+    label5->setColour (Label::textColourId, Colours::white);
+    label5->setColour (TextEditor::textColourId, Colours::black);
+    label5->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
     cachedImage_fx_panel_png_1 = ImageCache::getFromMemory (fx_panel_png, fx_panel_pngSize);
 
     //[UserPreSize]
@@ -804,6 +827,9 @@ FXPanel::~FXPanel()
     label3 = nullptr;
     notesCombo = nullptr;
     notesLabel = nullptr;
+    enableRunButton = nullptr;
+    label4 = nullptr;
+    label5 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -852,7 +878,7 @@ void FXPanel::resized()
     mixSlider->setBounds (92, 256, 67, 64);
     modeCombo->setBounds (168, 272, 80, 24);
     enableDistButton->setBounds (204, 227, 47, 24);
-    enableSeqButton->setBounds (832, 392, 47, 24);
+    enableSeqButton->setBounds (800, 404, 24, 24);
     stepButton1->setBounds (200, 400, 32, 32);
     stepButton2->setBounds (232, 400, 32, 32);
     stepButton3->setBounds (264, 400, 32, 32);
@@ -907,6 +933,9 @@ void FXPanel::resized()
     label3->setBounds (728, 440, 72, 24);
     notesCombo->setBounds (56, 472, 72, 24);
     notesLabel->setBounds (56, 440, 72, 24);
+    enableRunButton->setBounds (728, 403, 24, 24);
+    label4->setBounds (754, 403, 40, 24);
+    label5->setBounds (830, 404, 40, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1140,6 +1169,12 @@ void FXPanel::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_stepButton16] -- add your button handler code here..
         processor->getSequencer()->setStepEnabled(15, stepButton16->getToggleState());
         //[/UserButtonCode_stepButton16]
+    }
+    else if (buttonThatWasClicked == enableRunButton)
+    {
+        //[UserButtonCode_enableRunButton] -- add your button handler code here..
+        processor->getSequencer()->setPlaying(enableRunButton->getToggleState());
+        //[/UserButtonCode_enableRunButton]
     }
 
     //[UserbuttonClicked_Post]
@@ -1437,8 +1472,8 @@ BEGIN_JUCER_METADATA
                 buttonText="ON" connectedEdges="0" needsCallback="1" radioGroupId="0"
                 state="0"/>
   <TOGGLEBUTTON name="enableSeqButton" id="28fd42c0b4cac340" memberName="enableSeqButton"
-                virtualName="" explicitFocusOrder="0" pos="832 392 47 24" txtcol="ffffffff"
-                buttonText="ON" connectedEdges="0" needsCallback="1" radioGroupId="0"
+                virtualName="" explicitFocusOrder="0" pos="800 404 24 24" txtcol="ffffffff"
+                buttonText="" connectedEdges="0" needsCallback="1" radioGroupId="0"
                 state="0"/>
   <TOGGLEBUTTON name="stepButton1" id="399279df3c25523f" memberName="stepButton1"
                 virtualName="" explicitFocusOrder="0" pos="200 400 32 32" txtcol="ffffffff"
@@ -1626,6 +1661,20 @@ BEGIN_JUCER_METADATA
   <LABEL name="new label" id="a419e5a0d88a9703" memberName="notesLabel"
          virtualName="" explicitFocusOrder="0" pos="56 440 72 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Notes" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15" bold="0" italic="0" justification="33"/>
+  <TOGGLEBUTTON name="enableRunButton" id="19de0beaf480970f" memberName="enableRunButton"
+                virtualName="" explicitFocusOrder="0" pos="728 403 24 24" txtcol="ffffffff"
+                buttonText="" connectedEdges="0" needsCallback="1" radioGroupId="0"
+                state="0"/>
+  <LABEL name="new label" id="bfa112be6d16ccf7" memberName="label4" virtualName=""
+         explicitFocusOrder="0" pos="754 403 40 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="RUN" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15" bold="0" italic="0" justification="33"/>
+  <LABEL name="new label" id="bd69aaf613f989ae" memberName="label5" virtualName=""
+         explicitFocusOrder="0" pos="830 404 40 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="ON" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>

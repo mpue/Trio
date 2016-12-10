@@ -427,7 +427,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     lfo1ModCombo->setEnabled(false);
     lfo2ModCombo->setEnabled(false);
-    
+
     modCombo->setSelectedItemIndex(0);
     lfo1ModCombo->setSelectedItemIndex(0);
     lfo2ModCombo->setSelectedItemIndex(0);
@@ -600,7 +600,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     lfo2ModCombo->setSelectedId(nval);
 
     */
-     
+
     processor->addListener(this);
     // processor->addListener(fxPanel);
 

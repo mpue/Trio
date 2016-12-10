@@ -15,10 +15,6 @@
       <FILE id="rHwWAE" name="Knob_64.png" compile="0" resource="1" file="Knob_64.png"/>
     </GROUP>
     <GROUP id="{973A5F90-B82E-4BC1-6D49-78E790BACA7B}" name="Source">
-      <FILE id="ZYttDe" name="PatchBrowserComponent.cpp" compile="1" resource="0"
-            file="Source/PatchBrowserComponent.cpp"/>
-      <FILE id="hCwaXA" name="PatchBrowserComponent.h" compile="0" resource="0"
-            file="Source/PatchBrowserComponent.h"/>
       <GROUP id="{06ECFD99-A1E1-7763-3A4A-354D3264CA67}" name="Effects">
         <FILE id="d9SLof" name="StereoReverb.cpp" compile="1" resource="0"
               file="Source/StereoReverb.cpp"/>
@@ -34,17 +30,6 @@
         <FILE id="Pp7QVN" name="StereoDelay.cpp" compile="1" resource="0" file="Source/StereoDelay.cpp"/>
         <FILE id="MgsQFk" name="StereoDelay.h" compile="0" resource="0" file="Source/StereoDelay.h"/>
       </GROUP>
-      <FILE id="FQn9W1" name="BrowserPanel.cpp" compile="1" resource="0"
-            file="Source/BrowserPanel.cpp"/>
-      <FILE id="BoULQs" name="BrowserPanel.h" compile="0" resource="0" file="Source/BrowserPanel.h"/>
-      <FILE id="PjPigK" name="FXPanel.cpp" compile="1" resource="0" file="Source/FXPanel.cpp"/>
-      <FILE id="aJljOP" name="FXPanel.h" compile="0" resource="0" file="Source/FXPanel.h"/>
-      <FILE id="RUPcKe" name="PresetDialog.cpp" compile="1" resource="0"
-            file="Source/PresetDialog.cpp"/>
-      <FILE id="Qnksaj" name="PresetDialog.h" compile="0" resource="0" file="Source/PresetDialog.h"/>
-      <FILE id="pIfbKT" name="PresetWindow.cpp" compile="1" resource="0"
-            file="Source/PresetWindow.cpp"/>
-      <FILE id="DVQtl0" name="PresetWindow.h" compile="0" resource="0" file="Source/PresetWindow.h"/>
       <GROUP id="{FE71C827-790D-F0E0-B56D-BCCCA6736420}" name="Filters">
         <FILE id="tJyEW2" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
         <FILE id="nDBXHw" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
@@ -63,12 +48,15 @@
       <GROUP id="{C4D87346-FD23-E98A-B930-F244E3C758CF}" name="Modulators">
         <FILE id="aarOVo" name="ADSR.cpp" compile="1" resource="0" file="Source/ADSR.cpp"/>
         <FILE id="SpHGcP" name="ADSR.h" compile="0" resource="0" file="Source/ADSR.h"/>
+        <FILE id="w4LH6S" name="ModMatrix.cpp" compile="1" resource="0" file="Source/ModMatrix.cpp"/>
+        <FILE id="P4aeJw" name="ModMatrix.h" compile="0" resource="0" file="Source/ModMatrix.h"/>
+        <FILE id="qgtmp2" name="ModTarget.h" compile="0" resource="0" file="Source/ModTarget.h"/>
+        <FILE id="s5wC2w" name="Modulation.cpp" compile="1" resource="0" file="Source/Modulation.cpp"/>
+        <FILE id="Kec4aU" name="Modulation.h" compile="0" resource="0" file="Source/Modulation.h"/>
         <FILE id="cy9BbL" name="Modulator.h" compile="0" resource="0" file="Source/Modulator.h"/>
         <FILE id="v2WzFx" name="Sequencer.cpp" compile="1" resource="0" file="Source/Sequencer.cpp"/>
         <FILE id="JbkuEK" name="Sequencer.h" compile="0" resource="0" file="Source/Sequencer.h"/>
       </GROUP>
-      <FILE id="TrpiD7" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
-      <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
       <GROUP id="{826D2A94-B03C-6072-5870-EC17E24DF23B}" name="Oscillators">
         <FILE id="UAHIst" name="MultimodeOscillator.cpp" compile="1" resource="0"
               file="Source/MultimodeOscillator.cpp"/>
@@ -89,19 +77,36 @@
         <FILE id="W4aqIN" name="Oszillator.h" compile="0" resource="0" file="Source/Oszillator.h"/>
         <FILE id="ZCEilO" name="Oszillator.cpp" compile="1" resource="0" file="Source/Oszillator.cpp"/>
       </GROUP>
-      <FILE id="kEYhxA" name="TrioLookAndFeel.h" compile="0" resource="0"
-            file="Source/TrioLookAndFeel.h"/>
-      <FILE id="NApiJy" name="TrioLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/TrioLookAndFeel.cpp"/>
+      <FILE id="FQn9W1" name="BrowserPanel.cpp" compile="1" resource="0"
+            file="Source/BrowserPanel.cpp"/>
+      <FILE id="BoULQs" name="BrowserPanel.h" compile="0" resource="0" file="Source/BrowserPanel.h"/>
+      <FILE id="PjPigK" name="FXPanel.cpp" compile="1" resource="0" file="Source/FXPanel.cpp"/>
+      <FILE id="aJljOP" name="FXPanel.h" compile="0" resource="0" file="Source/FXPanel.h"/>
       <FILE id="FHlNI2" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
       <FILE id="ErxGhk" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
+      <FILE id="TrpiD7" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
+      <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
+      <FILE id="ZYttDe" name="PatchBrowserComponent.cpp" compile="1" resource="0"
+            file="Source/PatchBrowserComponent.cpp"/>
+      <FILE id="hCwaXA" name="PatchBrowserComponent.h" compile="0" resource="0"
+            file="Source/PatchBrowserComponent.h"/>
+      <FILE id="oMkQhO" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="paI8E9" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="DmynCO" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="LI8SpH" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="oMkQhO" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="paI8E9" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="RUPcKe" name="PresetDialog.cpp" compile="1" resource="0"
+            file="Source/PresetDialog.cpp"/>
+      <FILE id="Qnksaj" name="PresetDialog.h" compile="0" resource="0" file="Source/PresetDialog.h"/>
+      <FILE id="pIfbKT" name="PresetWindow.cpp" compile="1" resource="0"
+            file="Source/PresetWindow.cpp"/>
+      <FILE id="DVQtl0" name="PresetWindow.h" compile="0" resource="0" file="Source/PresetWindow.h"/>
+      <FILE id="NApiJy" name="TrioLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/TrioLookAndFeel.cpp"/>
+      <FILE id="kEYhxA" name="TrioLookAndFeel.h" compile="0" resource="0"
+            file="Source/TrioLookAndFeel.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

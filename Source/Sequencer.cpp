@@ -72,6 +72,8 @@ bool Sequencer::isEnabled() {
 
 void Sequencer::setPlaying(bool playing) {
     this->playing = playing;
+    if (playing) startTimer(1000 / raster);
+    else stopTimer();
 }
 
 bool Sequencer::isPlaying() {
@@ -180,4 +182,16 @@ bool Sequencer::isModulator() {
 
 void Sequencer::setModulator(bool modulator) {
     this->modulator = modulator;
+}
+
+void Sequencer::timerCallback() {
+    tick();
+}
+
+void Sequencer::update() {
+    if (playing) {
+        stopTimer();
+        startTimer(1000 / raster);
+    }
+    
 }

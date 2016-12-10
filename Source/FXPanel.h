@@ -178,6 +178,9 @@ private:
     ScopedPointer<Label> label3;
     ScopedPointer<ComboBox> notesCombo;
     ScopedPointer<Label> notesLabel;
+    ScopedPointer<ToggleButton> enableRunButton;
+    ScopedPointer<Label> label4;
+    ScopedPointer<Label> label5;
     Image cachedImage_fx_panel_png_1;
 
 

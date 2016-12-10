@@ -26,6 +26,7 @@
 #include "StereoDelay.h"
 #include "StereoReverb.h"
 #include "Sequencer.h"
+#include "ModMatrix.h"
 
 using namespace std;
 
@@ -178,6 +179,7 @@ private:
     ComboBox* programCombo = 0;
    
     ScopedPointer<Sequencer> sequencer;
+    ModMatrix* modMatrix;
     
     int octave = 0;
     

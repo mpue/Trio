@@ -267,7 +267,7 @@ float Model::getFilterModAmount()
 
 void Model::setFilterModAmount(float amount) {
     this->filterModAmount = amount;
-    this->mainFilter->setModAmount(amount);
+    // this->mainFilter->setModAmount(amount);
 }
 
 float Model::getLfo1Rate() {

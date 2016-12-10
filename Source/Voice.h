@@ -18,12 +18,13 @@
 #include "Modulator.h"
 #include "Note.h"
 #include "ADSR.h"
+#include "ModTarget.h"
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
 using namespace std;
 
-class Voice {
+class Voice : public ModTarget {
     
 public:
         
@@ -32,6 +33,7 @@ public:
     
     void addOszillator(Oszillator* o);
     vector<Oszillator*> getOszillators() const;
+    Oszillator* getOscillator(int num);
     
     float process();
     
@@ -49,7 +51,8 @@ public:
     void setPlaying(bool playing);
     bool isPlaying() const;
 
-    void setModulator(Modulator* modulator);
+    virtual void setModulator(Modulator* mod) override;
+    virtual void setModAmount(float amount) override;
     
     ADSR* getAmpEnvelope();
 
@@ -83,6 +86,7 @@ private:
     int octave = 0;
     int offset = 0;
 	float value = 0;
+    float modAmount;
 
 };
 

@@ -154,10 +154,12 @@ TrioAudioProcessor::TrioAudioProcessor()
     this->effects.push_back(reverb);
     this->effects.push_back(outputFilter);
     
+    this->modMatrix = new ModMatrix();
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
 {
+    delete this->modMatrix;
     this->registeredParams.clear();
     this->multimodeFilter = nullptr;
     this->outputFilter = nullptr;
@@ -305,6 +307,58 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
         setSelectedProgram("init");
     }
     
+    /*
+    Modulation* filterMod = new Modulation();
+    
+    filterMod->setModulator(lfo2);
+    filterMod->addTarget(multimodeFilter);
+    
+    modMatrix->addModulation(filterMod);
+    multimodeFilter->setModAmount(1.0f);
+    */
+    
+    /*
+    
+    Modulation* pitchOsc1 = new Modulation();
+    pitchOsc1->setModulator(lfo1);
+    
+    for (int i = 0; i < 127; i++) {
+        voices[i]->setModAmount(0.5);
+        pitchOsc1->addTarget(static_cast<MultimodeOscillator*>(voices[i]->getOscillator(0)));
+    }
+     
+    modMatrix->addModulation(pitchOsc1);
+     */
+    
+    /*
+    Modulation* pitchOsc2 = new Modulation();
+    pitchOsc2->setModulator(lfo2);
+    
+    for (int i = 0; i < 127; i++) {
+        voices[i]->setModAmount(0.5);
+        pitchOsc2->addTarget(static_cast<MultimodeOscillator*>(voices[i]->getOscillator(1)));
+    }
+    
+    modMatrix->addModulation(pitchOsc2);
+    */
+   
+    
+    Modulation* mod = new Modulation();
+    mod->setModulator(filterEnvelope);
+    mod->addTarget(multimodeFilter);
+    multimodeFilter->setModAmount(1.0f);
+    modMatrix->addModulation(mod);
+    
+    Modulation* seqMod = new Modulation();
+    seqMod->setModulator(sequencer);
+    seqMod->addTarget(multimodeFilter);
+    multimodeFilter->setModAmount(1.0f);
+    modMatrix->addModulation(seqMod);
+    
+
+    
+
+    
 }
 
 Oszillator* TrioAudioProcessor::createOscillator(Oszillator::OscMode mode) {
@@ -432,31 +486,51 @@ void TrioAudioProcessor::processSequencer(double sampleRate, int numSamples) {
     
     bpm = (deltappq / (deltaTime / 1000)) * 60;
     
-    if (result.isPlaying && sequencer->isEnabled()) {
+    if ((sequencer->isPlaying() || result.isPlaying) && sequencer->isEnabled()) {
         
         // 8th
         // Logger::getCurrentLogger()->writeToLog("ppq : "+String(currentppq));
-        tick = (int)(currentppq * sequencer->getRaster() / 4);
         
-        if (tick != lastTick) {
+        if (!sequencer->isPlaying()) {
+            tick = (int)(currentppq * sequencer->getRaster() / 4);
             sequencer->tick();
+        }
+        else {
+            tick = sequencer->getCurrentStep();
+        }
+
+        if (tick != lastTick) {
+            
             lastTick = tick;
             
             if (sequencer->isCurrentStepEnabled()) {
                 
                 if(!sequencer->isModulator()) {
                     
-                    for (int i = 0; i < 127;i++) {
-                        
-                        if (voices[i]->isPlaying()) {
-                            voices[i]->setOctave(sequencer->getOctave());
-                            voices[i]->setOffset(sequencer->getOffset());
-                            filterEnvelope->gate(true);
-                            voices[i]->getAmpEnvelope()->gate(true);
-                            // Logger::getCurrentLogger()->writeToLog("on");
+                    if (!sequencer->isPlaying()) {
+                        for (int i = 0; i < 127;i++) {
+                            
+                            if (voices[i]->isPlaying()) {
+                                voices[i]->setOctave(sequencer->getOctave());
+                                voices[i]->setOffset(sequencer->getOffset());
+                                filterEnvelope->gate(true);
+                                voices[i]->getAmpEnvelope()->gate(true);
+                                // Logger::getCurrentLogger()->writeToLog("on");
+                            }
+                            
                         }
                         
                     }
+                    else {
+                        
+                        voices[0]->setNoteAndVelocity(60+sequencer->getOffset(), 100);
+                        voices[0]->setOctave(sequencer->getOctave());
+                        voices[0]->setPlaying(true);
+                        voices[0]->getAmpEnvelope()->reset();
+                        voices[0]->getAmpEnvelope()->gate(true);
+
+                    }
+
                     
                 }
                 
@@ -689,6 +763,7 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
 	float* const leftOut = buffer.getWritePointer(0);
 	float* const rightOut = buffer.getWritePointer(1);
 
+    /*
 	for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
 
         if(filterEnvelope->getState() != ADSR::env_idle) {
@@ -701,8 +776,12 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
         processLFOs();
 
     }
+     */
+    for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+        modMatrix->process();
+    }
     
-    processModulation();
+    // processModulation();
 	processFX(leftOut, rightOut, buffer.getNumSamples());
 
 }
@@ -1136,6 +1215,7 @@ void TrioAudioProcessor::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged)
 }
 
 void TrioAudioProcessor::selectFilterModulator(TrioAudioProcessor::ModulatorType type) {
+    return;
     switch(type) {
         case ENV :
             multimodeFilter->setModulator(filterEnvelope);

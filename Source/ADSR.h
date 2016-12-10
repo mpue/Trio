@@ -27,7 +27,7 @@
 using namespace std;
 
 
-class ADSR : public Modulator{
+class ADSR : public Modulator {
 public:
 	ADSR(void);
 	~ADSR(void);

@@ -73,6 +73,10 @@ vector<Oszillator*> Voice::getOszillators() const {
     return this->oscillators;
 }
 
+Oszillator* Voice::getOscillator(int num) {
+    return oscillators.at(num);
+}
+
 float Voice::process() {
     
     value = 0;
@@ -87,14 +91,14 @@ float Voice::process() {
             value += o->process();
         }
 		*/
-		/*
-		for (int i = 0; i < oscillators.size(); i++) {
-			value += oscillators.at(i)->process();
-		}*/
         
-		value += oscillators.at(0)->process();
-		value += oscillators.at(1)->process();
-		value += oscillators.at(2)->process();
+        
+        for (int i = 0; i < oscillators.size(); i++) {
+            
+            
+			value += oscillators.at(i)->process();
+		}
+
 
         value = (value / oscillators.size()) * amplitude * ampEnvelope->process();
         
@@ -174,6 +178,10 @@ float Voice::getSampleRate() {
 
 ADSR* Voice::getAmpEnvelope() {
     return ampEnvelope;
+}
+
+void Voice::setModAmount(float amount ) {
+    this->modAmount = amount;
 }
 
 void Voice::setModulator(Modulator* modulator) {
