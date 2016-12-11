@@ -434,7 +434,7 @@ void TrioAudioProcessor::configureOscillators(Oszillator::OscMode mode1, Oszilla
 }
 
 void TrioAudioProcessor::setupOscillators(Oszillator::OscMode mode1, Oszillator::OscMode mode2, Oszillator::OscMode mode3) {
-    for (int i = 0; i < 127; i++) {
+    for (int i = 0; i < voices.size(); i++) {
         voices[i]->getOszillators().at(0)->setMode(mode1);
         voices[i]->getOszillators().at(1)->setMode(mode2);
         voices[i]->getOszillators().at(2)->setMode(mode3);
@@ -444,7 +444,7 @@ void TrioAudioProcessor::setupOscillators(Oszillator::OscMode mode1, Oszillator:
 
 void TrioAudioProcessor::setupOscillator(int osc, Oszillator::OscMode mode)
 {
-	for (int i = 0; i < 127; i++) {
+	for (int i = 0; i < voices.size(); i++) {
 		voices[i]->getOszillators().at(osc)->setMode(mode);
 		voices[i]->setModulator(lfo1);
 	}
@@ -533,7 +533,7 @@ void TrioAudioProcessor::processSequencer(double sampleRate, int numSamples) {
                 if(!sequencer->isModulator()) {
                     
                     if (!sequencer->isPlaying()) {
-                        for (int i = 0; i < 127;i++) {
+                        for (int i = 0; i < voices.size();i++) {
                             
                             if (voices[i]->isPlaying()) {
                                 voices[i]->setOctave(sequencer->getOctave());
@@ -624,7 +624,7 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
             nPitch = (nPitch * semitones) / 12;
             nPitch = pow(2, nPitch);
             
-            for (int i = 0; i < 127;i++) {
+            for (int i = 0; i < voices.size();i++) {
                 voices[i]->setPitchBend(nPitch);
             }
             
@@ -673,95 +673,7 @@ void TrioAudioProcessor::processLFOs() {
 }
 
 void TrioAudioProcessor::processModulation() {
-    // is there at least one modulation target?
-    if(model->getModsource() > 1) {
-        
-        // LFO 1
-        if (model->getModsource() == 2) {
-            // Osc 1 pitch
-            if (model->getMod1Target() == 3) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(0)->setFine(lfo1->process() * 10);
-                }
-            }
-            // Osc 2 pitch
-            else if (model->getMod1Target() == 4) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(1)->setFine(lfo1->process() * 10);
-                }
-            }
-            // Osc 3 pitch
-            else if (model->getMod1Target() == 5) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(2)->setFine(lfo1->process() * 10);
-                }
-            }
-            
-        }
-        // LFO 2
-        else if (model->getModsource() == 3) {
-            // Osc 1 pitch
-            if (model->getMod2Target() == 3) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(0)->setFine(lfo2->process() * 10);
-                }
-            }
-            // Osc 2 pitch
-            else if (model->getMod2Target() == 4) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(1)->setFine(lfo2->process() * 10);
-                }
-            }
-            // Osc 3 pitch
-            else if (model->getMod2Target() == 5) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(2)->setFine(lfo2->process() * 10);
-                }
-            }
-        }
-        // LFO 1+2
-        else if (model->getModsource() == 4) {
-            
-            // Osc 1 pitch
-            if (model->getMod1Target() == 3) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(0)->setFine(lfo1->process() * 10);
-                }
-            }
-            // Osc 2 pitch
-            else if (model->getMod1Target() == 4) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(1)->setFine(lfo1->process() * 10);
-                }
-            }
-            // Osc 3 pitch
-            else if (model->getMod1Target() == 5) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(2)->setFine(lfo1->process() * 10);
-                }
-            }
-            
-            // Osc 1 pitch
-            if (model->getMod2Target() == 3) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(0)->setFine(lfo2->process() * 10);
-                }
-            }
-            // Osc 2 pitch
-            else if (model->getMod2Target() == 4) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(1)->setFine(lfo2->process() * 10);
-                }
-            }
-            // Osc 3 pitch
-            else if (model->getMod2Target() == 5) {
-                for (int i = 0; i < 127;i++) {
-                    voices[i]->getOszillators().at(2)->setFine(lfo2->process() * 10);
-                }
-            }
-        }
-    }
-    
+
 }
 
 void TrioAudioProcessor::processFX(float* left, float* right, int numSamples) {
@@ -780,7 +692,7 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
 
 		float value = 0;
 
-		for (int i = 0; i < 127; i++) {
+		for (int i = 0; i < voices.size(); i++) {
 			if (voices[i]->isPlaying() || voices[i]->getAmpEnvelope()->getState() != ADSR::env_idle) {
 				value += voices[i]->process();
 			}
@@ -813,11 +725,10 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
 
     }
      */
+
     for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
         modMatrix->process();
     }
-    
-    // processModulation();
 	processFX(leftOut, rightOut, buffer.getNumSamples());
 
     this->magnitudeLeft = buffer.getMagnitude(0, 0, buffer.getNumSamples());
@@ -875,7 +786,7 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 int TrioAudioProcessor::getVoicesPlaying() {
     int num = 0;
     
-    for (int i = 0; i < 127;i++) {
+    for (int i = 0; i < voices.size();i++) {
         if (voices[i]->isPlaying()) {
             num++;
         }
@@ -1246,4 +1157,18 @@ ModMatrix* TrioAudioProcessor::getModMatrix() {
 
 MultimodeOscillator* TrioAudioProcessor::getLfo1() {
     return  this->lfo1;
+}
+
+void TrioAudioProcessor::setSync(bool sync) {
+    this->sync = sync;
+    
+    for (int i = 0; i < voices.size();i++) {
+        voices.at(i)->getOscillator(0)->setSync(sync);
+        if (sync) {
+           voices.at(i)->getOscillator(0)->setSlave(voices.at(i)->getOscillator(1));
+        }
+        else {
+           voices.at(i)->getOscillator(0)->setSlave(NULL);
+        }
+    }
 }

@@ -53,3 +53,15 @@ float Oszillator::getPitchBend() const {
 void Oszillator::setMode(OscMode mode) {
     this->mode = mode;
 }
+
+void Oszillator::setSync(bool sync) {
+    this->sync = sync;
+}
+
+bool Oszillator::isSync() {
+    return sync;
+}
+
+void Oszillator::setSlave(Oszillator *slave) {
+    this->slave = slave;
+}

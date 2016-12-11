@@ -12,6 +12,7 @@
 #define OSZILLATOR_H_INCLUDED
 
 
+
 class Oszillator {
 
 public:
@@ -42,6 +43,13 @@ public:
     
     void setMode(OscMode mode);
     
+    virtual void setSync(bool sync);
+    bool isSync();
+    
+    virtual void setSlave(Oszillator* slave);
+    
+    virtual void reset() = 0;
+    
 protected:
     
     double phase;
@@ -52,7 +60,8 @@ protected:
     int pitch; // halftones
     float pitchBend;
     OscMode mode;
-
+    bool sync = false;
+    Oszillator* slave = 0;
 
 };
 

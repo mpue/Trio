@@ -232,6 +232,7 @@ private:
     ScopedPointer<TextButton> modEditButton;
     ScopedPointer<TextButton> mainButton;
     ScopedPointer<ComboBox> modEnvCombo;
+    ScopedPointer<ToggleButton> slaveToggleButton;
     Image cachedImage_trio_png_1;
 
 

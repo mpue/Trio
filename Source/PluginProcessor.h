@@ -127,6 +127,9 @@ public:
     float getMagnitudeLeft();
     float getMagnitudeRight();
     MultimodeOscillator* getLfo1();
+  	vector<Voice*> getVoices();
+    
+    void setSync(bool sync);
     
 private:
     //==============================================================================
@@ -175,7 +178,7 @@ private:
     
     vector<String> programNames;
     String selectedProgram;
-	vector<Voice*> getVoices();
+
     int currentProgramNumber;
     
     ComboBox* programCombo = 0;
@@ -192,6 +195,8 @@ private:
     
     float magnitudeLeft;
     float magnitudeRight;
+    
+    bool sync;
 };
 
 

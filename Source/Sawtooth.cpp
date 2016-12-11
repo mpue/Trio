@@ -34,6 +34,10 @@ float Sawtooth::getOutput() {
     return this->saw;
 }
 
+void Sawtooth::reset() {
+    this->p = 0;
+}
+
 
 float Sawtooth::process() {
     
@@ -48,6 +52,10 @@ float Sawtooth::process() {
     {
         p = pmax + pmax - p;
         dp = -dp;
+        
+        if (this->slave != 0 && sync) {
+            slave->reset();
+        }
     }
     
     x = M_PI * p;
@@ -61,7 +69,7 @@ float Sawtooth::process() {
         saw = lastValue;
     else
         lastValue = saw;
-    
+        
     return saw * this->volume;
 }
 

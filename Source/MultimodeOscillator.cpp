@@ -93,6 +93,12 @@ float MultimodeOscillator::process() {
     
 }
 
+void MultimodeOscillator::reset() {
+    this->saw->reset();
+    this->pulse->reset();
+    this->sine->reset();
+}
+
 void MultimodeOscillator::setFine(float fine) {
     this->fine = fine;
     saw->setFine(fine);
@@ -102,4 +108,12 @@ void MultimodeOscillator::setFine(float fine) {
 
 float MultimodeOscillator::getFine() const {
     return this->fine;
+}
+
+void MultimodeOscillator::setSlave(Oszillator *slave) {
+    this->saw->setSlave(slave);
+}
+
+void MultimodeOscillator::setSync(bool sync) {
+    this->saw->setSync(sync);
 }

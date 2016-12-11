@@ -694,6 +694,11 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     modEnvCombo->addItem (TRANS("3"), 3);
     modEnvCombo->addListener (this);
 
+    addAndMakeVisible (slaveToggleButton = new ToggleButton ("slaveToggleButton"));
+    slaveToggleButton->setButtonText (TRANS("Sync"));
+    slaveToggleButton->addListener (this);
+    slaveToggleButton->setColour (ToggleButton::textColourId, Colours::white);
+
     cachedImage_trio_png_1 = ImageCache::getFromMemory (trio_png, trio_pngSize);
 
     //[UserPreSize]
@@ -1065,6 +1070,7 @@ MainWindow::~MainWindow()
     modEditButton = nullptr;
     mainButton = nullptr;
     modEnvCombo = nullptr;
+    slaveToggleButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -1180,6 +1186,7 @@ void MainWindow::resized()
     modEditButton->setBounds (360, 544, 100, 24);
     mainButton->setBounds (136, 544, 100, 24);
     modEnvCombo->setBounds (824, 61, 53, 24);
+    slaveToggleButton->setBounds (192, 64, 55, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1647,6 +1654,15 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_mainButton] -- add your button handler code here..
         toggleView(PanelDisplay::MAIN);
         //[/UserButtonCode_mainButton]
+    }
+    else if (buttonThatWasClicked == slaveToggleButton)
+    {
+        //[UserButtonCode_slaveToggleButton] -- add your button handler code here..
+                
+        bool sync = slaveToggleButton->getToggleState();
+        processor->setSync(sync);
+        
+        //[/UserButtonCode_slaveToggleButton]
     }
 
     //[UserbuttonClicked_Post]
@@ -2235,6 +2251,10 @@ BEGIN_JUCER_METADATA
   <COMBOBOX name="new combo box" id="45d3e099f97d2b3c" memberName="modEnvCombo"
             virtualName="" explicitFocusOrder="0" pos="824 61 53 24" editable="0"
             layout="33" items="1&#10;2&#10;3" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+  <TOGGLEBUTTON name="slaveToggleButton" id="552df8fb65ff3a22" memberName="slaveToggleButton"
+                virtualName="" explicitFocusOrder="0" pos="192 64 55 24" txtcol="ffffffff"
+                buttonText="Sync" connectedEdges="0" needsCallback="1" radioGroupId="0"
+                state="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

@@ -23,6 +23,8 @@ public:
     virtual float getFine() const override;
     virtual void setFrequency(double frequency) override;
     virtual float getOutput() override;
+    virtual void reset() override;
+    
 private:
     float fine;
     double step;

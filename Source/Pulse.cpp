@@ -23,6 +23,10 @@ Pulse::Pulse(float sampleRate) : Oszillator(sampleRate) {
     this->phase = 0;
 }
 
+void Pulse::reset() {
+    this->phase = 0;
+}
+
 float Pulse::getOutput() {
     return this->value;
 }

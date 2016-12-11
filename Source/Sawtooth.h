@@ -26,6 +26,7 @@ public:
     Sawtooth(float sampleRate);
     float fine;
     virtual void setFrequency(double frequency) override;
+    virtual void reset() override;
     
     
     float p;      //current position

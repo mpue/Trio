@@ -27,6 +27,8 @@ public:
     virtual void setFine(float fine) override;
     virtual float getFine() const override;
     
+    virtual void reset() override;
+    
     float fine;
     
 private:

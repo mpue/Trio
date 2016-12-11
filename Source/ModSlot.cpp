@@ -23,7 +23,6 @@
 //[/Headers]
 
 #include "ModSlot.h"
-#include "MultimodeOscillator.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
@@ -70,7 +69,7 @@ ModSlot::ModSlot (ModMatrix*  m, int index)
     targetCombo1->addListener (this);
 
     addAndMakeVisible (modAmountSlider1 = new Slider ("modAmountSlider1"));
-    modAmountSlider1->setRange (0, 1, 0.01);
+    modAmountSlider1->setRange (0, 10, 0.1);
     modAmountSlider1->setSliderStyle (Slider::RotaryVerticalDrag);
     modAmountSlider1->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     modAmountSlider1->addListener (this);
@@ -92,7 +91,7 @@ ModSlot::ModSlot (ModMatrix*  m, int index)
     targetCombo2->addListener (this);
 
     addAndMakeVisible (modAmountSlider2 = new Slider ("modAmountSlider2"));
-    modAmountSlider2->setRange (0, 1, 0.01);
+    modAmountSlider2->setRange (0, 10, 0.1);
     modAmountSlider2->setSliderStyle (Slider::RotaryVerticalDrag);
     modAmountSlider2->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     modAmountSlider2->addListener (this);
@@ -182,17 +181,17 @@ void ModSlot::resized()
 void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
     //[UsercomboBoxChanged_Pre]
-    
+
     if (!slotEnabled) {
         return;
     }
-    
+
     //[/UsercomboBoxChanged_Pre]
 
     if (comboBoxThatHasChanged == sourceCombo)
     {
         //[UserComboBoxCode_sourceCombo] -- add your combo box handling code here..
-        
+
         if (sourceCombo->getSelectedId() == 1) {
             matrix->getModulations().at(index)->setModulator(NULL);
         }
@@ -216,28 +215,28 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     else if (comboBoxThatHasChanged == targetCombo1)
     {
         //[UserComboBoxCode_targetCombo1] -- add your combo box handling code here..
-      
+
         // Filter envelope
         if (targetCombo1->getSelectedId() == 2) {
-            
+
             ModTarget* target = matrix->getModel()->getFilter();
-            
+
             if (matrix->getModulations().at(index)->getTargets().size() >= 1) {
                 matrix->getModulations().at(index)->getTargets()[0] = target;
             }
             else {
                 matrix->getModulations().at(index)->addTarget(target);
             }
-            
+
             target->setModAmount(modAmountSlider1->getValue());
             target->setModulator(matrix->getModulations().at(index)->getModulator());
         }
-        // Osc 1 Pitch        
+        // Osc 1 Pitch
         if (targetCombo1->getSelectedId() == 3) {
-            
+
             matrix->getModulations().at(index)->getTargets().clear();
-            
-            for (int i = 0; i < 127; i++) {
+
+            for (int i = 0; i < matrix->getModel()->getVoices().size(); i++) {
                 matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(0));
                 m->setModAmount(modAmountSlider1->getValue());
@@ -248,34 +247,34 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         }
         // Osc 2 Pitch
         if (targetCombo1->getSelectedId() == 4) {
-            
+
             matrix->getModulations().at(index)->getTargets().clear();
-            
-            for (int i = 0; i < 127; i++) {
+
+            for (int i = 0; i < matrix->getModel()->getVoices().size(); i++) {
                 matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(1));
                 m->setModAmount(modAmountSlider1->getValue());
                 m->setModulator(matrix->getModulations().at(index)->getModulator());
                 matrix->getModulations().at(index)->addTarget(m);
             }
-            
+
         }
         // Osc 3 Pitch
         if (targetCombo1->getSelectedId() == 5) {
-            
+
             matrix->getModulations().at(index)->getTargets().clear();
-            
-            for (int i = 0; i < 127; i++) {
+
+            for (int i = 0; i < matrix->getModel()->getVoices().size(); i++) {
                 matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(2));
                 m->setModAmount(modAmountSlider1->getValue());
                 m->setModulator(matrix->getModulations().at(index)->getModulator());
                 matrix->getModulations().at(index)->addTarget(m);
             }
-            
+
         }
-        
-        
+
+
         //[/UserComboBoxCode_targetCombo1]
     }
     else if (comboBoxThatHasChanged == targetCombo2)
@@ -296,12 +295,12 @@ void ModSlot::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == modAmountSlider1)
     {
         //[UserSliderCode_modAmountSlider1] -- add your slider handling code here..
-        
+
         for (int i = 0; i <  matrix->getModulations().at(index)->getTargets().size(); i++) {
             matrix->getModulations().at(index)->getTargets()[i]->setModAmount(modAmountSlider1->getValue());
         }
-        
-        
+
+
         //[/UserSliderCode_modAmountSlider1]
     }
     else if (sliderThatWasMoved == modAmountSlider2)
@@ -326,7 +325,7 @@ void ModSlot::buttonClicked (Button* buttonThatWasClicked)
         targetCombo1->setEnabled(enableButton->getToggleState());
         targetCombo2->setEnabled(enableButton->getToggleState());
         this->slotEnabled = enableButton->getToggleState();
-        
+
         // Modulation index does not exist
         if (matrix->getModulations().size() <= index) {
             Modulation* mod = new Modulation();
@@ -427,7 +426,7 @@ BEGIN_JUCER_METADATA
             layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <SLIDER name="modAmountSlider1" id="5e4f6014b1e0bf95" memberName="modAmountSlider1"
           virtualName="" explicitFocusOrder="0" pos="176 120 32 32" min="0"
-          max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
+          max="10" int="0.10000000000000000555" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <LABEL name="target2" id="19b619769e34b882" memberName="targetLabel2"
@@ -440,7 +439,7 @@ BEGIN_JUCER_METADATA
             layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <SLIDER name="modAmountSlider2" id="2a781a059068936a" memberName="modAmountSlider2"
           virtualName="" explicitFocusOrder="0" pos="176 176 32 32" min="0"
-          max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
+          max="10" int="0.10000000000000000555" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <LABEL name="titleLabel" id="9b37c8458eed3a16" memberName="titleLabel"

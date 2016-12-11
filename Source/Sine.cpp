@@ -26,6 +26,10 @@ float Sine::getOutput() {
     return this->value;
 }
 
+void Sine::reset() {
+    this->phase = 0;
+}
+
 float Sine::process() {
     
     phase += step;

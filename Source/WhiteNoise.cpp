@@ -20,6 +20,9 @@ WhiteNoise::~WhiteNoise() {
     random = nullptr;
 }
 
+void WhiteNoise::reset() {
+}
+
 float WhiteNoise::process() {
     return (random->nextFloat() * 0.25f - 0.125f) * volume;
 }
