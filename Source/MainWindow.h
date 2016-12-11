@@ -121,10 +121,6 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo2ShapeAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo1AmountAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> lfo2AmountAttachment;
-    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterAttackAttachment;
-    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterDecayAttachment;
-    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterSustainAttachment;
-    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filterReleaseAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampAttackAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampDecayAttachment;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> ampSustainAttachment;

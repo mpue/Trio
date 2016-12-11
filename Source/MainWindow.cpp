@@ -745,10 +745,6 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->lfo1AmountAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo1amount", *this->lfo1AmountSlider);
     this->lfo2RateAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo2rate", *this->lfo2RateSlider);
     this->lfo2AmountAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"lfo2amount", *this->lfo2AmountSlider);
-    this->filterAttackAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filterattack", *this->filterAttackSlider);
-    this->filterDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filterdecay", *this->filterDecaySlider);
-    this->filterSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filtersustain", *this->filterSustainSlider);
-    this->filterReleaseAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"filterrelease", *this->filterReleaseSlider);
     this->ampAttackAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampattack", *this->ampAttackSlider);
     this->ampDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampdecay", *this->ampDecaySlider);
     this->ampSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampsustain", *this->ampSustainSlider);
@@ -914,6 +910,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     startTimer(50);
 
+    
     for(std::map<int,String>::iterator it = processor->getModMatrix()->getSources()->begin(); it != processor->getModMatrix()->getSources()->end(); ++it) {
 
         pair<int,String> p = *it;
@@ -937,13 +934,15 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
         }
 
     }
-
+    
     for (int i = 0; i < modPanel->getSlots().size();i++) {
         modPanel->getSlots().at(i)->setSelectedSource(1);
         modPanel->getSlots().at(i)->setSelectedTarget1(1);
         modPanel->getSlots().at(i)->setSelectedTarget2(1);
     }
-
+    
+    modEnvCombo->setSelectedId(1);
+    
     //[/Constructor]
 }
 
@@ -971,10 +970,6 @@ MainWindow::~MainWindow()
     this->lfo2RateAttachment = nullptr;
     this->lfo2ShapeAttachment = nullptr;
     this->lfo2AmountAttachment = nullptr;
-    this->filterAttackAttachment = nullptr;
-    this->filterDecayAttachment = nullptr;
-    this->filterSustainAttachment = nullptr;
-    this->filterReleaseAttachment = nullptr;
     this->ampAttackAttachment = nullptr;
     this->ampDecayAttachment = nullptr;
     this->ampSustainAttachment = nullptr;
@@ -1195,7 +1190,10 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
 
-
+    int envIdx = processor->getCurrentModEnvIdx();
+    ADSR* adsr = processor->getCurrentModEnv();
+    double rate = processor->getSampleRate();
+    
     //[/UsersliderValueChanged_Pre]
 
     if (sliderThatWasMoved == cutoffSlider)
@@ -1313,28 +1311,37 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == filterAttackSlider)
     {
         //[UserSliderCode_filterAttackSlider] -- add your slider handling code here..
-        this->processor->getModel()->setFilterEnvAttack(filterAttackSlider->getValue());
+        this->processor->getModel()->setFilterEnvAttack(processor->getCurrentModEnvIdx(), filterAttackSlider->getValue());
+
         statusLabel->setText("Filter attack : "  + juce::String(filterAttackSlider->getValue()), juce::NotificationType::dontSendNotification);
+        float nval = processor->parameters->getParameterRange("mod"+String(envIdx+1)+"_attack").convertTo0to1(adsr->getAttackRate() / rate);
+        processor->parameters->getParameter("mod"+String(envIdx+1)+"_attack")->setValueNotifyingHost(nval);
         //[/UserSliderCode_filterAttackSlider]
     }
     else if (sliderThatWasMoved == filterDecaySlider)
     {
         //[UserSliderCode_filterDecaySlider] -- add your slider handling code here..
-        this->processor->getModel()->setFilterEnvDecay(filterDecaySlider->getValue());
+        this->processor->getModel()->setFilterEnvDecay(processor->getCurrentModEnvIdx(), filterDecaySlider->getValue());
+        float nval = processor->parameters->getParameterRange("mod"+String(envIdx+1)+"_decay").convertTo0to1(adsr->getDecayRate() / rate);
+        processor->parameters->getParameter("mod"+String(envIdx+1)+"_decay")->setValueNotifyingHost(nval);
         statusLabel->setText("Filter decay : "  + juce::String(filterDecaySlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterDecaySlider]
     }
     else if (sliderThatWasMoved == filterSustainSlider)
     {
         //[UserSliderCode_filterSustainSlider] -- add your slider handling code here..
-        this->processor->getModel()->setFilterEnvSustain(filterSustainSlider->getValue());
+        this->processor->getModel()->setFilterEnvSustain(processor->getCurrentModEnvIdx(),filterSustainSlider->getValue());
+        float nval = processor->parameters->getParameterRange("mod"+String(envIdx+1)+"_sustain").convertTo0to1(adsr->getSustainLevel());
+        processor->parameters->getParameter("mod"+String(envIdx+1)+"_sustain")->setValueNotifyingHost(nval);
         statusLabel->setText("Filter sustain : "  + juce::String(filterSustainSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterSustainSlider]
     }
     else if (sliderThatWasMoved == filterReleaseSlider)
     {
         //[UserSliderCode_filterReleaseSlider] -- add your slider handling code here..
-        this->processor->getModel()->setFilterEnvRelease(filterReleaseSlider->getValue());
+        this->processor->getModel()->setFilterEnvRelease(processor->getCurrentModEnvIdx(), filterReleaseSlider->getValue());
+        float nval = processor->parameters->getParameterRange("mod"+String(envIdx+1)+"_release").convertTo0to1(adsr->getReleaseRate() / rate);
+        processor->parameters->getParameter("mod"+String(envIdx+1)+"_release")->setValueNotifyingHost(nval);
         statusLabel->setText("Filter release : "  + juce::String(filterReleaseSlider->getValue()), juce::NotificationType::dontSendNotification);
         //[/UserSliderCode_filterReleaseSlider]
     }
@@ -1424,6 +1431,16 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     else if (comboBoxThatHasChanged == modEnvCombo)
     {
         //[UserComboBoxCode_modEnvCombo] -- add your combo box handling code here..
+        processor->setCurrentModEnv(modEnvCombo->getSelectedId() - 1);
+        
+        ADSR* adsr = processor->getCurrentModEnv();
+        double rate = processor->getSampleRate();
+        
+        filterAttackSlider->setValue(adsr->getAttackRate() / rate);
+        filterDecaySlider->setValue(adsr->getDecayRate() / rate);
+        filterSustainSlider->setValue(adsr->getSustainLevel());
+        filterReleaseSlider->setValue(adsr->getReleaseRate() / rate);
+         
         //[/UserComboBoxCode_modEnvCombo]
     }
 
@@ -1658,10 +1675,10 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == slaveToggleButton)
     {
         //[UserButtonCode_slaveToggleButton] -- add your button handler code here..
-                
+
         bool sync = slaveToggleButton->getToggleState();
         processor->setSync(sync);
-        
+
         //[/UserButtonCode_slaveToggleButton]
     }
 
@@ -1763,7 +1780,67 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
             highPassButton->setToggleState(true,NotificationType::dontSendNotification);
         }
     }
-
+    else if (id == "mod1_attack") {
+        if (this->processor->getCurrentModEnvIdx() == 1) {
+            filterAttackSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod1_decay") {
+        if (this->processor->getCurrentModEnvIdx() == 1) {
+            filterDecaySlider->setValue(nval);
+        }
+    }
+    else if (id == "mod1_sustain") {
+        if (this->processor->getCurrentModEnvIdx() == 1) {
+            filterSustainSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod1_release") {
+        if (this->processor->getCurrentModEnvIdx() == 1) {
+            filterReleaseSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod2_attack") {
+        if (this->processor->getCurrentModEnvIdx() == 2) {
+            filterAttackSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod2_decay") {
+        if (this->processor->getCurrentModEnvIdx() == 2) {
+            filterDecaySlider->setValue(nval);
+        }
+    }
+    else if (id == "mod2_sustain") {
+        if (this->processor->getCurrentModEnvIdx() == 2) {
+            filterSustainSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod2_release") {
+        if (this->processor->getCurrentModEnvIdx() == 2) {
+            filterReleaseSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod3_attack") {
+        if (this->processor->getCurrentModEnvIdx() == 3) {
+            filterAttackSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod3_decay") {
+        if (this->processor->getCurrentModEnvIdx() == 3) {
+            filterDecaySlider->setValue(nval);
+        }
+    }
+    else if (id == "mod3_sustain") {
+        if (this->processor->getCurrentModEnvIdx() == 3) {
+            filterSustainSlider->setValue(nval);
+        }
+    }
+    else if (id == "mod3_release") {
+        if (this->processor->getCurrentModEnvIdx() == 3) {
+            filterReleaseSlider->setValue(nval);
+        }
+    }
+    
 }
 
 void MainWindow::toggleView(MainWindow::PanelDisplay display) {

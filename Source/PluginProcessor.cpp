@@ -70,19 +70,25 @@ TrioAudioProcessor::TrioAudioProcessor()
     registeredParams.push_back(parameters->createAndAddParameter("lfo1amount", "LFO 1 Mod Amount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr));
     
-    registeredParams.push_back(parameters->createAndAddParameter("filterattack", "Filter attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("filterdecay", "Filter decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("filtersustain", "Filter sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("filterrelease", "Filter release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod1_attack", "Env 1 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod1_decay", "Env 1 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod1_sustain", "Env 1 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod1_release", "Env 1 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    
+    registeredParams.push_back(parameters->createAndAddParameter("mod2_attack", "Env 2 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod2_decay", "Env 2 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod2_sustain", "Env 2 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod2_release", "Env 2 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+
+    registeredParams.push_back(parameters->createAndAddParameter("mod3_attack", "Env 3 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod3_decay", "Env 3 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod3_sustain", "Env 3 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod3_release", "Env 3 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     
     registeredParams.push_back(parameters->createAndAddParameter("ampattack", "Amp attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("ampdecay", "Amp decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("ampsustain", "Amp sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("amprelease", "Amp release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    
-    registeredParams.push_back(parameters->createAndAddParameter("modsource", "Mod source", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod1target", "Mod 1 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod2target", "Mod 2 target", String(), NormalisableRange<float>(1.0f,5.0f), 1.0f, nullptr, nullptr));
     
     registeredParams.push_back(parameters->createAndAddParameter("fxreverb_enabled", "Reverb enabled", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("fxreverb_damping", "Reverb Damping", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
@@ -711,21 +717,6 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
 	float* const leftOut = buffer.getWritePointer(0);
 	float* const rightOut = buffer.getWritePointer(1);
 
-    /*
-	for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-
-        if(filterEnvelope->getState() != ADSR::env_idle) {
-            filterEnvelope->process();
-        }
-        else {
-            filterEnvelope->reset();
-        }
-        
-        processLFOs();
-
-    }
-     */
-
     for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
         modMatrix->process();
     }
@@ -733,7 +724,7 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
 
     this->magnitudeLeft = buffer.getMagnitude(0, 0, buffer.getNumSamples());
     this->magnitudeRight = buffer.getMagnitude(1, 0, buffer.getNumSamples());
-    
+
 }
 
 
@@ -923,19 +914,43 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 	if (parameterID == "lfo2amount") {
 		model->setLfo2Amount(newValue);
 	}
-	if (parameterID == "filterattack") {
-		model->setFilterEnvAttack(newValue);
+	if (parameterID == "mod1_attack") {
+		model->setFilterEnvAttack(0,newValue);
 	}
-	if (parameterID == "filterdecay") {
-		model->setFilterEnvDecay(newValue);
+	if (parameterID == "mod1_decay") {
+		model->setFilterEnvDecay(0,newValue);
 	}
-	if (parameterID == "filtersustain") {
-		model->setFilterEnvSustain(newValue);
+	if (parameterID == "mod1_sustain") {
+		model->setFilterEnvSustain(0,newValue);
 	}
-	if (parameterID == "filterrelease") {
-		model->setFilterEnvRelease(newValue);
+	if (parameterID == "mod1_release") {
+		model->setFilterEnvRelease(0,newValue);
 	}
-	if (parameterID == "ampattack") {
+    if (parameterID == "mod2_attack") {
+        model->setFilterEnvAttack(1,newValue);
+    }
+    if (parameterID == "mod2_decay") {
+        model->setFilterEnvDecay(1,newValue);
+    }
+    if (parameterID == "mod2_sustain") {
+        model->setFilterEnvSustain(1,newValue);
+    }
+    if (parameterID == "mod2_release") {
+        model->setFilterEnvRelease(1,newValue);
+    }
+    if (parameterID == "mod3_attack") {
+        model->setFilterEnvAttack(2,newValue);
+    }
+    if (parameterID == "mod3_decay") {
+        model->setFilterEnvDecay(2,newValue);
+    }
+    if (parameterID == "mod3_sustain") {
+        model->setFilterEnvSustain(2,newValue);
+    }
+    if (parameterID == "mod3_release") {
+        model->setFilterEnvRelease(2,newValue);
+    }
+    if (parameterID == "ampattack") {
 		model->setAmpEnvAttack(newValue);
 	}
 	if (parameterID == "ampdecay") {
@@ -1075,7 +1090,6 @@ AudioProcessorValueTreeState* TrioAudioProcessor::getValueTreeState() {
 }
 
 void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
-    
 
     if (state->getChildWithName("sequencer").isValid()) {
         
@@ -1171,4 +1185,17 @@ void TrioAudioProcessor::setSync(bool sync) {
            voices.at(i)->getOscillator(0)->setSlave(NULL);
         }
     }
+}
+
+
+ADSR* TrioAudioProcessor::getCurrentModEnv() {
+    return modEnvelopes.at(currentModEnv);
+}
+
+void TrioAudioProcessor::setCurrentModEnv(int env) {
+    this->currentModEnv = env;
+}
+
+int TrioAudioProcessor::getCurrentModEnvIdx() {
+    return this->currentModEnv;
 }

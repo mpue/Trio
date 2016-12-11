@@ -41,16 +41,28 @@ void ADSR::setAttackRate(float rate) {
     attackBase = (1.0 + targetRatioA) * (1.0 - attackCoef);
 }
 
+float ADSR::getAttackRate() {
+    return this->attackRate;
+}
+
 void ADSR::setDecayRate(float rate) {
     decayRate = rate;
     decayCoef = calcCoef(rate, targetRatioDR);
     decayBase = (sustainLevel - targetRatioDR) * (1.0 - decayCoef);
 }
 
+float ADSR::getDecayRate() {
+    return this->decayRate;
+}
+
 void ADSR::setReleaseRate(float rate) {
     releaseRate = rate;
     releaseCoef = calcCoef(rate, targetRatioDR);
     releaseBase = -targetRatioDR * (1.0 - releaseCoef);
+}
+
+float ADSR::getReleaseRate() {
+    return this->releaseRate;
 }
 
 float ADSR::calcCoef(float rate, float targetRatio) {
@@ -60,6 +72,10 @@ float ADSR::calcCoef(float rate, float targetRatio) {
 void ADSR::setSustainLevel(float level) {
     sustainLevel = level;
     decayBase = (sustainLevel - targetRatioDR) * (1.0 - decayCoef);
+}
+
+float ADSR::getSustainLevel() {
+    return this->sustainLevel;
 }
 
 void ADSR::setTargetRatioA(float targetRatio) {

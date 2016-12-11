@@ -223,41 +223,40 @@ void Model::setVolume(float _volume) {
     this->volume = _volume;
 }
 
-float Model::getFilterEnvAttack() {
-    return this->filterEnvAttack;
+float Model::getFilterEnvAttack(int index) {
+    return this->filterEnvAttack[index];
 }
 
-void Model::setFilterEnvAttack(float attack) {
-    this->filterEnvAttack = attack;
-    modEnv.at(currentModEnvIdx)->setAttackRate(this->sampleRate * attack);
+void Model::setFilterEnvAttack(int index, float attack) {
+    this->filterEnvAttack[index] = attack;
+    modEnv.at(index)->setAttackRate(this->sampleRate * attack);
 }
 
-float Model::getFilterEnvDecay() {
-    return this->filterEnvDecay;
+float Model::getFilterEnvDecay(int index) {
+    return this->filterEnvDecay[index];
 }
 
-void Model::setFilterEnvDecay(float decay) {
-    this->filterEnvDecay = decay;
-     modEnv.at(currentModEnvIdx)->setDecayRate(this->sampleRate * decay);
+void Model::setFilterEnvDecay(int index, float decay) {
+    this->filterEnvDecay[index] = decay;
+     modEnv.at(index)->setDecayRate(this->sampleRate * decay);
 }
 
-float Model::getFilterEnvSustain() {
-    return this->filterEnvSustain;
+float Model::getFilterEnvSustain(int index) {
+    return this->filterEnvSustain[index];
 }
 
-void Model::setFilterEnvSustain(float sustain) {
-    this->filterEnvSustain = sustain;
-         modEnv.at(currentModEnvIdx)->setSustainLevel(this->sampleRate * sustain);
-
+void Model::setFilterEnvSustain(int index, float sustain) {
+    this->filterEnvSustain[index] = sustain;
+    modEnv.at(index)->setSustainLevel(sustain);
 }
 
-float Model::getFilterEnvRelease() {
-    return this->filterEnvRelease;
+float Model::getFilterEnvRelease(int index) {
+    return this->filterEnvRelease[index];
 }
 
-void Model::setFilterEnvRelease(float release) {
-    this->filterEnvRelease = release;
-     modEnv.at(currentModEnvIdx)->setReleaseRate(this->sampleRate * release);
+void Model::setFilterEnvRelease(int index, float release) {
+    this->filterEnvRelease[index] = release;
+    modEnv.at(index)->setReleaseRate(this->sampleRate * release);
 
 }
 

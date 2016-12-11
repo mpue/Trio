@@ -63,14 +63,14 @@ public:
     float getAmpEnvRelease();
     void setAmpEnvRelease(float release);
     
-    float getFilterEnvAttack();
-    void setFilterEnvAttack(float attack);
-    float getFilterEnvDecay();
-    void setFilterEnvDecay(float decay);
-    float getFilterEnvSustain();
-    void setFilterEnvSustain(float sustain);
-    float getFilterEnvRelease();
-    void setFilterEnvRelease(float release);
+    float getFilterEnvAttack(int index);
+    void setFilterEnvAttack(int index, float attack);
+    float getFilterEnvDecay(int index);
+    void setFilterEnvDecay(int index, float decay);
+    float getFilterEnvSustain(int index);
+    void setFilterEnvSustain(int index, float sustain);
+    float getFilterEnvRelease(int index);
+    void setFilterEnvRelease(int index, float release);
     
     float getFilterCutoff();
     void setFilterCutoff(float cutoff);
@@ -142,10 +142,11 @@ private:
     float ampEnvSustain;
     float ampEnvRelease;
     
-    float filterEnvAttack;
-    float filterEnvDecay;
-    float filterEnvSustain;
-    float filterEnvRelease;
+    float filterEnvAttack[3]  = { 0 };
+    float filterEnvDecay[3]   = { 0 };
+    float filterEnvSustain[3] = { 0 };
+    float filterEnvRelease[3] = { 0 };
+
     float filterModAmount;
     
 	vector<Voice*> voices;

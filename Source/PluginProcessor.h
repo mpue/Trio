@@ -130,6 +130,11 @@ public:
   	vector<Voice*> getVoices();
     
     void setSync(bool sync);
+    void setCurrentModEnv(int env);
+    ADSR* getCurrentModEnv();
+    int getCurrentModEnvIdx();
+    
+    ScopedPointer<AudioProcessorValueTreeState> parameters;
     
 private:
     //==============================================================================
@@ -173,7 +178,7 @@ private:
     ScopedPointer<MultimodeOscillator> lfo1;
     ScopedPointer<MultimodeOscillator> lfo2;
     
-    ScopedPointer<AudioProcessorValueTreeState> parameters;
+
     juce::AudioPlayHead::CurrentPositionInfo result;
     
     vector<String> programNames;
@@ -195,6 +200,8 @@ private:
     
     float magnitudeLeft;
     float magnitudeRight;
+    
+    int currentModEnv = 0;
     
     bool sync;
 };

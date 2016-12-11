@@ -36,9 +36,13 @@ public:
     int getState(void);
 	void gate(int on);
     void setAttackRate(float rate);
+    float getAttackRate();
     void setDecayRate(float rate);
+    float getDecayRate();
     void setReleaseRate(float rate);
+    float getReleaseRate();
 	void setSustainLevel(float level);
+    float getSustainLevel();
     void setTargetRatioA(float targetRatio);
     void setTargetRatioDR(float targetRatio);
     void reset(void);
