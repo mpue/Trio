@@ -327,8 +327,10 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     this->modMatrix->registerSource("none", 1);
     this->modMatrix->registerSource("LFO1", 2);
     this->modMatrix->registerSource("LFO2", 3);
-    this->modMatrix->registerSource("FilterEnv", 4);
-    this->modMatrix->registerSource("Sequencer", 5);
+    this->modMatrix->registerSource("ModEnv1", 4);
+    this->modMatrix->registerSource("ModEnv2", 5);
+    this->modMatrix->registerSource("ModEnv3", 6);
+    this->modMatrix->registerSource("Sequencer", 7);
     
     this->modMatrix->registerTarget("none", 1);
     this->modMatrix->registerTarget("Filter1Cutoff", 2);
@@ -564,7 +566,7 @@ void TrioAudioProcessor::processSequencer(double sampleRate, int numSamples) {
                         voices[0]->getAmpEnvelope()->reset();
                         voices[0]->getAmpEnvelope()->gate(true);
                         for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
-                            modEnvelopes.at(envIdx)->gate(false);
+                            modEnvelopes.at(envIdx)->gate(true);
                         }
 
                     }
@@ -720,6 +722,7 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
     for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
         modMatrix->process();
     }
+    
 	processFX(leftOut, rightOut, buffer.getNumSamples());
 
     this->magnitudeLeft = buffer.getMagnitude(0, 0, buffer.getNumSamples());
