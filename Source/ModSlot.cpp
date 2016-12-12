@@ -217,7 +217,7 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
                 matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
             }
         }
-        
+
         //[/UserComboBoxCode_sourceCombo]
     }
     else if (comboBoxThatHasChanged == targetCombo1)

@@ -32,7 +32,7 @@ private:
 
 	ScopedPointer<TableListBox> table;
 
-		// Geerbt über TableListBoxModel
+		// Geerbt Ã¼ber TableListBoxModel
 	virtual int getNumRows() override;
 	virtual void paintRowBackground(Graphics &, int rowNumber, int width, int height, bool rowIsSelected) override;
 	virtual void paintCell(Graphics &, int rowNumber, int columnId, int width, int height, bool rowIsSelected) override;

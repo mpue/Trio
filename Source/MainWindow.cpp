@@ -914,7 +914,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     startTimer(50);
 
-    
+
     for(std::map<int,String>::iterator it = processor->getModMatrix()->getSources()->begin(); it != processor->getModMatrix()->getSources()->end(); ++it) {
 
         pair<int,String> p = *it;
@@ -938,15 +938,15 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
         }
 
     }
-    
+
     for (int i = 0; i < modPanel->getSlots().size();i++) {
         modPanel->getSlots().at(i)->setSelectedSource(1);
         modPanel->getSlots().at(i)->setSelectedTarget1(1);
         modPanel->getSlots().at(i)->setSelectedTarget2(1);
     }
-    
+
     modEnvCombo->setSelectedId(1);
-    
+
     //[/Constructor]
 }
 
@@ -1198,7 +1198,7 @@ void MainWindow::sliderValueChanged (Slider* sliderThatWasMoved)
     int envIdx = processor->getCurrentModEnvIdx();
     ADSR* adsr = processor->getCurrentModEnv();
     double rate = processor->getSampleRate();
-    
+
     //[/UsersliderValueChanged_Pre]
 
     if (sliderThatWasMoved == cutoffSlider)
@@ -1437,15 +1437,15 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     {
         //[UserComboBoxCode_modEnvCombo] -- add your combo box handling code here..
         processor->setCurrentModEnv(modEnvCombo->getSelectedId() - 1);
-        
+
         ADSR* adsr = processor->getCurrentModEnv();
         double rate = processor->getSampleRate();
-        
+
         filterAttackSlider->setValue(adsr->getAttackRate() / rate);
         filterDecaySlider->setValue(adsr->getDecayRate() / rate);
         filterSustainSlider->setValue(adsr->getSustainLevel());
         filterReleaseSlider->setValue(adsr->getReleaseRate() / rate);
-         
+
         //[/UserComboBoxCode_modEnvCombo]
     }
 
@@ -1845,7 +1845,7 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
             filterReleaseSlider->setValue(nval);
         }
     }
-    
+
 }
 
 void MainWindow::toggleView(MainWindow::PanelDisplay display) {
