@@ -80,6 +80,14 @@
       <FILE id="FQn9W1" name="BrowserPanel.cpp" compile="1" resource="0"
             file="Source/BrowserPanel.cpp"/>
       <FILE id="BoULQs" name="BrowserPanel.h" compile="0" resource="0" file="Source/BrowserPanel.h"/>
+      <FILE id="cu9wfu" name="ControllerConfig.cpp" compile="1" resource="0"
+            file="Source/ControllerConfig.cpp"/>
+      <FILE id="TffiT5" name="ControllerConfig.h" compile="0" resource="0"
+            file="Source/ControllerConfig.h"/>
+      <FILE id="wA6UzV" name="ControllerEditor.cpp" compile="1" resource="0"
+            file="Source/ControllerEditor.cpp"/>
+      <FILE id="tLtMAa" name="ControllerEditor.h" compile="0" resource="0"
+            file="Source/ControllerEditor.h"/>
       <FILE id="PjPigK" name="FXPanel.cpp" compile="1" resource="0" file="Source/FXPanel.cpp"/>
       <FILE id="aJljOP" name="FXPanel.h" compile="0" resource="0" file="Source/FXPanel.h"/>
       <FILE id="FHlNI2" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
@@ -107,6 +115,9 @@
       <FILE id="pIfbKT" name="PresetWindow.cpp" compile="1" resource="0"
             file="Source/PresetWindow.cpp"/>
       <FILE id="DVQtl0" name="PresetWindow.h" compile="0" resource="0" file="Source/PresetWindow.h"/>
+      <FILE id="zhbO5I" name="SettingsPanel.cpp" compile="1" resource="0"
+            file="Source/SettingsPanel.cpp"/>
+      <FILE id="uMjpHv" name="SettingsPanel.h" compile="0" resource="0" file="Source/SettingsPanel.h"/>
       <FILE id="NApiJy" name="TrioLookAndFeel.cpp" compile="1" resource="0"
             file="Source/TrioLookAndFeel.cpp"/>
       <FILE id="kEYhxA" name="TrioLookAndFeel.h" compile="0" resource="0"
@@ -166,20 +177,20 @@
                        isDebug="0" optimisation="3" targetName="Trio" postbuildCommand="copy /Y $(SolutionDir)$(Platform)\$(Configuration)\Trio.dll d:\vstplugins"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_video" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_opengl" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_gui_extra" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_gui_basics" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_graphics" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_events" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_data_structures" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_cryptography" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_core" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_processors" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_formats" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_devices" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_basics" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_video" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_opengl" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_cryptography" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_core" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\..\vst\JUCE\modules"/>
       </MODULEPATHS>
     </VS2015>
   </EXPORTFORMATS>

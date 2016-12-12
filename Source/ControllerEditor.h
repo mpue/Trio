@@ -42,7 +42,7 @@ private:
 
 	vector<ControllerConfig*> configuration;
 	ScopedPointer<Label> nameEditor = nullptr;
-	ScopedPointer<TextEditor> controllerEditor = nullptr;
+	ScopedPointer<Label> controllerEditor = nullptr;
 
 	ScopedPointer<Component> originalNameEditor = nullptr;
 	ScopedPointer<Component> originalControllerEditor = nullptr;

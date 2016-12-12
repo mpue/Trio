@@ -106,6 +106,9 @@ SettingsPanel::SettingsPanel ()
 
 
     //[Constructor] You can add your own custom stuff here..
+	pitchBendCombo->setSelectedId(1);
+	transposeCombo->setSelectedId(4);
+
     //[/Constructor]
 }
 

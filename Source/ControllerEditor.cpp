@@ -23,9 +23,9 @@ ControllerEditor::ControllerEditor()
 	this->controllerTable->setBounds(0, 0, 910, 600);
 	setBounds(0, 0, 910, 600);
 
-	controllerTable->getHeader().addColumn("#", 1, getWidth() / 5);
-	controllerTable->getHeader().addColumn("Controller", 2, (getWidth() / 5) * 3);
-	controllerTable->getHeader().addColumn("Value", 3, getWidth() / 5);
+	controllerTable->getHeader().addColumn("#", 1, getWidth() / 16);
+	controllerTable->getHeader().addColumn("Controller", 2, (getWidth() / 16) * 14);
+	controllerTable->getHeader().addColumn("Value", 3, (getWidth() / 16));
 
 	addAndMakeVisible(controllerTable);
 	controllerTable->updateContent();
@@ -38,20 +38,42 @@ ControllerEditor::ControllerEditor()
 	configuration.push_back(new ControllerConfig(2, "Volume",7));
 	configuration.push_back(new ControllerConfig(3, "Filter cutoff", 42));
 	configuration.push_back(new ControllerConfig(4, "Filter reso", 43));
-	configuration.push_back(new ControllerConfig(5, "Mod env attack", 43));
-	configuration.push_back(new ControllerConfig(6, "Mod env decay", 44));
-	configuration.push_back(new ControllerConfig(7, "Mod env sustain", 45));
-	configuration.push_back(new ControllerConfig(8, "Mod env release", 46));
-	configuration.push_back(new ControllerConfig(9, "Amp env attack", 47));
-	configuration.push_back(new ControllerConfig(10, "Amp env decay", 48));
-	configuration.push_back(new ControllerConfig(11, "Amp env sustain", 49));
-	configuration.push_back(new ControllerConfig(12, "Amp env release", 50));
-	configuration.push_back(new ControllerConfig(13, "LFO 1 rate", 51));
-	configuration.push_back(new ControllerConfig(14, "LFO 2 rate", 52));
+	configuration.push_back(new ControllerConfig(5, "Mod env 1 attack", 43));
+	configuration.push_back(new ControllerConfig(6, "Mod env 1 decay", 44));
+	configuration.push_back(new ControllerConfig(7, "Mod env 1 sustain", 45));
+	configuration.push_back(new ControllerConfig(8, "Mod env 1 release", 46));
+	configuration.push_back(new ControllerConfig(9, "Mod env 2 attack", 47));
+	configuration.push_back(new ControllerConfig(10, "Mod env 2 decay", 48));
+	configuration.push_back(new ControllerConfig(11, "Mod env 2 sustain", 49));
+	configuration.push_back(new ControllerConfig(12, "Mod env 2 release", 50));
+	configuration.push_back(new ControllerConfig(13, "Mod env 3 attack", 51));
+	configuration.push_back(new ControllerConfig(14, "Mod env 3 decay", 52));
+	configuration.push_back(new ControllerConfig(15, "Mod env 3 sustain", 53));
+	configuration.push_back(new ControllerConfig(16, "Mod env 3 release", 54));
+	configuration.push_back(new ControllerConfig(17, "Amp env attack", 55));
+	configuration.push_back(new ControllerConfig(18, "Amp env decay", 56));
+	configuration.push_back(new ControllerConfig(19, "Amp env sustain", 57));
+	configuration.push_back(new ControllerConfig(20, "Amp env release", 58));
+	configuration.push_back(new ControllerConfig(21, "LFO 1 rate", 59));
+	configuration.push_back(new ControllerConfig(22, "LFO 2 rate", 60));
+	configuration.push_back(new ControllerConfig(23, "Osc 1 pitch", 61));
+	configuration.push_back(new ControllerConfig(24, "Osc 2 pitch", 62));
+	configuration.push_back(new ControllerConfig(25, "Osc 3 pitch", 63));
+	configuration.push_back(new ControllerConfig(26, "Osc 1 fine", 64));
+	configuration.push_back(new ControllerConfig(27, "Osc 2 fine", 65));
+	configuration.push_back(new ControllerConfig(28, "Osc 3 fine", 66));
+	configuration.push_back(new ControllerConfig(29, "Osc 1 volume", 67));
+	configuration.push_back(new ControllerConfig(30, "Osc 2 volume", 68));
+	configuration.push_back(new ControllerConfig(31, "Osc 3 volume", 69));
+
 }
 
 ControllerEditor::~ControllerEditor()
 {
+	for (std::vector<ControllerConfig*>::iterator it = configuration.begin();it != configuration.end();it++) {
+		delete *it;
+	}
+
 }
 
 void ControllerEditor::paint (Graphics& g)
@@ -131,8 +153,8 @@ Component* ControllerEditor::refreshComponentForCell(int rowNumber, int columnId
 				nameEditor->addListener(this);
 			}
 
-			nameEditor->setColour(Label::backgroundColourId, Colours::black);
-			nameEditor->setColour(Label::textColourId, Colours::darkorange);
+			nameEditor->setColour(Label::backgroundColourId, Colours::darkorange);
+			nameEditor->setColour(Label::textColourId, Colours::black);
 			nameEditor->setEditable(false, true, false);
 
 			nameEditor->setText(configuration.at(rowNumber)->name, juce::NotificationType::dontSendNotification);
@@ -144,16 +166,21 @@ Component* ControllerEditor::refreshComponentForCell(int rowNumber, int columnId
 
 	}
 	else if (columnId == 3) {
-		if (isRowSelected && columnId == selectedColumn) {
+		if (isRowSelected) {
 
-			controllerEditor = static_cast<TextEditor*>(existingComponentToUpdate);
+			controllerEditor = static_cast<Label*>(existingComponentToUpdate);
 
 			if (controllerEditor == nullptr) {
 				originalControllerEditor = existingComponentToUpdate;
-				controllerEditor = new TextEditor();
+				controllerEditor = new Label();
+				controllerEditor->addListener(this);
 			}
 			
-			controllerEditor->setText(String(configuration.at(rowNumber)->controller));
+			controllerEditor->setColour(Label::backgroundColourId, Colours::darkorange);
+			controllerEditor->setColour(Label::textColourId, Colours::black);
+			controllerEditor->setEditable(false, true, false);
+
+			controllerEditor->setText(String(configuration.at(rowNumber)->controller), juce::NotificationType::dontSendNotification);
 			return controllerEditor;
 		}
 		else {
@@ -175,10 +202,15 @@ void ControllerEditor::labelTextChanged(Label * labelThatHasChanged)
 		configuration.at(selectedRow)->name = labelThatHasChanged->getText();
 		controllerTable->updateContent();
 	}
+	else if (selectedColumn == 3) {
+		configuration.at(selectedRow)->controller = labelThatHasChanged->getText().getIntValue();
+		controllerTable->updateContent();
+	}
 	
 }
 
 void ControllerEditor::editorShown(Label* l, TextEditor &t)
 {
 	t.setColour(TextEditor::textColourId, Colours::darkorange);
+	t.setColour(TextEditor::backgroundColourId, Colours::black);
 }
