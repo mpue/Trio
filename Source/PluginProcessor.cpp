@@ -71,17 +71,17 @@ TrioAudioProcessor::TrioAudioProcessor()
     registeredParams.push_back(parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr));
     
     registeredParams.push_back(parameters->createAndAddParameter("mod1_attack", "Env 1 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod1_decay", "Env 1 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod1_decay", "Env 1 decay", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod1_sustain", "Env 1 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod1_release", "Env 1 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     
     registeredParams.push_back(parameters->createAndAddParameter("mod2_attack", "Env 2 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod2_decay", "Env 2 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod2_decay", "Env 2 decay", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod2_sustain", "Env 2 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod2_release", "Env 2 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
 
     registeredParams.push_back(parameters->createAndAddParameter("mod3_attack", "Env 3 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod3_decay", "Env 3 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod3_decay", "Env 3 decay", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod3_sustain", "Env 3 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod3_release", "Env 3 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     
@@ -143,13 +143,7 @@ TrioAudioProcessor::TrioAudioProcessor()
     filterCutoff = 12000.0f;
     
     for (int i = 0 ; i < 3;i++) {
-        ADSR* env = new ADSR();
-        
-        env->setAttackRate(0 * sampleRate);  // 1 second
-        env->setDecayRate(0 * sampleRate);
-        env->setReleaseRate(0 * sampleRate);
-        env->setSustainLevel(.8);
-        
+        ADSR* env = new ADSR();        
         modEnvelopes.push_back(env);
     }
     
@@ -321,6 +315,13 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     if (this->selectedProgram == "") {
         setSelectedProgram("init");
     }
+
+	for (int i = 0; i < modEnvelopes.size(); i++) {
+		modEnvelopes.at(i)->setAttackRate(0 * sampleRate);  // 1 second
+		modEnvelopes.at(i)->setDecayRate(0 * sampleRate);
+		modEnvelopes.at(i)->setReleaseRate(0 * sampleRate);
+		modEnvelopes.at(i)->setSustainLevel(.8);
+	}
     
     this->modMatrix = new ModMatrix(sampleRate, model);
     
@@ -535,7 +536,7 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
     {
         
-        if (m.isNoteOn())
+        if (m.isNoteOn() && !voices[m.getNoteNumber()]->isPlaying())
         {
             for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
                 modEnvelopes.at(envIdx)->gate(true);
@@ -547,10 +548,9 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
 			voices[m.getNoteNumber()]->getAmpEnvelope()->gate(true);
 			voices[m.getNoteNumber()]->setDuration(250);
 			voices[m.getNoteNumber()]->setTime(elapsed);
-
-			return;
+			numVoices++;							
         }
-        else if (m.isNoteOff())
+        else if (m.isNoteOff() && voices[m.getNoteNumber()]->isPlaying())
         {
             
             if (voices[m.getNoteNumber()]->isPlaying()) {
@@ -561,9 +561,9 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
             for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
                 modEnvelopes.at(envIdx)->gate(false);
             }
-            
-			return;
-            
+			            
+			numVoices--;
+
         }
         else if (m.isAftertouch())
         {
@@ -1128,4 +1128,9 @@ void TrioAudioProcessor::setCurrentModEnv(int env) {
 
 int TrioAudioProcessor::getCurrentModEnvIdx() {
     return this->currentModEnv;
+}
+
+int TrioAudioProcessor::getNumVoices()
+{
+	return numVoices;
 }

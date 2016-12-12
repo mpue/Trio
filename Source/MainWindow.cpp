@@ -164,14 +164,14 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     filterAttackSlider->addListener (this);
 
     addAndMakeVisible (filterDecaySlider = new Slider ("filterDecaySlider"));
-    filterDecaySlider->setRange (0, 5, 0.1);
+    filterDecaySlider->setRange (0, 2, 0.1);
     filterDecaySlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterDecaySlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterDecaySlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     filterDecaySlider->addListener (this);
 
     addAndMakeVisible (filterSustainSlider = new Slider ("filterSustainSlider"));
-    filterSustainSlider->setRange (0, 1, 0.02);
+    filterSustainSlider->setRange (0.01, 1, 0.02);
     filterSustainSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterSustainSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterSustainSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -305,8 +305,8 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
                              ImageCache::getFromMemory (oscillator_sine_48_png, oscillator_sine_48_pngSize), 1.000f, Colour (0xffff7e00),
                              Image(), 1.000f, Colour (0xffff7e00));
     addAndMakeVisible (statusLabel = new Label ("statusLabel",
-                                                TRANS("\n")));
-    statusLabel->setFont (Font (15.00f, Font::plain));
+                                                TRANS("Trio Ready.")));
+    statusLabel->setFont (Font (18.00f, Font::plain));
     statusLabel->setJustificationType (Justification::centredLeft);
     statusLabel->setEditable (false, false, false);
     statusLabel->setColour (Label::textColourId, Colours::white);
@@ -699,6 +699,24 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     slaveToggleButton->addListener (this);
     slaveToggleButton->setColour (ToggleButton::textColourId, Colours::white);
 
+    addAndMakeVisible (voicesLabel = new Label ("voicesLabel",
+                                                TRANS("Voices : 0 ")));
+    voicesLabel->setFont (Font (18.00f, Font::plain));
+    voicesLabel->setJustificationType (Justification::centredLeft);
+    voicesLabel->setEditable (false, false, false);
+    voicesLabel->setColour (Label::textColourId, Colours::white);
+    voicesLabel->setColour (TextEditor::textColourId, Colours::black);
+    voicesLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (ampLabel2 = new Label ("label",
+                                              TRANS("Status")));
+    ampLabel2->setFont (Font ("Verdana", 24.00f, Font::bold));
+    ampLabel2->setJustificationType (Justification::centredLeft);
+    ampLabel2->setEditable (false, false, false);
+    ampLabel2->setColour (Label::textColourId, Colours::white);
+    ampLabel2->setColour (TextEditor::textColourId, Colours::black);
+    ampLabel2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
     cachedImage_trio_png_1 = ImageCache::getFromMemory (trio_png, trio_pngSize);
 
     //[UserPreSize]
@@ -891,6 +909,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     // processor->addListener(fxPanel);
 
     statusLabel->setColour(Label::textColourId, Colours::darkorange);
+	voicesLabel->setColour(Label::textColourId, Colours::darkorange);
 
     /*
     cutoffSlider->setSkewFactorFromMidPoint(3.0f);
@@ -1071,6 +1090,8 @@ MainWindow::~MainWindow()
     mainButton = nullptr;
     modEnvCombo = nullptr;
     slaveToggleButton = nullptr;
+    voicesLabel = nullptr;
+    ampLabel2 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -1128,7 +1149,7 @@ void MainWindow::resized()
     ampSustainSlider->setBounds (750, 256, 64, 64);
     ampReleaseSlider->setBounds (819, 256, 64, 64);
     ampVolSlider->setBounds (616, 416, 64, 64);
-    presetCombo->setBounds (600, 16, 296, 24);
+    presetCombo->setBounds (600, 16, 184, 24);
     storeButton->setBounds (24, 544, 100, 24);
     imageButton->setBounds (96, 64, 24, 24);
     imageButton3->setBounds (160, 64, 24, 24);
@@ -1139,7 +1160,7 @@ void MainWindow::resized()
     imageButton7->setBounds (104, 384, 24, 24);
     imageButton8->setBounds (168, 384, 24, 24);
     imageButton9->setBounds (136, 384, 24, 24);
-    statusLabel->setBounds (728, 544, 150, 24);
+    statusLabel->setBounds (704, 544, 150, 24);
     browseButton->setBounds (472, 544, 100, 24);
     setupButton->setBounds (584, 544, 104, 24);
     fxButton->setBounds (248, 544, 100, 24);
@@ -1187,6 +1208,8 @@ void MainWindow::resized()
     mainButton->setBounds (136, 544, 100, 24);
     modEnvCombo->setBounds (824, 61, 53, 24);
     slaveToggleButton->setBounds (192, 64, 55, 24);
+    voicesLabel->setBounds (800, 16, 88, 24);
+    ampLabel2->setBounds (720, 376, 160, 32);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -1700,6 +1723,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 void MainWindow::timerCallback() {
     this->leftVolSLider->setValue(processor->getMagnitudeLeft());
     this->rightVolSlider->setValue(processor->getMagnitudeRight());
+	this->voicesLabel->setText("Voices : " + String(processor->getNumVoices()),juce::NotificationType::dontSendNotification);
 }
 
 void MainWindow::visibilityChanged() {
@@ -2034,14 +2058,14 @@ BEGIN_JUCER_METADATA
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterDecaySlider" id="33363d9ec7716419" memberName="filterDecaySlider"
           virtualName="" explicitFocusOrder="0" pos="681 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          min="0" max="2" int="0.10000000000000000555" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterSustainSlider" id="221683b72a922f05" memberName="filterSustainSlider"
           virtualName="" explicitFocusOrder="0" pos="750 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
-          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
+          min="0.010000000000000000208" max="1" int="0.020000000000000000416"
+          style="RotaryVerticalDrag" textBoxPos="NoTextBox" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterReleaseSlider" id="7c537539090ea5d7" memberName="filterReleaseSlider"
           virtualName="" explicitFocusOrder="0" pos="819 96 64 64" rotaryslideroutline="66fff8f8"
           min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
@@ -2073,7 +2097,7 @@ BEGIN_JUCER_METADATA
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <COMBOBOX name="presetCombo" id="dd92602a91bc7ca9" memberName="presetCombo"
-            virtualName="" explicitFocusOrder="0" pos="600 16 296 24" editable="0"
+            virtualName="" explicitFocusOrder="0" pos="600 16 184 24" editable="0"
             layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TEXTBUTTON name="storeButton" id="7f02553932604ec2" memberName="storeButton"
               virtualName="" explicitFocusOrder="0" pos="24 544 100 24" buttonText="Store"
@@ -2133,10 +2157,10 @@ BEGIN_JUCER_METADATA
                resourceOver="oscillator_sine_48_png" opacityOver="1" colourOver="ffff7e00"
                resourceDown="" opacityDown="1" colourDown="ffff7e00"/>
   <LABEL name="statusLabel" id="f241e45e174945c6" memberName="statusLabel"
-         virtualName="" explicitFocusOrder="0" pos="728 544 150 24" textCol="ffffffff"
-         edTextCol="ff000000" edBkgCol="0" labelText="&#10;" editableSingleClick="0"
+         virtualName="" explicitFocusOrder="0" pos="704 544 150 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="Trio Ready." editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="33"/>
+         fontsize="18" bold="0" italic="0" justification="33"/>
   <TEXTBUTTON name="browseButton" id="f48c01fdd9a33988" memberName="browseButton"
               virtualName="" explicitFocusOrder="0" pos="472 544 100 24" buttonText="Browser"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
@@ -2358,6 +2382,16 @@ BEGIN_JUCER_METADATA
                 virtualName="" explicitFocusOrder="0" pos="192 64 55 24" txtcol="ffffffff"
                 buttonText="Sync" connectedEdges="0" needsCallback="1" radioGroupId="0"
                 state="0"/>
+  <LABEL name="voicesLabel" id="d66ad1b525af5a0f" memberName="voicesLabel"
+         virtualName="" explicitFocusOrder="0" pos="800 16 88 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="Voices : 0 " editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="18" bold="0" italic="0" justification="33"/>
+  <LABEL name="label" id="802b4f32d1338d" memberName="ampLabel2" virtualName=""
+         explicitFocusOrder="0" pos="720 376 160 32" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="Status" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Verdana"
+         fontsize="24" bold="1" italic="0" justification="33"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

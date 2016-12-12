@@ -235,9 +235,9 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
             else {
                 matrix->getModulations().at(index)->addTarget(target);
             }
-
-            target->setModAmount(modAmountSlider1->getValue());
+            
             target->setModulator(matrix->getModulations().at(index)->getModulator());
+			target->setModAmount(modAmountSlider1->getValue());
         }
         // Osc 1 Pitch
         if (targetCombo1->getSelectedId() == 3) {
@@ -247,8 +247,8 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
             for (int i = 0; i < matrix->getModel()->getVoices().size(); i++) {
                 matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(0));
-                m->setModAmount(modAmountSlider1->getValue());
                 m->setModulator(matrix->getModulations().at(index)->getModulator());
+				m->setModAmount(modAmountSlider1->getValue());
                 matrix->getModulations().at(index)->addTarget(m);
             }
 
@@ -260,9 +260,9 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 
             for (int i = 0; i < matrix->getModel()->getVoices().size(); i++) {
                 matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
-                MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(1));
-                m->setModAmount(modAmountSlider1->getValue());
+                MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(1));          
                 m->setModulator(matrix->getModulations().at(index)->getModulator());
+				m->setModAmount(modAmountSlider1->getValue());
                 matrix->getModulations().at(index)->addTarget(m);
             }
 
@@ -275,8 +275,8 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
             for (int i = 0; i < matrix->getModel()->getVoices().size(); i++) {
                 matrix->getModel()->getVoices().at(i)->setModAmount(modAmountSlider1->getValue());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(matrix->getModel()->getVoices().at(i)->getOscillator(2));
-                m->setModAmount(modAmountSlider1->getValue());
                 m->setModulator(matrix->getModulations().at(index)->getModulator());
+				m->setModAmount(modAmountSlider1->getValue());
                 matrix->getModulations().at(index)->addTarget(m);
             }
 

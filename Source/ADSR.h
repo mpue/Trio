@@ -122,7 +122,6 @@ inline int ADSR::getState() {
 }
 
 inline void ADSR::reset() {
-    // cout << "ADSR reset" << endl;
     state = env_idle;
     output = 0.0;
 }

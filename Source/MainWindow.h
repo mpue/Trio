@@ -230,6 +230,8 @@ private:
     ScopedPointer<TextButton> mainButton;
     ScopedPointer<ComboBox> modEnvCombo;
     ScopedPointer<ToggleButton> slaveToggleButton;
+    ScopedPointer<Label> voicesLabel;
+    ScopedPointer<Label> ampLabel2;
     Image cachedImage_trio_png_1;
 
 

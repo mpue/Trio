@@ -133,6 +133,7 @@ public:
     int getCurrentModEnvIdx();
     
     ScopedPointer<AudioProcessorValueTreeState> parameters;
+	int getNumVoices();
     
 private:
     //==============================================================================
@@ -202,6 +203,7 @@ private:
     int currentModEnv = 0;
     
     bool sync;
+	int numVoices = 0;
 };
 
 

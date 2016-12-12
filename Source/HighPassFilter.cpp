@@ -14,6 +14,7 @@ HighPassFilter::HighPassFilter() {
     this->filter1 = new IIRFilter();
     this->filter2 = new IIRFilter();
     this->modulator = 0;
+	this->modAmount = 0;
 }
 
 HighPassFilter::~HighPassFilter() {

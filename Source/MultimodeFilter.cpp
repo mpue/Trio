@@ -34,6 +34,9 @@ void MultimodeFilter::setMode(Mode mode) {
 }
 
 void MultimodeFilter::coefficients(float frequency, float resonance) {
+	if (frequency == 0) {
+		frequency = 0.1;
+	}
     this->lowPassLeft->coefficients( frequency, resonance);
     this->lowPassRight->coefficients( frequency, resonance);
     this->highPassLeft->coefficients( frequency, resonance);
