@@ -29,7 +29,7 @@
 #include "FXPanel.h"
 #include "BrowserPanel.h"
 #include "ModPanel.h"
-
+#include "SettingsPanel.h"
 //[/Headers]
 
 
@@ -134,6 +134,7 @@ private:
     ScopedPointer<PresetDialog> presetPanel;
     ScopedPointer<FXPanel> fxPanel;
     ScopedPointer<BrowserPanel> browserPanel;
+	ScopedPointer<SettingsPanel> settingsPanel;
 
     Oszillator::OscMode mode1;
     Oszillator::OscMode mode2;
