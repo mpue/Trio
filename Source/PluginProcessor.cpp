@@ -558,9 +558,11 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
 				voices[m.getNoteNumber()]->getAmpEnvelope()->gate(false);
             }
             
-            for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
-                modEnvelopes.at(envIdx)->gate(false);
-            }
+			if (numVoices == 0) {
+				for (int envIdx = 0; envIdx < this->modEnvelopes.size(); envIdx++) {
+					modEnvelopes.at(envIdx)->gate(false);
+				}
+			}
 			            
 			numVoices--;
 

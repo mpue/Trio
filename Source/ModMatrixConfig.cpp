@@ -9,3 +9,28 @@
 */
 
 #include "ModMatrixConfig.h"
+
+ModMatrixConfig::ModMatrixConfig()
+{
+	this->config = new ValueTree(Identifier("modMatrix"));
+}
+
+  ModMatrixConfig::~ModMatrixConfig()
+  {
+  }
+
+  void ModMatrixConfig::addConfig(ModSlotConfig * config)
+  {
+  }
+
+  ValueTree * ModMatrixConfig::getConfiguation()
+  {
+	  config->removeAllChildren(nullptr);
+
+	  for (int i = 0; i < slotConfigs.size(); i++) {
+		  slotConfigs.at(i);
+		  this->config->addChild(*(slotConfigs.at(i)->getSlotConfig()),-1, nullptr);
+	  }
+
+	  return this->config;
+  }
