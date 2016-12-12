@@ -581,7 +581,8 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
             nPitch = pow(2, nPitch);
             
             for (int i = 0; i < voices.size();i++) {
-                voices[i]->setPitchBend(nPitch);
+                if (voices[i]->isPlaying())
+                    voices[i]->setPitchBend(nPitch);
             }
             
             globalPitch = nPitch;
@@ -619,6 +620,8 @@ void TrioAudioProcessor::processFX(float* left, float* right, int numSamples) {
     }
 }
 
+static float maxMag = 0;
+
 void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages) {
     
     this->processSequencer(this->sampleRate, buffer.getNumSamples());
@@ -654,9 +657,17 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
     
 	processFX(leftOut, rightOut, buffer.getNumSamples());
 
+
+    
     this->magnitudeLeft = buffer.getMagnitude(0, 0, buffer.getNumSamples());
     this->magnitudeRight = buffer.getMagnitude(1, 0, buffer.getNumSamples());
 
+
+     
+    if (magnitudeLeft > 1)
+        buffer.applyGain(0,0, buffer.getNumSamples(),1/magnitudeLeft);
+    if (magnitudeRight > 1)
+        buffer.applyGain(1,0, buffer.getNumSamples(),1/magnitudeRight);
 }
 
 
