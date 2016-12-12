@@ -216,6 +216,27 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
             matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
         }
 
+			if (sourceCombo->getSelectedId() == 1) {
+				matrix->getModulations().at(index)->setModulator(NULL);
+			}
+			// LFO 1
+			else if (sourceCombo->getSelectedId() == 2) {
+				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo1());
+			}
+			// LFO 2
+			else if (sourceCombo->getSelectedId() == 3) {
+				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo2());
+			}
+			else if (sourceCombo->getSelectedId() == 4) {
+				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(0));
+			}
+			else if (sourceCombo->getSelectedId() == 5) {
+				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
+			}
+
+		}
+
+
         //[/UserComboBoxCode_sourceCombo]
     }
     else if (comboBoxThatHasChanged == targetCombo1)

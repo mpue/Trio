@@ -45,7 +45,6 @@ TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
     lf->setColour(TextButton::textColourOffId, Colours::darkorange);
     lf->setColour(TextButton::textColourOnId, Colours::black);
     lf->setColour(CaretComponent::caretColourId, Colours::darkorange);
-    
     lf->setColour (ScrollBar::thumbColourId,Colours::darkorange);
     lf->setColour (ScrollBar::backgroundColourId,Colour::fromRGBA(0x5a,0x5a,0x5a,0xff));
     lf->setColour (Slider::thumbColourId,Colours::darkorange);

@@ -175,7 +175,7 @@ TrioAudioProcessor::TrioAudioProcessor()
 
 TrioAudioProcessor::~TrioAudioProcessor()
 {
-    delete this->modMatrix;
+    this->modMatrix = nullptr;
     this->registeredParams.clear();
     this->multimodeFilter = nullptr;
     this->outputFilter = nullptr;

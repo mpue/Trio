@@ -774,10 +774,14 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->modPanel = new ModPanel(processor->getModMatrix());
     this->modPanel->setBounds(x,y,getWidth(),getHeight());
 
+	this->settingsPanel = new SettingsPanel();
+	this->settingsPanel->setBounds(x, y, getWidth(), getHeight());
+
     addChildComponent(fxPanel);
     addChildComponent(presetPanel);
     addChildComponent(browserPanel);
     addChildComponent(modPanel);
+	addChildComponent(settingsPanel);
 
     mainButton->toFront(false);
     fxButton->toFront(false);
@@ -978,6 +982,7 @@ MainWindow::~MainWindow()
     this->animator = nullptr;
     this->browserPanel = nullptr;
     this->fxPanel = nullptr;
+	this->settingsPanel = nullptr;
     this->filtermodeAttachment = nullptr;
 
     //[/Destructor_pre]
@@ -1855,6 +1860,10 @@ void MainWindow::toggleView(MainWindow::PanelDisplay display) {
         if(browserPanel->isVisible()){
             animator->fadeOut(browserPanel, 100);
         }
+		if (settingsPanel->isVisible()) {
+			animator->fadeOut(settingsPanel, 100);
+		}
+
     }
     else if (display == PanelDisplay::FX) {
         if(modPanel->isVisible()){
@@ -1863,6 +1872,9 @@ void MainWindow::toggleView(MainWindow::PanelDisplay display) {
         if(browserPanel->isVisible()){
             animator->fadeOut(modPanel, 100);
         }
+		if (settingsPanel->isVisible()) {
+			animator->fadeOut(settingsPanel, 100);
+		}
         animator->fadeIn(fxPanel, 100);
 
     }
@@ -1873,6 +1885,9 @@ void MainWindow::toggleView(MainWindow::PanelDisplay display) {
         if(browserPanel->isVisible()){
             animator->fadeOut(modPanel, 100);
         }
+		if (settingsPanel->isVisible()) {
+			animator->fadeOut(settingsPanel, 100);
+		}
         animator->fadeIn(modPanel, 100);
     }
     else if (display == PanelDisplay::BROWSER) {
@@ -1882,11 +1897,22 @@ void MainWindow::toggleView(MainWindow::PanelDisplay display) {
         if(modPanel->isVisible()){
             animator->fadeOut(modPanel, 100);
         }
+		if (settingsPanel->isVisible()) {
+			animator->fadeOut(settingsPanel, 100);
+		}
         animator->fadeIn(browserPanel, 100);
     }
     else if (display == PanelDisplay::SETUP) {
-
-
+		if (fxPanel->isVisible()) {
+			animator->fadeOut(fxPanel, 100);
+		}
+		if (modPanel->isVisible()) {
+			animator->fadeOut(modPanel, 100);
+		}
+		if (browserPanel->isVisible()) {
+			animator->fadeOut(browserPanel, 100);
+		}
+		animator->fadeIn(settingsPanel, 100);
     }
 
     this->currentDisplay = display;

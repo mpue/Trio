@@ -439,3 +439,50 @@ void TrioLookAndFeel::drawShinyButtonShape(Graphics& g,
 	g.setColour(Colour(0x80000000));
 	g.strokePath(outline, PathStrokeType(strokeWidth));
 }
+
+void TrioLookAndFeel::drawTableHeaderBackground(Graphics &g, TableHeaderComponent &header)
+{
+	g.fillAll(Colours::darkorange);
+
+	/*
+	Rectangle<int> area(header.getLocalBounds());
+	area.removeFromTop(area.getHeight() / 2);
+
+	g.setGradientFill(ColourGradient(Colour(0xffe8ebf9), 0.0f, (float)area.getY(),
+		Colour(0xfff6f8f9), 0.0f, (float)area.getBottom(),
+		false));
+	g.fillRect(area);
+
+	g.setColour(Colour(0x33000000));
+	g.fillRect(area.removeFromBottom(1));
+	*/
+
+	for (int i = header.getNumColumns(true); --i >= 0;)
+		g.fillRect(header.getColumnPosition(i).removeFromRight(1));
+}
+
+void TrioLookAndFeel::drawTableHeaderColumn(Graphics &g, const String & columnName, int columnId, int width, int height, bool isMouseOver, bool isMouseDown, int columnFlags)
+{
+	if (isMouseDown)
+		g.fillAll(Colours::orange);
+	else if (isMouseOver)
+		g.fillAll(Colours::darkorange);
+
+	Rectangle<int> area(width, height);
+	area.reduce(4, 0);
+
+	if ((columnFlags & (TableHeaderComponent::sortedForwards | TableHeaderComponent::sortedBackwards)) != 0)
+	{
+		Path sortArrow;
+		sortArrow.addTriangle(0.0f, 0.0f,
+			0.5f, (columnFlags & TableHeaderComponent::sortedForwards) != 0 ? -0.8f : 0.8f,
+			1.0f, 0.0f);
+
+		g.setColour(Colours::black);
+		g.fillPath(sortArrow, sortArrow.getTransformToScaleToFit(area.removeFromRight(height / 2).reduced(2).toFloat(), true));
+	}
+
+	g.setColour(Colours::black);
+	g.setFont(Font(height * 0.5f, Font::bold));
+	g.drawFittedText(columnName, area, Justification::centredLeft, 1);
+}

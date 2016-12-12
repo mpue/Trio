@@ -36,7 +36,7 @@ private:
 	virtual int getNumRows() override;
 	virtual void paintRowBackground(Graphics &, int rowNumber, int width, int height, bool rowIsSelected) override;
 	virtual void paintCell(Graphics &, int rowNumber, int columnId, int width, int height, bool rowIsSelected) override;
-	virtual void cellClicked(int rowNumber, int columnId, const MouseEvent&) override;
+	virtual void cellClicked(int rowNumber, int columnId, const MouseEvent&) override;	
 	virtual bool keyPressed(const KeyPress& key, Component* originatingComponent) override;
 
 	int selectedColumn = 0;
