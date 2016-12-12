@@ -60,9 +60,7 @@ public:
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
     void processSequencer(double sampleRate, int numSamples);
     void processMidi(MidiBuffer& midiMessages);
-    void processModulation();
     void processFX(float* left, float* right, int numSamples);
-    void processLFOs();
     
     //==============================================================================
     AudioProcessorEditor* createEditor() override;

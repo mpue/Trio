@@ -15,6 +15,21 @@
       <FILE id="rHwWAE" name="Knob_64.png" compile="0" resource="1" file="Knob_64.png"/>
     </GROUP>
     <GROUP id="{973A5F90-B82E-4BC1-6D49-78E790BACA7B}" name="Source">
+      <GROUP id="{84CD871F-5158-0DD5-2477-3B6CF7ADDA43}" name="Config">
+        <FILE id="cu9wfu" name="ControllerConfig.cpp" compile="1" resource="0"
+              file="Source/ControllerConfig.cpp"/>
+        <FILE id="TffiT5" name="ControllerConfig.h" compile="0" resource="0"
+              file="Source/ControllerConfig.h"/>
+        <FILE id="TrpiD7" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
+        <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
+        <FILE id="kiIrf1" name="ModMatrixConfig.cpp" compile="1" resource="0"
+              file="Source/ModMatrixConfig.cpp"/>
+        <FILE id="wkvM9X" name="ModMatrixConfig.h" compile="0" resource="0"
+              file="Source/ModMatrixConfig.h"/>
+        <FILE id="Z7QCot" name="ModSlotConfig.cpp" compile="1" resource="0"
+              file="Source/ModSlotConfig.cpp"/>
+        <FILE id="hzrVRT" name="ModSlotConfig.h" compile="0" resource="0" file="Source/ModSlotConfig.h"/>
+      </GROUP>
       <GROUP id="{06ECFD99-A1E1-7763-3A4A-354D3264CA67}" name="Effects">
         <FILE id="d9SLof" name="StereoReverb.cpp" compile="1" resource="0"
               file="Source/StereoReverb.cpp"/>
@@ -77,31 +92,40 @@
         <FILE id="W4aqIN" name="Oszillator.h" compile="0" resource="0" file="Source/Oszillator.h"/>
         <FILE id="ZCEilO" name="Oszillator.cpp" compile="1" resource="0" file="Source/Oszillator.cpp"/>
       </GROUP>
-      <FILE id="FQn9W1" name="BrowserPanel.cpp" compile="1" resource="0"
-            file="Source/BrowserPanel.cpp"/>
-      <FILE id="BoULQs" name="BrowserPanel.h" compile="0" resource="0" file="Source/BrowserPanel.h"/>
-      <FILE id="cu9wfu" name="ControllerConfig.cpp" compile="1" resource="0"
-            file="Source/ControllerConfig.cpp"/>
-      <FILE id="TffiT5" name="ControllerConfig.h" compile="0" resource="0"
-            file="Source/ControllerConfig.h"/>
-      <FILE id="wA6UzV" name="ControllerEditor.cpp" compile="1" resource="0"
-            file="Source/ControllerEditor.cpp"/>
-      <FILE id="tLtMAa" name="ControllerEditor.h" compile="0" resource="0"
-            file="Source/ControllerEditor.h"/>
-      <FILE id="PjPigK" name="FXPanel.cpp" compile="1" resource="0" file="Source/FXPanel.cpp"/>
-      <FILE id="aJljOP" name="FXPanel.h" compile="0" resource="0" file="Source/FXPanel.h"/>
-      <FILE id="FHlNI2" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
-      <FILE id="ErxGhk" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
-      <FILE id="TrpiD7" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
-      <FILE id="gMAwrG" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
-      <FILE id="XMxXXo" name="ModPanel.cpp" compile="1" resource="0" file="Source/ModPanel.cpp"/>
-      <FILE id="azKaBY" name="ModPanel.h" compile="0" resource="0" file="Source/ModPanel.h"/>
-      <FILE id="EOWJX9" name="ModSlot.cpp" compile="1" resource="0" file="Source/ModSlot.cpp"/>
-      <FILE id="Za7HyT" name="ModSlot.h" compile="0" resource="0" file="Source/ModSlot.h"/>
-      <FILE id="ZYttDe" name="PatchBrowserComponent.cpp" compile="1" resource="0"
-            file="Source/PatchBrowserComponent.cpp"/>
-      <FILE id="hCwaXA" name="PatchBrowserComponent.h" compile="0" resource="0"
-            file="Source/PatchBrowserComponent.h"/>
+      <GROUP id="{996D4AB4-DA72-AA89-0F8E-A69B8C97ECE5}" name="UI">
+        <FILE id="FQn9W1" name="BrowserPanel.cpp" compile="1" resource="0"
+              file="Source/BrowserPanel.cpp"/>
+        <FILE id="BoULQs" name="BrowserPanel.h" compile="0" resource="0" file="Source/BrowserPanel.h"/>
+        <FILE id="wA6UzV" name="ControllerEditor.cpp" compile="1" resource="0"
+              file="Source/ControllerEditor.cpp"/>
+        <FILE id="tLtMAa" name="ControllerEditor.h" compile="0" resource="0"
+              file="Source/ControllerEditor.h"/>
+        <FILE id="PjPigK" name="FXPanel.cpp" compile="1" resource="0" file="Source/FXPanel.cpp"/>
+        <FILE id="aJljOP" name="FXPanel.h" compile="0" resource="0" file="Source/FXPanel.h"/>
+        <FILE id="FHlNI2" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
+        <FILE id="ErxGhk" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
+        <FILE id="XMxXXo" name="ModPanel.cpp" compile="1" resource="0" file="Source/ModPanel.cpp"/>
+        <FILE id="azKaBY" name="ModPanel.h" compile="0" resource="0" file="Source/ModPanel.h"/>
+        <FILE id="EOWJX9" name="ModSlot.cpp" compile="1" resource="0" file="Source/ModSlot.cpp"/>
+        <FILE id="Za7HyT" name="ModSlot.h" compile="0" resource="0" file="Source/ModSlot.h"/>
+        <FILE id="ZYttDe" name="PatchBrowserComponent.cpp" compile="1" resource="0"
+              file="Source/PatchBrowserComponent.cpp"/>
+        <FILE id="hCwaXA" name="PatchBrowserComponent.h" compile="0" resource="0"
+              file="Source/PatchBrowserComponent.h"/>
+        <FILE id="RUPcKe" name="PresetDialog.cpp" compile="1" resource="0"
+              file="Source/PresetDialog.cpp"/>
+        <FILE id="Qnksaj" name="PresetDialog.h" compile="0" resource="0" file="Source/PresetDialog.h"/>
+        <FILE id="pIfbKT" name="PresetWindow.cpp" compile="1" resource="0"
+              file="Source/PresetWindow.cpp"/>
+        <FILE id="DVQtl0" name="PresetWindow.h" compile="0" resource="0" file="Source/PresetWindow.h"/>
+        <FILE id="zhbO5I" name="SettingsPanel.cpp" compile="1" resource="0"
+              file="Source/SettingsPanel.cpp"/>
+        <FILE id="uMjpHv" name="SettingsPanel.h" compile="0" resource="0" file="Source/SettingsPanel.h"/>
+        <FILE id="NApiJy" name="TrioLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/TrioLookAndFeel.cpp"/>
+        <FILE id="kEYhxA" name="TrioLookAndFeel.h" compile="0" resource="0"
+              file="Source/TrioLookAndFeel.h"/>
+      </GROUP>
       <FILE id="oMkQhO" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="paI8E9" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
@@ -109,19 +133,8 @@
             file="Source/PluginProcessor.cpp"/>
       <FILE id="LI8SpH" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="RUPcKe" name="PresetDialog.cpp" compile="1" resource="0"
-            file="Source/PresetDialog.cpp"/>
-      <FILE id="Qnksaj" name="PresetDialog.h" compile="0" resource="0" file="Source/PresetDialog.h"/>
-      <FILE id="pIfbKT" name="PresetWindow.cpp" compile="1" resource="0"
-            file="Source/PresetWindow.cpp"/>
-      <FILE id="DVQtl0" name="PresetWindow.h" compile="0" resource="0" file="Source/PresetWindow.h"/>
-      <FILE id="zhbO5I" name="SettingsPanel.cpp" compile="1" resource="0"
-            file="Source/SettingsPanel.cpp"/>
-      <FILE id="uMjpHv" name="SettingsPanel.h" compile="0" resource="0" file="Source/SettingsPanel.h"/>
-      <FILE id="NApiJy" name="TrioLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/TrioLookAndFeel.cpp"/>
-      <FILE id="kEYhxA" name="TrioLookAndFeel.h" compile="0" resource="0"
-            file="Source/TrioLookAndFeel.h"/>
+      <FILE id="VT0ry9" name="TrioSynth.cpp" compile="1" resource="0" file="Source/TrioSynth.cpp"/>
+      <FILE id="CbA0jg" name="TrioSynth.h" compile="0" resource="0" file="Source/TrioSynth.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

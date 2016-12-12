@@ -33,7 +33,7 @@ ControllerEditor::ControllerEditor()
 	controllerTable->selectRow(0);
 	controllerTable->setOpaque(false);
 	controllerTable->updateContent();
-
+    
 	configuration.push_back(new ControllerConfig(1, "Pitch bend", 1));
 	configuration.push_back(new ControllerConfig(2, "Volume",7));
 	configuration.push_back(new ControllerConfig(3, "Filter cutoff", 42));
@@ -70,8 +70,8 @@ ControllerEditor::ControllerEditor()
 
 ControllerEditor::~ControllerEditor()
 {
-	for (std::vector<ControllerConfig*>::iterator it = configuration.begin();it != configuration.end();it++) {
-		delete *it;
+	for (std::vector<ScopedPointer<ControllerConfig>>::iterator it = configuration.begin();it != configuration.end();it++) {
+        *it = nullptr;
 	}
 
 }

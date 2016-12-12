@@ -192,51 +192,32 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     {
         //[UserComboBoxCode_sourceCombo] -- add your combo box handling code here..
 
-        if (sourceCombo->getSelectedId() == 1) {
-            matrix->getModulations().at(index)->setModulator(NULL);
+        if (matrix->getModulations().size() > 0) {
+            if (sourceCombo->getSelectedId() == 1) {
+                matrix->getModulations().at(index)->setModulator(NULL);
+            }
+            // LFO 1
+            else if (sourceCombo->getSelectedId() == 2) {
+                matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo1());
+            }
+            // LFO 2
+            else if (sourceCombo->getSelectedId() == 3) {
+                matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo2());
+            }
+            else if (sourceCombo->getSelectedId() == 4) {
+                matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(0));
+            }
+            else if (sourceCombo->getSelectedId() == 5) {
+                matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(1));
+            }
+            else if (sourceCombo->getSelectedId() == 6) {
+                matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(2));
+            }
+            else if (sourceCombo->getSelectedId() == 7) {
+                matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
+            }
         }
-        // LFO 1
-        else if (sourceCombo->getSelectedId() == 2) {
-            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo1());
-        }
-        // LFO 2
-        else if (sourceCombo->getSelectedId() == 3) {
-            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo2());
-        }
-        else if (sourceCombo->getSelectedId() == 4) {
-            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(0));
-        }
-        else if (sourceCombo->getSelectedId() == 5) {
-            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(1));
-        }
-        else if (sourceCombo->getSelectedId() == 6) {
-            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(2));
-        }
-        else if (sourceCombo->getSelectedId() == 7) {
-            matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
-        }
-
-			if (sourceCombo->getSelectedId() == 1) {
-				matrix->getModulations().at(index)->setModulator(NULL);
-			}
-			// LFO 1
-			else if (sourceCombo->getSelectedId() == 2) {
-				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo1());
-			}
-			// LFO 2
-			else if (sourceCombo->getSelectedId() == 3) {
-				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getLfo2());
-			}
-			else if (sourceCombo->getSelectedId() == 4) {
-				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getModEnvelopes().at(0));
-			}
-			else if (sourceCombo->getSelectedId() == 5) {
-				matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
-			}
-
-		}
-
-
+        
         //[/UserComboBoxCode_sourceCombo]
     }
     else if (comboBoxThatHasChanged == targetCombo1)

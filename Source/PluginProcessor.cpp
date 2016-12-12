@@ -338,60 +338,6 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     this->modMatrix->registerTarget("Osc2Pitch", 4);
     this->modMatrix->registerTarget("Osc3Pitch", 5);
     
-    /*
-    Modulation* filterMod = new Modulation();
-    
-    filterMod->setModulator(lfo2);
-    filterMod->addTarget(multimodeFilter);
-    
-    modMatrix->addModulation(filterMod);
-    multimodeFilter->setModAmount(1.0f);
-    */
-    
-    /*
-    
-    Modulation* pitchOsc1 = new Modulation();
-    pitchOsc1->setModulator(lfo1);
-    
-    for (int i = 0; i < 127; i++) {
-        voices[i]->setModAmount(0.5);
-        pitchOsc1->addTarget(static_cast<MultimodeOscillator*>(voices[i]->getOscillator(0)));
-    }
-     
-    modMatrix->addModulation(pitchOsc1);
-     */
-    
-    /*
-    Modulation* pitchOsc2 = new Modulation();
-    pitchOsc2->setModulator(lfo2);
-    
-    for (int i = 0; i < 127; i++) {
-        voices[i]->setModAmount(0.5);
-        pitchOsc2->addTarget(static_cast<MultimodeOscillator*>(voices[i]->getOscillator(1)));
-    }
-    
-    modMatrix->addModulation(pitchOsc2);
-    */
-   
-   /*
-    Modulation* mod = new Modulation();
-    mod->setModulator(filterEnvelope);
-    mod->addTarget(multimodeFilter);
-    multimodeFilter->setModAmount(1.0f);
-    modMatrix->addModulation(mod);
-    */
-    
-    /*
-    Modulation* seqMod = new Modulation();
-    seqMod->setModulator(sequencer);
-    seqMod->addTarget(multimodeFilter);
-    multimodeFilter->setModAmount(1.0f);
-    modMatrix->addModulation(seqMod);
-    */
-
-    
-
-    
 }
 
 Oszillator* TrioAudioProcessor::createOscillator(Oszillator::OscMode mode) {
@@ -663,26 +609,7 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
     }
 }
 
-void TrioAudioProcessor::processLFOs() {
-    if (model->getModsource() == 2) {
-        lfo1->process();
-    }
-    else if (model->getModsource() == 3) {
-        lfo2->process();
-    }
-    else if (model->getModsource() == 4) {
-        lfo1->process();
-        lfo2->process();
-    }
-    else if (model->getModsource() == 5) {
-        lfo1->process();
-        lfo2->process();
-    }
-}
 
-void TrioAudioProcessor::processModulation() {
-
-}
 
 void TrioAudioProcessor::processFX(float* left, float* right, int numSamples) {
     for (int i = 0; i < effects.size();i++) {

@@ -40,7 +40,7 @@ private:
 
 	ScopedPointer<TableListBox> controllerTable;
 
-	vector<ControllerConfig*> configuration;
+	vector<ScopedPointer<ControllerConfig>> configuration;
 	ScopedPointer<Label> nameEditor = nullptr;
 	ScopedPointer<Label> controllerEditor = nullptr;
 
