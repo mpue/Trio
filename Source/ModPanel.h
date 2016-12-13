@@ -27,6 +27,7 @@
 #include "Modulator.h"
 #include "Modulation.h"
 #include "ModMatrix.h"
+#include "ModMatrixConfig.h"
 #include <vector>
 
 //[/Headers]
@@ -52,7 +53,8 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
 
     std::vector<ModSlot*> getSlots();
-
+	ModMatrixConfig* getConfig();
+	void setConfig(ModMatrixConfig* config);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -67,6 +69,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     std::vector<ModSlot*> slots;
     ModMatrix* matrix;
+	ScopedPointer<ModMatrixConfig> config;
     //[/UserVariables]
 
     //==============================================================================

@@ -1495,7 +1495,6 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         seq = ValueTree (Identifier ("sequencer"));
         processor->getValueTreeState()->state.addChild(seq, 0, nullptr);
 
-
         seq.setProperty("raster", processor->getSequencer()->getRaster(), nullptr);
         seq.setProperty("octaves", processor->getSequencer()->getNumOctaves(), nullptr);
         seq.setProperty("stepconfig", processor->getSequencer()->getStepConfig(), nullptr);
@@ -1518,6 +1517,16 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         }
 
         seq.addChild(velocities, 0, nullptr);
+
+		ValueTree modMatrix = processor->getValueTreeState()->state.getChildWithName("modMatrix");
+
+		while (modMatrix.isValid()) {
+			processor->getValueTreeState()->state.removeChild(modMatrix, nullptr);
+			modMatrix = processor->getValueTreeState()->state.getChildWithName("modMatrix");
+		}
+
+		modMatrix = *modPanel->getConfig()->getConfiguation();
+		processor->getValueTreeState()->state.addChild(modMatrix, 0, nullptr);
 
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
         presetPanel->setData(xml);

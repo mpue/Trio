@@ -14,10 +14,12 @@ ModSlotConfig::ModSlotConfig()
   {
   }
 
- ModSlotConfig::ModSlotConfig(int sourceId, int targetId1, int targetId2) {
+ ModSlotConfig::ModSlotConfig(int sourceId, int targetId1, int targetId2, float amount1, float amount2) {
 	 this->sourceId = sourceId;
 	 this->targetId1 = targetId1;
 	 this->targetId2 = targetId1;
+	 this->amount1 = amount1;
+	 this->amount2 = amount2;
 	 this->slotConfig = new ValueTree(Identifier("slotConfig"));
  }
 
@@ -56,6 +58,36 @@ ModSlotConfig::ModSlotConfig()
 	  return targetId2;
   }
 
+  void ModSlotConfig::setAmount1(float amount)
+  {
+	  this->amount1 = amount;
+  }
+
+  float ModSlotConfig::getAmount1()
+  {
+	  return amount1;
+  }
+
+  void ModSlotConfig::setAmount2(float amount)
+  {
+	  this->amount2 = amount;
+  }
+
+  float ModSlotConfig::getAmount2()
+  {
+	  return amount2;
+  }
+
+  bool ModSlotConfig::isSlotEnabled()
+  {
+	  return enabled;
+  }
+
+  void ModSlotConfig::setEnabled(bool enabled)
+  {
+	  this->enabled = enabled;
+  }
+
   ValueTree* ModSlotConfig::getSlotConfig()
   {
 	  slotConfig->removeAllChildren(nullptr);
@@ -63,6 +95,9 @@ ModSlotConfig::ModSlotConfig()
 	  slotConfig->setProperty("sourceId", this->sourceId, nullptr);
 	  slotConfig->setProperty("targetId1", this->targetId1, nullptr);
 	  slotConfig->setProperty("targetId2", this->targetId2, nullptr);
+	  slotConfig->setProperty("amount1", this->amount1, nullptr);
+	  slotConfig->setProperty("amount2", this->amount2, nullptr);
+	  slotConfig->setProperty("enabled", this->enabled, nullptr);
 
 	  return slotConfig;
   }

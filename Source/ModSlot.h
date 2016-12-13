@@ -23,6 +23,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ModMatrix.h"
+#include "ModSlotConfig.h"
 //[/Headers]
 
 
@@ -58,8 +59,11 @@ public:
     int getSelectedSource();
     int getSelectedTarget1();
     int getSelectedTarget2();
+	void setSlotEnabled(bool enabled);
     bool isSlotEnabled();
     int getIndex();
+	ModSlotConfig* getConfig();
+	void setConfig(ModSlotConfig* config);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -75,6 +79,7 @@ private:
     bool slotEnabled;
     ModMatrix* matrix;
     int index;
+	ScopedPointer<ModSlotConfig> config;
     //[/UserVariables]
 
     //==============================================================================
@@ -88,7 +93,6 @@ private:
     ScopedPointer<Slider> modAmountSlider2;
     ScopedPointer<Label> titleLabel;
     ScopedPointer<ToggleButton> enableButton;
-
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModSlot)
