@@ -21,6 +21,7 @@ ModMatrixConfig::ModMatrixConfig()
 
   void ModMatrixConfig::addConfig(ModSlotConfig * config)
   {
+	  this->slotConfigs.push_back(config);
   }
 
   ValueTree * ModMatrixConfig::getConfiguation()
@@ -33,4 +34,9 @@ ModMatrixConfig::ModMatrixConfig()
 	  }
 
 	  return this->config;
+  }
+
+  ModSlotConfig * ModMatrixConfig::getSlotConfig(int i)
+  {
+	  return slotConfigs.at(i);		  
   }

@@ -1110,6 +1110,33 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
         sequencer->setEnabled(false);
     }
         
+	if (state->getChildWithName("modMatrix").isValid()) {
+
+		ValueTree v = state->getChildWithName("modMatrix");
+
+		ModMatrixConfig* mmc = new ModMatrixConfig();
+
+		for (int i = 0; i < v.getNumChildren();i++) {
+			ValueTree child = v.getChild(i);
+
+			ModSlotConfig* msc = new ModSlotConfig();
+
+			msc->setAmount1(child.getProperty("amount1"));
+			msc->setAmount2(child.getProperty("amount2"));
+			msc->setSourceId(child.getProperty("sourceId"));
+			msc->setTargetId1(child.getProperty("targetId1"));
+			msc->setTargetId2(child.getProperty("targetId2"));
+			msc->setEnabled(child.getProperty("enabled"));
+
+			mmc->addConfig(msc);
+
+
+
+		}
+
+	}
+
+
     for (int i = 0; i < state->getNumChildren();i++) {
         
         String id = state->getChild(i).getProperty("id").toString();

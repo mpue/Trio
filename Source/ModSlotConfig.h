@@ -18,7 +18,7 @@ class ModSlotConfig {
 public:
 	
 	ModSlotConfig();
-	ModSlotConfig(int sourceId, int targetId1, int targetId2);
+	ModSlotConfig(int sourceId, int targetId1, int targetId2, float amount1, float amount2);
 	~ModSlotConfig();
 
 	void setSourceId(int id);
@@ -30,6 +30,15 @@ public:
 	void setTargetId2(int id);
 	int getTargetId2();
 
+	void setAmount1(float amount);
+	float getAmount1();
+
+	void setAmount2(float amount);
+	float getAmount2();
+
+	bool isSlotEnabled();
+	void setEnabled(bool enabled);
+
 	ValueTree* getSlotConfig();
 
 private:
@@ -37,6 +46,11 @@ private:
 	int targetId1;
 	int targetId2;
     
+	float amount1 = 0;
+	float amount2 = 0;
+
+	bool enabled;
+
 	ScopedPointer<ValueTree> slotConfig;
 };
 

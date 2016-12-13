@@ -75,6 +75,8 @@ ModPanel::ModPanel (ModMatrix*  m)
     slots.push_back(modSlot5);
     slots.push_back(modSlot6);
 
+	config = new ModMatrixConfig();
+
     //[/Constructor]
 }
 
@@ -93,6 +95,7 @@ ModPanel::~ModPanel()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+	config = nullptr;
     //[/Destructor]
 }
 
@@ -134,6 +137,21 @@ void ModPanel::resized()
 
 std::vector<ModSlot*> ModPanel::getSlots() {
     return this->slots;
+}
+
+ModMatrixConfig * ModPanel::getConfig()
+{
+	return this->config;
+}
+
+void ModPanel::setConfig(ModMatrixConfig * config)
+{
+	this->config = config;
+
+	for (int i = 0; i < slots.size();i++) {
+		slots.at(i)->setConfig(config->getSlotConfig(i));
+	}
+
 }
 
 //[/MiscUserCode]
