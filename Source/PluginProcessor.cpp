@@ -158,6 +158,13 @@ TrioAudioProcessor::TrioAudioProcessor()
     sequencer = new Sequencer();
     sequencer->setModulator(false);
     
+    convolverLeft = new fftconvolver::FFTConvolver();
+    convolverRight= new fftconvolver::FFTConvolver();
+    
+
+    
+
+    
     this->effects.push_back(multimodeFilter);
     this->effects.push_back(stereoDelay);
     this->effects.push_back(reverb);
@@ -338,6 +345,33 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     this->modMatrix->registerTarget("Osc1Pitch", 3);
     this->modMatrix->registerTarget("Osc2Pitch", 4);
     this->modMatrix->registerTarget("Osc3Pitch", 5);
+    
+    AudioFormatManager manager;
+    manager.registerBasicFormats();
+    
+    AudioSampleBuffer fileBuffer;
+    
+    const File file("/Users/mpue/Downloads/IMreverbs/Musikvereinsaal.wav");
+    ScopedPointer<AudioFormatReader> reader (manager.createReaderFor (file));
+    
+    if (reader != nullptr)
+    {
+        const double duration = reader->lengthInSamples / reader->sampleRate;
+        
+        
+        fileBuffer.setSize (reader->numChannels, reader->lengthInSamples);
+        reader->read (&fileBuffer,
+                      0,
+                      reader->lengthInSamples,
+                      0,
+                      true,
+                      true);
+        
+        
+        convolverLeft->init(samplesPerBlock, fileBuffer.getReadPointer(0),fileBuffer.getNumSamples());
+        convolverRight->init(samplesPerBlock, fileBuffer.getReadPointer(1),fileBuffer.getNumSamples());
+        
+    }
     
 }
 
@@ -618,6 +652,7 @@ void TrioAudioProcessor::processFX(float* left, float* right, int numSamples) {
     for (int i = 0; i < effects.size();i++) {
         effects.at(i)->processStereo(left, right, numSamples);
     }
+
 }
 
 static float maxMag = 0;
@@ -647,7 +682,8 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
 		buffer.addSample(1, sample, value * model->getVolume());
 
 	}
-
+    const float* leftIn = buffer.getReadPointer(0);
+    const float* rightIn = buffer.getReadPointer(1);
 	float* const leftOut = buffer.getWritePointer(0);
 	float* const rightOut = buffer.getWritePointer(1);
 
@@ -656,8 +692,9 @@ void TrioAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& m
     }
     
 	processFX(leftOut, rightOut, buffer.getNumSamples());
-
-
+    
+    //convolverLeft->process(leftOut, leftOut,buffer.getNumSamples());
+    //convolverRight->process(leftOut, rightOut,buffer.getNumSamples());
     
     this->magnitudeLeft = buffer.getMagnitude(0, 0, buffer.getNumSamples());
     this->magnitudeRight = buffer.getMagnitude(1, 0, buffer.getNumSamples());
