@@ -27,6 +27,7 @@
 #include "StereoReverb.h"
 #include "Sequencer.h"
 #include "ModMatrix.h"
+#include "FFTConvolver.h"
 
 using namespace std;
 
@@ -100,6 +101,9 @@ public:
     void setState(ValueTree* state, bool notify);
     StereoReverb* getReverb();
     Distortion* getDistortion();
+    
+    fftconvolver::FFTConvolver* convolverLeft;
+    fftconvolver::FFTConvolver* convolverRight;
     
     vector<String> getProgramNames();
     String getSelectedProgram();
