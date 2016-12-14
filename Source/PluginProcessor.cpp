@@ -52,6 +52,8 @@ TrioAudioProcessor::TrioAudioProcessor()
     registeredParams.push_back(parameters->createAndAddParameter("osc2fine", "Osc 2 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("osc3fine", "Osc 3 Fine", String(), NormalisableRange<float>(-2.0f,2.0f), 0.0f, nullptr, nullptr));
 
+	registeredParams.push_back(parameters->createAndAddParameter("oscsync", "Osc sync", String(), NormalisableRange<float>(0.0f, 1.0f), 0.0f, nullptr, nullptr));
+
     registeredParams.push_back(parameters->createAndAddParameter("osc1shape", "Osc 1 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("osc2shape", "Osc 2 Shape", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("osc3shape", "Osc 3 Shape", String(), NormalisableRange<float>(0.0f,3.0f), 0.0f, nullptr, nullptr));
@@ -842,6 +844,9 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 	if (parameterID == "osc3fine") {
 		model->setOsc3Fine(newValue);
 	}
+	if (parameterID == "oscsync") {	
+		setSync(newValue > 0);
+	}
 	if (parameterID == "filtermod") {
 		model->setFilterModAmount(newValue);
 	}
@@ -1084,7 +1089,8 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
         sequencer->setRaster(16);
         sequencer->setEnabled(false);
     }
-        
+       
+	// existing configuration -> update matrix
 	if (state->getChildWithName("modMatrix").isValid()) {
 
 		ValueTree v = state->getChildWithName("modMatrix");
@@ -1110,6 +1116,10 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
 		modMatrix->setConfig(mmc);
 
 	}
+	// create default configuration
+	else {
+		modMatrix->createDefaultConfig();
+	}
 
 
     for (int i = 0; i < state->getNumChildren();i++) {
@@ -1130,7 +1140,6 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
 		this->updateParam(id, val);
         
     }
-    
 
     sendChangeMessage();
 }

@@ -179,3 +179,26 @@ ModMatrixConfig * ModMatrix::getConfiguration()
 {
 	return this->config;
 }
+
+void ModMatrix::createDefaultConfig()
+{
+	ModMatrixConfig* mmc = new ModMatrixConfig();
+
+	for (int i = 0; i < 6;i++) {
+
+		ModSlotConfig* msc = new ModSlotConfig();
+
+		msc->setAmount1(0);
+		msc->setAmount2(0);
+		msc->setSourceId(1);
+		msc->setTargetId1(1);
+		msc->setTargetId2(1);
+		msc->setEnabled(false);
+
+		mmc->addConfig(msc);
+
+	}
+
+	setConfig(mmc);
+
+}

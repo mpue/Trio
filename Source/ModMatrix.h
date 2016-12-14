@@ -43,6 +43,8 @@ public:
 	void setConfig(ModMatrixConfig* config);
 	ModMatrixConfig* getConfiguration();
 
+	void createDefaultConfig();
+
 private:
     vector<Modulation*> modulations;
     

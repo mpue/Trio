@@ -51,7 +51,7 @@ private:
 
 	bool enabled;
 
-	ScopedPointer<ValueTree> slotConfig;
+	ValueTree* slotConfig;
 };
 
 

@@ -767,7 +767,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     this->ampDecayAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampdecay", *this->ampDecaySlider);
     this->ampSustainAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"ampsustain", *this->ampSustainSlider);
     this->ampReleaseAttachment = new AudioProcessorValueTreeState::SliderAttachment(*processor->getValueTreeState(),"amprelease", *this->ampReleaseSlider);
-    // this->filtermodeAttachment = new AudioProcessorValueTreeState::ButtonAttachment(*processor->getValueTreeState(),"filtermode", *this->lowPassPutton);
+    this->oscSyncAttachment = new AudioProcessorValueTreeState::ButtonAttachment(*processor->getValueTreeState(),"oscsync", *this->slaveToggleButton);
 
     /*
     this->modSourceAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment(*processor->getValueTreeState(),"modsource", *this->modCombo);
@@ -1002,7 +1002,7 @@ MainWindow::~MainWindow()
     this->browserPanel = nullptr;
     this->fxPanel = nullptr;
 	this->settingsPanel = nullptr;
-    this->filtermodeAttachment = nullptr;
+    this->oscSyncAttachment = nullptr;
 
     //[/Destructor_pre]
 
@@ -1715,6 +1715,16 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
         bool sync = slaveToggleButton->getToggleState();
         processor->setSync(sync);
+		
+		float val = 0.0f;
+
+		if (sync) {
+			val = 1.0f;
+		}
+
+		String id = "oscsync";
+		float nval = processor->getValueTreeState()->getParameterRange(id).convertTo0to1(val);
+		processor->getValueTreeState()->getParameter(id)->setValueNotifyingHost(nval);
 
         //[/UserButtonCode_slaveToggleButton]
     }

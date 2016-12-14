@@ -128,7 +128,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> modSourceAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod1TargetAttachment;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> mod2TargetAttachment;
-    ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> filtermodeAttachment;
+    ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> oscSyncAttachment;
 
     ScopedPointer<ModPanel> modPanel;
     ScopedPointer<PresetDialog> presetPanel;

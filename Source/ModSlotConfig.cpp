@@ -26,8 +26,8 @@ ModSlotConfig::ModSlotConfig()
 
  ModSlotConfig::~ModSlotConfig()
  {
-	 if (slotConfig != nullptr)
-		slotConfig = nullptr;
+	 if (slotConfig != NULL)
+		 delete slotConfig;
  }
 
   void ModSlotConfig::setSourceId(int id)
