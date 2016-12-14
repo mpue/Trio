@@ -19,16 +19,17 @@ ModMatrix::ModMatrix(double sampleRate, Model* m) {
 
 ModMatrix::~ModMatrix() {
 	
-	/*
+	
     for(std::vector<Modulation*>::iterator it = modulations.begin(); it != modulations.end(); ++it) {
         delete *it;
     }
-	*/
+	
 	
     modSources->clear();
     modTargets->clear();
     delete modSources;
     delete modTargets;
+    delete config;
 }
 
 void ModMatrix::process() {
@@ -73,6 +74,10 @@ Model* ModMatrix::getModel() {
 
 void ModMatrix::setConfig(ModMatrixConfig * config)
 {
+    if (this->config != NULL) {
+        delete this->config;
+    }
+    
 	this->config = config;
 
 	this->modulations.clear();

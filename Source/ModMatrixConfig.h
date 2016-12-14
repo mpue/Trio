@@ -31,8 +31,8 @@ public:
 	int getNumConfigs();
 
 private:
-	vector<ScopedPointer<ModSlotConfig>> slotConfigs;
-	ScopedPointer<ValueTree> config;
+	vector<ModSlotConfig*> slotConfigs;
+    ValueTree* config;
 
 };
 

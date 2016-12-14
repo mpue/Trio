@@ -19,6 +19,10 @@ Modulation::~Modulation() {
         targets.at(i)->setModulator(NULL);
     }
     
+    for(std::vector<ModTarget*>::iterator it = targets.begin(); it != targets.end(); ++it) {
+        delete *it;
+    }
+    
     this->targets.clear();
 }
 

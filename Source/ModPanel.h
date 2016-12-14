@@ -72,7 +72,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     std::vector<ModSlot*> slots;
     ModMatrix* matrix;
-	ScopedPointer<ModMatrixConfig> config;
+	ModMatrixConfig* config;
     //[/UserVariables]
 
     //==============================================================================

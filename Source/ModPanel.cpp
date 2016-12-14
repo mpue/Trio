@@ -96,7 +96,7 @@ ModPanel::~ModPanel()
 
 
     //[Destructor]. You can add your own custom destruction code here..
-	config = nullptr;
+	delete config;
 	matrix->removeAllChangeListeners();
     //[/Destructor]
 }
