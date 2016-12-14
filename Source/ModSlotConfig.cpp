@@ -11,8 +11,9 @@
 #include "ModSlotConfig.h"
 
 ModSlotConfig::ModSlotConfig()
-  {
-  }
+{
+	this->slotConfig = new ValueTree(Identifier("slotConfig"));
+}
 
  ModSlotConfig::ModSlotConfig(int sourceId, int targetId1, int targetId2, float amount1, float amount2) {
 	 this->sourceId = sourceId;
@@ -25,7 +26,8 @@ ModSlotConfig::ModSlotConfig()
 
  ModSlotConfig::~ModSlotConfig()
  {
-	 slotConfig = nullptr;
+	 if (slotConfig != nullptr)
+		slotConfig = nullptr;
  }
 
   void ModSlotConfig::setSourceId(int id)

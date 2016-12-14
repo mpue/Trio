@@ -18,6 +18,12 @@
 
 using namespace std;
 
+Model::Model()
+{
+	this->volume = 1.0f;
+	this->filterResonance = 0.1f;
+}
+
 Model::Model(vector<Voice*> voices, MultimodeFilter* mainFilter, vector<ADSR*> modEnv, MultimodeOscillator* lfo1, MultimodeOscillator* lfo2, Sequencer* seq,int sampleRate) {
     this->voices = voices;
     this->mainFilter = mainFilter;
@@ -330,24 +336,54 @@ int Model::getMod2Target() {
     return this->mod2target;
 }
 
+void Model::setEnvelopes(vector<ADSR*> envelopes)
+{
+	this->modEnv = envelopes;
+}
+
 vector<ADSR*> Model::getModEnvelopes() {
     return this->modEnv;
+}
+
+void Model::setFilter(MultimodeFilter * filter)
+{
+	this->mainFilter = filter;
 }
 
 MultimodeFilter* Model::getFilter() {
     return mainFilter;
 }
 
+void Model::setLfo1(MultimodeOscillator * osc)
+{
+	this->lfo1 = osc;
+}
+
 MultimodeOscillator* Model::getLfo1() {
     return lfo1;
+}
+
+void Model::setLfo2(MultimodeOscillator * osc)
+{
+	this->lfo1 = osc;
 }
 
 MultimodeOscillator* Model::getLfo2() {
     return lfo2;
 }
 
+void Model::setVoices(vector<Voice*> voices)
+{
+	this->voices = voices;
+}
+
 vector<Voice*> Model::getVoices() {
     return this->voices;
+}
+
+void Model::setSequencer(Sequencer * sequencer)
+{
+	this->seq = sequencer;
 }
 
 Sequencer* Model::getSequencer() {
@@ -360,4 +396,9 @@ void Model::setCurrentModEnvIdx(int idx ) {
 
 int Model::getCurrentModEnvIdx() {
     return this->currentModEnvIdx;
+}
+
+void Model::setSampleRate(float sampleRate)
+{
+	this->sampleRate = sampleRate;
 }

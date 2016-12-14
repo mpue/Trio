@@ -15,19 +15,6 @@
       <FILE id="rHwWAE" name="Knob_64.png" compile="0" resource="1" file="Knob_64.png"/>
     </GROUP>
     <GROUP id="{973A5F90-B82E-4BC1-6D49-78E790BACA7B}" name="Source">
-      <GROUP id="{EE0E30CF-F27F-9DBE-4482-C15C22225F6B}" name="Convolver">
-        <FILE id="S6LMMh" name="AudioFFT.cpp" compile="1" resource="0" file="Source/AudioFFT.cpp"/>
-        <FILE id="JlGTgd" name="AudioFFT.h" compile="0" resource="0" file="Source/AudioFFT.h"/>
-        <FILE id="QyJJSS" name="FFTConvolver.cpp" compile="1" resource="0"
-              file="Source/FFTConvolver.cpp"/>
-        <FILE id="Hdp1bP" name="FFTConvolver.h" compile="0" resource="0" file="Source/FFTConvolver.h"/>
-        <FILE id="PefWiP" name="TwoStageFFTConvolver.cpp" compile="1" resource="0"
-              file="Source/TwoStageFFTConvolver.cpp"/>
-        <FILE id="IdciYj" name="TwoStageFFTConvolver.h" compile="0" resource="0"
-              file="Source/TwoStageFFTConvolver.h"/>
-        <FILE id="Ug4jVG" name="Utilities.cpp" compile="1" resource="0" file="Source/Utilities.cpp"/>
-        <FILE id="syhnGS" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
-      </GROUP>
       <GROUP id="{84CD871F-5158-0DD5-2477-3B6CF7ADDA43}" name="Config">
         <FILE id="cu9wfu" name="ControllerConfig.cpp" compile="1" resource="0"
               file="Source/ControllerConfig.cpp"/>

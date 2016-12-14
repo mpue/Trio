@@ -70,3 +70,112 @@ double ModMatrix::getSampleRate(){
 Model* ModMatrix::getModel() {
     return this->model;
 }
+
+void ModMatrix::setConfig(ModMatrixConfig * config)
+{
+	this->config = config;
+
+	this->modulations.clear();
+	
+	for (int i = 0; i < config->getNumConfigs();i++) {
+		ModSlotConfig* msc = config->getSlotConfig(i);
+
+		Modulation* mod = new Modulation();
+		this->modulations.push_back(mod);
+
+		mod->setEnabled(msc->isSlotEnabled());
+
+		if (msc->getSourceId() == 1) {
+			modulations.at(i)->setModulator(NULL);
+		}
+		// LFO 1
+		else if (msc->getSourceId() == 2) {
+			modulations.at(i)->setModulator(model->getLfo1());
+		}
+		// LFO 2
+		else if (msc->getSourceId() == 3) {
+			modulations.at(i)->setModulator(model->getLfo2());
+		}
+		else if (msc->getSourceId() == 4) {
+			modulations.at(i)->setModulator(model->getModEnvelopes().at(0));
+		}
+		else if (msc->getSourceId() == 5) {
+			modulations.at(i)->setModulator(model->getModEnvelopes().at(1));
+		}
+		else if (msc->getSourceId() == 6) {
+			modulations.at(i)->setModulator(model->getModEnvelopes().at(2));
+		}
+		else if (msc->getSourceId() == 7) {
+			modulations.at(i)->setModulator(model->getSequencer());
+		}			
+
+
+		// Filter envelope
+		if (msc->getTargetId1() == 2) {
+
+			ModTarget* target = model->getFilter();
+
+			if (modulations.at(i)->getTargets().size() >= 1) {
+				modulations.at(i)->getTargets()[0] = target;
+			}
+			else {
+				modulations.at(i)->addTarget(target);
+			}
+
+			target->setModulator(modulations.at(i)->getModulator());
+			target->setModAmount(msc->getAmount1());
+		}
+		// Osc 1 Pitch
+		if (msc->getTargetId1() == 3) {
+
+			modulations.at(i)->getTargets().clear();
+
+			for (int i = 0; i < model->getVoices().size(); i++) {
+				model->getVoices().at(i)->setModAmount(msc->getAmount1());
+				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(i)->getOscillator(0));
+				m->setModulator(modulations.at(i)->getModulator());
+				m->setModAmount(msc->getAmount1());
+				modulations.at(i)->addTarget(m);
+			}
+
+		}
+		// Osc 2 Pitch
+		if (msc->getTargetId1() == 4) {
+
+			modulations.at(i)->getTargets().clear();
+
+			for (int i = 0; i < model->getVoices().size(); i++) {
+				model->getVoices().at(i)->setModAmount(msc->getAmount1());
+				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(i)->getOscillator(1));
+				m->setModulator(modulations.at(i)->getModulator());
+				m->setModAmount(msc->getAmount1());
+				modulations.at(i)->addTarget(m);
+			}
+
+		}
+		// Osc 3 Pitch
+		if (msc->getTargetId1() == 5) {
+
+			modulations.at(i)->getTargets().clear();
+
+			for (int i = 0; i < model->getVoices().size(); i++) {
+				model->getVoices().at(i)->setModAmount(msc->getAmount1());
+				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(i)->getOscillator(2));
+				m->setModulator(modulations.at(i)->getModulator());
+				m->setModAmount(msc->getAmount1());
+				modulations.at(i)->addTarget(m);
+			
+			}
+
+		}
+
+	}
+
+	sendChangeMessage();
+
+}
+
+ModMatrixConfig * ModMatrix::getConfiguration()
+{
+	return this->config;
+}

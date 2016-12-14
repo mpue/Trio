@@ -42,7 +42,8 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class ModPanel  : public Component
+class ModPanel  : public Component,
+                  public ChangeListener
 {
 public:
     //==============================================================================
@@ -55,6 +56,8 @@ public:
     std::vector<ModSlot*> getSlots();
 	ModMatrixConfig* getConfig();
 	void setConfig(ModMatrixConfig* config);
+	virtual void changeListenerCallback(ChangeBroadcaster* source) override;
+
     //[/UserMethods]
 
     void paint (Graphics& g) override;

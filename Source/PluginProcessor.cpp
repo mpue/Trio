@@ -158,19 +158,10 @@ TrioAudioProcessor::TrioAudioProcessor()
     sequencer = new Sequencer();
     sequencer->setModulator(false);
     
-    convolverLeft = new fftconvolver::FFTConvolver();
-    convolverRight= new fftconvolver::FFTConvolver();
-    
-
-    
-
-    
     this->effects.push_back(multimodeFilter);
     this->effects.push_back(stereoDelay);
     this->effects.push_back(reverb);
     this->effects.push_back(outputFilter);
-    
-
     
 }
 
@@ -271,8 +262,13 @@ String TrioAudioProcessor::getSelectedProgram() {
 }
 
 void TrioAudioProcessor::setSelectedProgram(juce::String name) {
-    this->selectedProgram = name;
     
+	this->selectedProgram = name;
+	
+	if (!prepared) {
+		return;
+	}
+
     String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
     String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
     
@@ -314,8 +310,6 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     lfo2 = new MultimodeOscillator(sampleRate);
     lfo1->setMode(Oszillator::SINE);
     
-    this->model = new Model(voices, multimodeFilter ,modEnvelopes, lfo1, lfo2, this->sequencer, 44100);
-    
     multimodeFilter->coefficients(filterCutoff, 0.1f );    
     outputFilter->coefficients(30,0.1);
 
@@ -330,8 +324,10 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 		modEnvelopes.at(i)->setSustainLevel(.8);
 	}
     
+	this->model = new Model(voices, multimodeFilter, modEnvelopes, lfo1, lfo2, sequencer, sampleRate);
+
     this->modMatrix = new ModMatrix(sampleRate, model);
-    
+
     this->modMatrix->registerSource("none", 1);
     this->modMatrix->registerSource("LFO1", 2);
     this->modMatrix->registerSource("LFO2", 3);
@@ -345,33 +341,14 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     this->modMatrix->registerTarget("Osc1Pitch", 3);
     this->modMatrix->registerTarget("Osc2Pitch", 4);
     this->modMatrix->registerTarget("Osc3Pitch", 5);
-    
-    AudioFormatManager manager;
-    manager.registerBasicFormats();
-    
-    AudioSampleBuffer fileBuffer;
-    
-    const File file("/Users/mpue/Downloads/IMreverbs/Musikvereinsaal.wav");
-    ScopedPointer<AudioFormatReader> reader (manager.createReaderFor (file));
-    
-    if (reader != nullptr)
-    {
-        const double duration = reader->lengthInSamples / reader->sampleRate;
-        
-        
-        fileBuffer.setSize (reader->numChannels, reader->lengthInSamples);
-        reader->read (&fileBuffer,
-                      0,
-                      reader->lengthInSamples,
-                      0,
-                      true,
-                      true);
-        
-        
-        convolverLeft->init(samplesPerBlock, fileBuffer.getReadPointer(0),fileBuffer.getNumSamples());
-        convolverRight->init(samplesPerBlock, fileBuffer.getReadPointer(1),fileBuffer.getNumSamples());
-        
-    }
+
+	if (!prepared) {
+		prepared = true;
+
+		if (selectedProgram != "") {
+			setSelectedProgram(selectedProgram);
+		}
+	}
     
 }
 
@@ -826,8 +803,6 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 			this->setupOscillator(2, Oszillator::OscMode::NOISE);
 		}
 	}
-
-
 	if (parameterID == "volume") {
 		model->setVolume(newValue);
 	}
@@ -1130,9 +1105,9 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
 
 			mmc->addConfig(msc);
 
-
-
 		}
+
+		modMatrix->setConfig(mmc);
 
 	}
 

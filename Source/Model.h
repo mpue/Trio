@@ -30,6 +30,7 @@ class Model {
     
 public:
 
+	Model();
     Model(vector<Voice*> voices, MultimodeFilter* mainFilter, vector<ADSR*> modEnv,MultimodeOscillator* lfo1, MultimodeOscillator* lfo2,  Sequencer* seq, int sampleRate);
     ~Model();
     
@@ -108,16 +109,29 @@ public:
     int getMod2Target();
     void setMod2Target(int target);
     
+	void setEnvelopes(vector<ADSR*> envelopes);
     vector <ADSR*> getModEnvelopes();
+
+	void setFilter(MultimodeFilter* filter);
     MultimodeFilter* getFilter();
-    MultimodeOscillator* getLfo1();
+    
+	void setLfo1(MultimodeOscillator* osc);
+	MultimodeOscillator* getLfo1();
+
+	void setLfo2(MultimodeOscillator* osc);
     MultimodeOscillator* getLfo2();
     
+	void setVoices(vector<Voice*>);
     vector<Voice*> getVoices();
-    Sequencer* getSequencer();
+    
+	void setSequencer(Sequencer* sequencer);
+	Sequencer* getSequencer();
+
     void setCurrentModEnvIdx(int idx);
     int getCurrentModEnvIdx();
     
+	void setSampleRate(float sampleRate);
+
 private:
     
     float volume;

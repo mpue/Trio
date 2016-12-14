@@ -120,6 +120,8 @@ ModSlot::ModSlot (ModMatrix*  m, int index)
     sourceCombo->setEnabled(false);
     targetCombo1->setEnabled(false);
     targetCombo2->setEnabled(false);
+
+	this->config = new ModSlotConfig();
     //[/Constructor]
 }
 
@@ -139,9 +141,8 @@ ModSlot::~ModSlot()
     titleLabel = nullptr;
     enableButton = nullptr;
 
-
     //[Destructor]. You can add your own custom destruction code here..
-	config = nullptr;
+	delete config;
     //[/Destructor]
 }
 
@@ -411,18 +412,30 @@ int ModSlot::getIndex() {
 
 ModSlotConfig * ModSlot::getConfig()
 {
+	config->setAmount1(modAmountSlider1->getValue());
+	config->setAmount2(modAmountSlider2->getValue());
+	config->setSourceId(sourceCombo->getSelectedId());
+	config->setTargetId1(targetCombo1->getSelectedId());
+	config->setTargetId2(targetCombo2->getSelectedId());
+
 	return config;
 }
 
 void ModSlot::setConfig(ModSlotConfig * config)
 {
 	this->config = config;
+
 	this->modAmountSlider1->setValue(config->getAmount1(), juce::NotificationType::dontSendNotification);
 	this->modAmountSlider2->setValue(config->getAmount2(), juce::NotificationType::dontSendNotification);
 	this->sourceCombo->setSelectedId(config->getSourceId(), juce::NotificationType::dontSendNotification);
 	this->targetCombo1->setSelectedId(config->getTargetId1(), juce::NotificationType::dontSendNotification);
 	this->targetCombo2->setSelectedId(config->getTargetId2(), juce::NotificationType::dontSendNotification);
 	this->enableButton->setToggleState(config->isSlotEnabled(), false);
+	this->slotEnabled = config->isSlotEnabled();
+
+	sourceCombo->setEnabled(this->slotEnabled);		
+	targetCombo1->setEnabled(this->slotEnabled);
+	targetCombo2->setEnabled(this->slotEnabled);
 
 }
 

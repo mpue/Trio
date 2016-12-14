@@ -27,6 +27,8 @@ public:
 	void addConfig(ModSlotConfig* config);
 	ValueTree* getConfiguation();
 	ModSlotConfig* getSlotConfig(int i);
+	void clearSlots();
+	int getNumConfigs();
 
 private:
 	vector<ScopedPointer<ModSlotConfig>> slotConfigs;

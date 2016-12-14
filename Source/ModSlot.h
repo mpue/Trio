@@ -79,7 +79,7 @@ private:
     bool slotEnabled;
     ModMatrix* matrix;
     int index;
-	ScopedPointer<ModSlotConfig> config;
+	ModSlotConfig* config;
     //[/UserVariables]
 
     //==============================================================================

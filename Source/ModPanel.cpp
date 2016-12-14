@@ -32,6 +32,7 @@ ModPanel::ModPanel (ModMatrix*  m)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     this->matrix = m;
+	m->addChangeListener(this);
     //[/Constructor_pre]
 
     addAndMakeVisible (modSlot1 = new ModSlot (m,0));
@@ -96,6 +97,7 @@ ModPanel::~ModPanel()
 
     //[Destructor]. You can add your own custom destruction code here..
 	config = nullptr;
+	matrix->removeAllChangeListeners();
     //[/Destructor]
 }
 
@@ -141,6 +143,12 @@ std::vector<ModSlot*> ModPanel::getSlots() {
 
 ModMatrixConfig * ModPanel::getConfig()
 {
+	this->config->clearSlots();
+
+	for (int i = 0; i < slots.size();i++) {
+		this->config->addConfig(slots.at(i)->getConfig());
+	}
+
 	return this->config;
 }
 
@@ -152,6 +160,11 @@ void ModPanel::setConfig(ModMatrixConfig * config)
 		slots.at(i)->setConfig(config->getSlotConfig(i));
 	}
 
+}
+
+void ModPanel::changeListenerCallback(ChangeBroadcaster * source)
+{
+	setConfig(matrix->getConfiguration());
 }
 
 //[/MiscUserCode]
@@ -167,7 +180,7 @@ void ModPanel::setConfig(ModMatrixConfig * config)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ModPanel" componentName=""
-                 parentClasses="public Component" constructorParams="ModMatrix*  m"
+                 parentClasses="public Component, public ChangeListener" constructorParams="ModMatrix*  m"
                  variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
                  overlayOpacity="0.330" fixedSize="0" initialWidth="910" initialHeight="600">
   <BACKGROUND backgroundColour="ffffffff">

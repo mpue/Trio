@@ -29,7 +29,6 @@ ModMatrixConfig::ModMatrixConfig()
 	  config->removeAllChildren(nullptr);
 
 	  for (int i = 0; i < slotConfigs.size(); i++) {
-		  slotConfigs.at(i);
 		  this->config->addChild(*(slotConfigs.at(i)->getSlotConfig()),-1, nullptr);
 	  }
 
@@ -39,4 +38,14 @@ ModMatrixConfig::ModMatrixConfig()
   ModSlotConfig * ModMatrixConfig::getSlotConfig(int i)
   {
 	  return slotConfigs.at(i);		  
+  }
+
+  void ModMatrixConfig::clearSlots()
+  {
+	  this->slotConfigs.clear();
+  }
+
+  int ModMatrixConfig::getNumConfigs()
+  {
+	  return slotConfigs.size();
   }

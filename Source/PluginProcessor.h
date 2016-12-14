@@ -27,7 +27,7 @@
 #include "StereoReverb.h"
 #include "Sequencer.h"
 #include "ModMatrix.h"
-#include "FFTConvolver.h"
+
 
 using namespace std;
 
@@ -101,11 +101,8 @@ public:
     void setState(ValueTree* state, bool notify);
     StereoReverb* getReverb();
     Distortion* getDistortion();
-    
-    fftconvolver::FFTConvolver* convolverLeft;
-    fftconvolver::FFTConvolver* convolverRight;
-    
-    vector<String> getProgramNames();
+
+	vector<String> getProgramNames();
     String getSelectedProgram();
     void setSelectedProgram(String program);
     
@@ -146,6 +143,8 @@ private:
     double sampleRate;
     int samplesPerBlock;
     
+	bool prepared = false;
+
     float globalPitch;
     float elapsed;
     float lastTime;
@@ -176,7 +175,7 @@ private:
     vector<Voice*> voices;
     int getVoicesPlaying();
     vector<ADSR*> modEnvelopes;
-    Model* model;
+    Model* model = NULL;
     
     ScopedPointer<MultimodeOscillator> lfo1;
     ScopedPointer<MultimodeOscillator> lfo2;
@@ -185,7 +184,7 @@ private:
     juce::AudioPlayHead::CurrentPositionInfo result;
     
     vector<String> programNames;
-    String selectedProgram;
+    String selectedProgram = "";
 
     int currentProgramNumber;
     

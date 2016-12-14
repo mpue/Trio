@@ -17,10 +17,11 @@
 #include <vector>
 #include <map>
 #include "Model.h"
+#include "ModMatrixConfig.h"
 
 using namespace std;
 
-class ModMatrix {
+class ModMatrix : public ChangeBroadcaster {
   
 public:
     ModMatrix(double sampleRate, Model* m);
@@ -39,7 +40,9 @@ public:
     
     double getSampleRate();
     Model* getModel();
-    
+	void setConfig(ModMatrixConfig* config);
+	ModMatrixConfig* getConfiguration();
+
 private:
     vector<Modulation*> modulations;
     
@@ -48,6 +51,7 @@ private:
     
     double sampleRate;
     Model* model;
+	ModMatrixConfig* config;
 };
 
 
