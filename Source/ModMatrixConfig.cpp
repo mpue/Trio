@@ -12,17 +12,11 @@
 
 ModMatrixConfig::ModMatrixConfig()
 {
-    this->config = new ValueTree(Identifier("modMatrix"));
+    // this->config = new ValueTree(Identifier("modMatrix"));
 }
 
 ModMatrixConfig::~ModMatrixConfig()
 {
-    for(std::vector<ModSlotConfig*>::iterator it = slotConfigs.begin(); it != slotConfigs.end(); ++it) {
-        delete *it;
-    }
-    slotConfigs.clear();
-    config->removeAllChildren(nullptr);
-    delete config;
 }
 
 void ModMatrixConfig::addConfig(ModSlotConfig * config)
@@ -30,16 +24,28 @@ void ModMatrixConfig::addConfig(ModSlotConfig * config)
     this->slotConfigs.push_back(config);
 }
 
+/*
 ValueTree * ModMatrixConfig::getConfiguation()
 {
     config->removeAllChildren(nullptr);
     
     for (int i = 0; i < slotConfigs.size(); i++) {
-        this->config->addChild(*(slotConfigs.at(i)->getSlotConfig()),-1, nullptr);
+        
+        ScopedPointer<ValueTree> slotConfig = new ValueTree(Identifier("slotConfig"));
+        
+        slotConfig->setProperty("sourceId", slotConfigs.at(i)->sourceId, nullptr);
+        slotConfig->setProperty("targetId1", slotConfigs.at(i)->targetId1, nullptr);
+        slotConfig->setProperty("targetId2", slotConfigs.at(i)->targetId2, nullptr);
+        slotConfig->setProperty("amount1", slotConfigs.at(i)->amount1, nullptr);
+        slotConfig->setProperty("amount2", slotConfigs.at(i)->amount2, nullptr);
+        slotConfig->setProperty("enabled", slotConfigs.at(i)->enabled, nullptr);
+        
+        config->addChild(*slotConfig, -1, nullptr);
     }
     
     return this->config;
 }
+ */
 
 ModSlotConfig * ModMatrixConfig::getSlotConfig(int i)
 {
@@ -49,7 +55,8 @@ ModSlotConfig * ModMatrixConfig::getSlotConfig(int i)
 void ModMatrixConfig::clearSlots()
 {
     for(std::vector<ModSlotConfig*>::iterator it = slotConfigs.begin(); it != slotConfigs.end(); ++it) {
-        delete *it;
+        if (*it != NULL)
+            delete *it;
     }
     this->slotConfigs.clear();
 }

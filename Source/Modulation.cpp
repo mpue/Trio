@@ -15,13 +15,16 @@ Modulation::Modulation() {
 
 Modulation::~Modulation() {
 
+    /*
     for (int i = 0; i < targets.size();i++) {
         targets.at(i)->setModulator(NULL);
     }
     
+    
     for(std::vector<ModTarget*>::iterator it = targets.begin(); it != targets.end(); ++it) {
         delete *it;
     }
+    */
     
     this->targets.clear();
 }

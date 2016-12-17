@@ -15,6 +15,8 @@
 
 class ModSlotConfig {
     
+
+    
 public:
 	
 	ModSlotConfig();
@@ -39,8 +41,10 @@ public:
 	bool isSlotEnabled();
 	void setEnabled(bool enabled);
 
-	ValueTree* getSlotConfig();
+	// ValueTree* getSlotConfig();
 
+    friend class ModMatrixConfig;
+    
 private:
 	int sourceId;
 	int targetId1;
@@ -51,7 +55,7 @@ private:
 
 	bool enabled;
 
-	ValueTree* slotConfig;
+
 };
 
 

@@ -135,9 +135,9 @@ void ModMatrix::setConfig(ModMatrixConfig * config)
 
 			modulations.at(i)->getTargets().clear();
 
-			for (int i = 0; i < model->getVoices().size(); i++) {
-				model->getVoices().at(i)->setModAmount(msc->getAmount1());
-				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(i)->getOscillator(0));
+			for (int j = 0; j < model->getVoices().size(); j++) {
+				model->getVoices().at(j)->setModAmount(msc->getAmount1());
+				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(j)->getOscillator(0));
 				m->setModulator(modulations.at(i)->getModulator());
 				m->setModAmount(msc->getAmount1());
 				modulations.at(i)->addTarget(m);
@@ -149,30 +149,29 @@ void ModMatrix::setConfig(ModMatrixConfig * config)
 
 			modulations.at(i)->getTargets().clear();
 
-			for (int i = 0; i < model->getVoices().size(); i++) {
-				model->getVoices().at(i)->setModAmount(msc->getAmount1());
-				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(i)->getOscillator(1));
-				m->setModulator(modulations.at(i)->getModulator());
-				m->setModAmount(msc->getAmount1());
-				modulations.at(i)->addTarget(m);
-			}
-
-		}
+            for (int j = 0; j < model->getVoices().size(); j++) {
+                model->getVoices().at(j)->setModAmount(msc->getAmount1());
+                MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(j)->getOscillator(1));
+                m->setModulator(modulations.at(i)->getModulator());
+                m->setModAmount(msc->getAmount1());
+                modulations.at(i)->addTarget(m);
+            }
+            
+        }
 		// Osc 3 Pitch
 		if (msc->getTargetId1() == 5) {
 
 			modulations.at(i)->getTargets().clear();
 
-			for (int i = 0; i < model->getVoices().size(); i++) {
-				model->getVoices().at(i)->setModAmount(msc->getAmount1());
-				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(i)->getOscillator(2));
-				m->setModulator(modulations.at(i)->getModulator());
-				m->setModAmount(msc->getAmount1());
-				modulations.at(i)->addTarget(m);
-			
-			}
-
-		}
+            for (int j = 0; j < model->getVoices().size(); j++) {
+                model->getVoices().at(j)->setModAmount(msc->getAmount1());
+                MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(j)->getOscillator(2));
+                m->setModulator(modulations.at(i)->getModulator());
+                m->setModAmount(msc->getAmount1());
+                modulations.at(i)->addTarget(m);
+            }
+            
+        }
 
 	}
 

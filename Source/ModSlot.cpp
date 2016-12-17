@@ -242,6 +242,7 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
             
             target->setModulator(matrix->getModulations().at(index)->getModulator());
 			target->setModAmount(modAmountSlider1->getValue());
+
         }
         // Osc 1 Pitch
         if (targetCombo1->getSelectedId() == 3) {
@@ -340,9 +341,10 @@ void ModSlot::buttonClicked (Button* buttonThatWasClicked)
         targetCombo1->setEnabled(enableButton->getToggleState());
         targetCombo2->setEnabled(enableButton->getToggleState());
         this->slotEnabled = enableButton->getToggleState();
-
+        matrix->getModulations().at(index)->setEnabled(this->slotEnabled);
+        
         // Modulation index does not exist
-        if (matrix->getModulations().size() <= index) {
+        if (this->slotEnabled && matrix->getModulations().size() <= index) {
             Modulation* mod = new Modulation();
             mod->setEnabled(true);
             matrix->addModulation(mod);

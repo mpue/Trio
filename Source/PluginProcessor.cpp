@@ -563,13 +563,13 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
 			voices[m.getNoteNumber()]->setTime(elapsed);
 			numVoices++;							
         }
-        else if (m.isNoteOff() && voices[m.getNoteNumber()]->isPlaying())
+        if (m.isNoteOff())
         {
             
-            if (voices[m.getNoteNumber()]->isPlaying()) {
-				voices[m.getNoteNumber()]->setPlaying(false);
-				voices[m.getNoteNumber()]->getAmpEnvelope()->gate(false);
-            }
+			voices[m.getNoteNumber()]->setPlaying(false);
+			voices[m.getNoteNumber()]->getAmpEnvelope()->gate(false);
+
+            numVoices--;
             
 			if (numVoices == 0) {
 				for (int envIdx = 0; envIdx < this->modEnvelopes.size(); envIdx++) {
@@ -577,13 +577,12 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
 				}
 			}
 			            
-			numVoices--;
 
         }
-        else if (m.isAftertouch())
+        if (m.isAftertouch())
         {
         }
-        else if (m.isPitchWheel())
+        if (m.isPitchWheel())
         {
             int pitch = m.getPitchWheelValue();
             
@@ -601,7 +600,7 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
             globalPitch = nPitch;
             
         }
-        else if (m.isController()) {
+        if (m.isController()) {
             
             // Modulation wheel
             if (m.getControllerNumber() == 1) {

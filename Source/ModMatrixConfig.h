@@ -25,14 +25,14 @@ public:
 	~ModMatrixConfig();
 
 	void addConfig(ModSlotConfig* config);
-	ValueTree* getConfiguation();
+	// ValueTree* getConfiguation();
 	ModSlotConfig* getSlotConfig(int i);
 	void clearSlots();
 	int getNumConfigs();
 
 private:
 	vector<ModSlotConfig*> slotConfigs;
-    ValueTree* config;
+    // ValueTree* config;
 
 };
 
