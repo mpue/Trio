@@ -50,7 +50,8 @@ class MainWindow  : public Component,
                     public Timer,
                     public ChangeBroadcaster,
                     public KeyListener,
-                    public ChangeListener
+                    public ChangeListener,
+                    AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -78,6 +79,7 @@ public:
     void toggleView(PanelDisplay display);
     bool keyPressed (const KeyPress& key, Component* originatingComponent) override;
     void changeListenerCallback (ChangeBroadcaster* source) override;
+    void parameterChanged(const String &parameterID, float newValue) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;

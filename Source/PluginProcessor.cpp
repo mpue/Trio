@@ -37,6 +37,8 @@ TrioAudioProcessor::TrioAudioProcessor()
     currentppq = 0;
     deltappq = 0;
     
+    currentModEnv = 0;
+    
     this->parameters = new AudioProcessorValueTreeState(*this,nullptr);
     registeredParams.push_back(parameters->createAndAddParameter("volume", "Volume", String(), NormalisableRange<float>(0.0f,1.0f), 1.0f, nullptr, nullptr));
     
@@ -73,17 +75,17 @@ TrioAudioProcessor::TrioAudioProcessor()
     registeredParams.push_back(parameters->createAndAddParameter("lfo2amount", "LFO 2 Mod AMount", String(), NormalisableRange<float>(0.0f,10.0f), 0.0f, nullptr, nullptr));
     
     registeredParams.push_back(parameters->createAndAddParameter("mod1_attack", "Env 1 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod1_decay", "Env 1 decay", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod1_decay", "Env 1 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod1_sustain", "Env 1 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod1_release", "Env 1 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     
     registeredParams.push_back(parameters->createAndAddParameter("mod2_attack", "Env 2 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod2_decay", "Env 2 decay", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod2_decay", "Env 2 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod2_sustain", "Env 2 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod2_release", "Env 2 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
 
     registeredParams.push_back(parameters->createAndAddParameter("mod3_attack", "Env 3 attack", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
-    registeredParams.push_back(parameters->createAndAddParameter("mod3_decay", "Env 3 decay", String(), NormalisableRange<float>(0.0f,2.0f), 0.0f, nullptr, nullptr));
+    registeredParams.push_back(parameters->createAndAddParameter("mod3_decay", "Env 3 decay", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod3_sustain", "Env 3 sustain", String(), NormalisableRange<float>(0.0f,1.0f), 0.0f, nullptr, nullptr));
     registeredParams.push_back(parameters->createAndAddParameter("mod3_release", "Env 3 release", String(), NormalisableRange<float>(0.0f,5.0f), 0.0f, nullptr, nullptr));
     
@@ -549,19 +551,25 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
     {
         
-        if (m.isNoteOn() && !voices[m.getNoteNumber()]->isPlaying())
+        if (m.isNoteOn())
         {
+
             for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
+                modEnvelopes.at(envIdx)->reset();
                 modEnvelopes.at(envIdx)->gate(true);
             }
 			
-			voices[m.getNoteNumber()]->setNoteAndVelocity(m.getNoteNumber(), m.getVelocity());
-			voices[m.getNoteNumber()]->setPlaying(true);
-            voices[m.getNoteNumber()]->getAmpEnvelope()->reset();
-			voices[m.getNoteNumber()]->getAmpEnvelope()->gate(true);
-			voices[m.getNoteNumber()]->setDuration(250);
-			voices[m.getNoteNumber()]->setTime(elapsed);
-			numVoices++;							
+            if(!voices[m.getNoteNumber()]->isPlaying()) {
+                voices[m.getNoteNumber()]->setNoteAndVelocity(m.getNoteNumber(), m.getVelocity());
+                voices[m.getNoteNumber()]->setPlaying(true);
+                voices[m.getNoteNumber()]->getAmpEnvelope()->reset();
+                voices[m.getNoteNumber()]->getAmpEnvelope()->gate(true);
+                voices[m.getNoteNumber()]->setDuration(250);
+                voices[m.getNoteNumber()]->setTime(elapsed);
+                
+                numVoices++;
+            }
+						
         }
         if (m.isNoteOff())
         {

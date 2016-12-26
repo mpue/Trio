@@ -164,7 +164,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
     filterAttackSlider->addListener (this);
 
     addAndMakeVisible (filterDecaySlider = new Slider ("filterDecaySlider"));
-    filterDecaySlider->setRange (0, 2, 0.1);
+    filterDecaySlider->setRange (0, 5, 0.1);
     filterDecaySlider->setSliderStyle (Slider::RotaryVerticalDrag);
     filterDecaySlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     filterDecaySlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
@@ -964,7 +964,12 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
         modPanel->getSlots().at(i)->setSelectedTarget2(1);
     }
 
-    modEnvCombo->setSelectedId(1);
+    processor->parameters->addParameterListener("mod1_attack", this);
+    processor->parameters->addParameterListener("mod1_decay", this);
+    processor->parameters->addParameterListener("mod1_sustain", this);
+    processor->parameters->addParameterListener("mod1_release", this);
+
+    filterDecaySlider->setValue(nval);
 
     //[/Constructor]
 }
@@ -974,6 +979,10 @@ MainWindow::~MainWindow()
     //[Destructor_pre]. You can add your own custom destruction code here..
     processor->removeListener(this);
     processor->removeAllChangeListeners();
+    processor->parameters->removeParameterListener("mod1_attack",this);
+    processor->parameters->removeParameterListener("mod1_decay",this);
+    processor->parameters->removeParameterListener("mod1_sustain",this);
+    processor->parameters->removeParameterListener("mod1_release",this);
     this->volumeAttachement = nullptr;
     this->osc1VolAttachment = nullptr;
     this->osc2VolAttachment = nullptr;
@@ -1526,11 +1535,11 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 		}
 
         modMatrix = ValueTree(Identifier("modMatrix"));
-        
+
         for (int i = 0; i < processor->getModMatrix()->getConfiguration()->getNumConfigs(); i++) {
-            
+
             ValueTree slotConfig = ValueTree(Identifier("slotConfig"));
-            
+
             slotConfig.setProperty("sourceId", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getSourceId(), nullptr);
             slotConfig.setProperty("targetId1", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getTargetId1(), nullptr);
             slotConfig.setProperty("targetId2", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getTargetId2(), nullptr);
@@ -1539,9 +1548,9 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
             slotConfig.setProperty("enabled", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->isSlotEnabled() , nullptr);
 
             modMatrix.addChild(slotConfig, -1, nullptr);
-            
+
         }
-		
+
 		processor->getValueTreeState()->state.addChild(modMatrix, -1, nullptr);
 
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
@@ -1731,7 +1740,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
         bool sync = slaveToggleButton->getToggleState();
         processor->setSync(sync);
-		
+
 		float val = 0.0f;
 
 		if (sync) {
@@ -1776,7 +1785,7 @@ void MainWindow::visibilityChanged() {
 
     }
      */
-
+    modEnvCombo->setSelectedId(1);
     presetCombo->setText(processor->getSelectedProgram(),NotificationType::dontSendNotification);
     // processor->updateHostDisplay();
 }
@@ -1844,66 +1853,69 @@ void MainWindow::audioProcessorParameterChanged (AudioProcessor* processor, int 
             highPassButton->setToggleState(true,NotificationType::dontSendNotification);
         }
     }
+
     else if (id == "mod1_attack") {
-        if (this->processor->getCurrentModEnvIdx() == 1) {
+        if (this->processor->getCurrentModEnvIdx() + 1  == 1) {
             filterAttackSlider->setValue(nval);
         }
     }
     else if (id == "mod1_decay") {
-        if (this->processor->getCurrentModEnvIdx() == 1) {
+        if (this->processor->getCurrentModEnvIdx() + 1  == 1) {
             filterDecaySlider->setValue(nval);
         }
     }
     else if (id == "mod1_sustain") {
-        if (this->processor->getCurrentModEnvIdx() == 1) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 1) {
             filterSustainSlider->setValue(nval);
         }
     }
     else if (id == "mod1_release") {
-        if (this->processor->getCurrentModEnvIdx() == 1) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 1) {
             filterReleaseSlider->setValue(nval);
         }
     }
+
     else if (id == "mod2_attack") {
-        if (this->processor->getCurrentModEnvIdx() == 2) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 2) {
             filterAttackSlider->setValue(nval);
         }
     }
     else if (id == "mod2_decay") {
-        if (this->processor->getCurrentModEnvIdx() == 2) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 2) {
             filterDecaySlider->setValue(nval);
         }
     }
     else if (id == "mod2_sustain") {
-        if (this->processor->getCurrentModEnvIdx() == 2) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 2) {
             filterSustainSlider->setValue(nval);
         }
     }
     else if (id == "mod2_release") {
-        if (this->processor->getCurrentModEnvIdx() == 2) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 2) {
             filterReleaseSlider->setValue(nval);
         }
     }
     else if (id == "mod3_attack") {
-        if (this->processor->getCurrentModEnvIdx() == 3) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 3) {
             filterAttackSlider->setValue(nval);
         }
     }
     else if (id == "mod3_decay") {
-        if (this->processor->getCurrentModEnvIdx() == 3) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 3) {
             filterDecaySlider->setValue(nval);
         }
     }
     else if (id == "mod3_sustain") {
-        if (this->processor->getCurrentModEnvIdx() == 3) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 3) {
             filterSustainSlider->setValue(nval);
         }
     }
     else if (id == "mod3_release") {
-        if (this->processor->getCurrentModEnvIdx() == 3) {
+        if (this->processor->getCurrentModEnvIdx() + 1 == 3) {
             filterReleaseSlider->setValue(nval);
         }
     }
+
 
 }
 
@@ -1986,6 +1998,10 @@ void MainWindow::changeListenerCallback (ChangeBroadcaster* source) {
     presetCombo->setText(processor->getSelectedProgram());
 }
 
+void MainWindow::parameterChanged(const String &parameterID, float newValue) {
+    Logger::getCurrentLogger()->writeToLog("MainWIndow : Parameter changed ->"+parameterID);
+}
+
 //[/MiscUserCode]
 
 
@@ -1999,7 +2015,7 @@ void MainWindow::changeListenerCallback (ChangeBroadcaster* source) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer, public ChangeBroadcaster, public KeyListener, public ChangeListener"
+                 parentClasses="public Component, public SliderListener, public ButtonListener, public ComboBoxListener, public AudioProcessorListener, public Timer, public ChangeBroadcaster, public KeyListener, public ChangeListener, AudioProcessorValueTreeState::Listener"
                  constructorParams="TrioAudioProcessor* p" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="910" initialHeight="600">
@@ -2093,7 +2109,7 @@ BEGIN_JUCER_METADATA
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterDecaySlider" id="33363d9ec7716419" memberName="filterDecaySlider"
           virtualName="" explicitFocusOrder="0" pos="681 96 64 64" rotaryslideroutline="66fff8f8"
-          min="0" max="2" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          min="0" max="5" int="0.10000000000000000555" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="filterSustainSlider" id="221683b72a922f05" memberName="filterSustainSlider"

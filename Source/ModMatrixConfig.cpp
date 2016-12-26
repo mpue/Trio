@@ -17,6 +17,7 @@ ModMatrixConfig::ModMatrixConfig()
 
 ModMatrixConfig::~ModMatrixConfig()
 {
+    clearSlots();
 }
 
 void ModMatrixConfig::addConfig(ModSlotConfig * config)
