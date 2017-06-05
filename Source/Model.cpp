@@ -39,6 +39,10 @@ Model::Model(vector<Voice*> voices, MultimodeFilter* mainFilter, vector<ADSR*> m
 Model::~Model() {
 }
 
+void Model::changeListenerCallback (ChangeBroadcaster* source) {
+    
+}
+
 float Model::getOsc1Pitch() {
     return this->osc1Pitch;
 }
@@ -401,4 +405,22 @@ int Model::getCurrentModEnvIdx() {
 void Model::setSampleRate(float sampleRate)
 {
 	this->sampleRate = sampleRate;
+}
+
+int Model::getGlobalTranspose() {
+    return this->globalTranspose;
+}
+
+void Model::setGlobalTranspose(int transpose) {
+    this->globalTranspose = transpose;
+    sendChangeMessage();
+}
+
+int Model::getPitchbendRange() {
+    return this->pitchbendRange;
+}
+
+void Model::setPitchbendRange(int range) {
+    this->pitchbendRange = range;
+    sendChangeMessage();
 }

@@ -19,6 +19,7 @@ ModMatrix::ModMatrix(double sampleRate, Model* m) {
 
 ModMatrix::~ModMatrix() {
 	
+    removeAllChangeListeners();
 	
     for(std::vector<Modulation*>::iterator it = modulations.begin(); it != modulations.end(); ++it) {
         delete *it;

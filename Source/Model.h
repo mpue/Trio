@@ -26,13 +26,15 @@
 
 using namespace std;
 
-class Model {
+class Model : public ChangeBroadcaster, public ChangeListener {
     
 public:
 
 	Model();
     Model(vector<Voice*> voices, MultimodeFilter* mainFilter, vector<ADSR*> modEnv,MultimodeOscillator* lfo1, MultimodeOscillator* lfo2,  Sequencer* seq, int sampleRate);
     ~Model();
+    
+    void changeListenerCallback (ChangeBroadcaster* source) override;
     
 	float getOsc1Pitch();
     void setOsc1Pitch(int pitch);
@@ -131,7 +133,14 @@ public:
     int getCurrentModEnvIdx();
     
 	void setSampleRate(float sampleRate);
+    
+    void setGlobalTranspose(int transpose);
+    int getGlobalTranspose();
 
+    void setPitchbendRange(int range);
+    int getPitchbendRange();
+    
+    
 private:
     
     float volume;
@@ -184,6 +193,9 @@ private:
     int currentModEnvIdx = 0;
     
     Sequencer* seq;
+    
+    int globalTranspose = 0;
+    int pitchbendRange = 2;
     
 };
 

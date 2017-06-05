@@ -47,8 +47,8 @@ SettingsPanel::SettingsPanel ()
     pitchBendCombo->setJustificationType (Justification::centredLeft);
     pitchBendCombo->setTextWhenNothingSelected (String());
     pitchBendCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    pitchBendCombo->addItem (TRANS("+/- 3"), 1);
-    pitchBendCombo->addItem (TRANS("+/- 2"), 2);
+    pitchBendCombo->addItem (TRANS("+/- 2"), 1);
+    pitchBendCombo->addItem (TRANS("+/- 3"), 2);
     pitchBendCombo->addSeparator();
     pitchBendCombo->addSeparator();
     pitchBendCombo->addListener (this);
@@ -127,6 +127,7 @@ SettingsPanel::~SettingsPanel()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+    removeAllChangeListeners();
     //[/Destructor]
 }
 
@@ -171,21 +172,38 @@ void SettingsPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == pitchBendCombo)
     {
         //[UserComboBoxCode_pitchBendCombo] -- add your combo box handling code here..
+        
+        if (pitchBendCombo->getSelectedId() == 1) {
+            this->pitchbendrange = 2;
+        }
+        else {
+            this->pitchbendrange = 3;
+        }
+
         //[/UserComboBoxCode_pitchBendCombo]
     }
     else if (comboBoxThatHasChanged == transposeCombo)
     {
         //[UserComboBoxCode_transposeCombo] -- add your combo box handling code here..
+        this->transpose = transposeCombo->getText().getIntValue();
         //[/UserComboBoxCode_transposeCombo]
     }
 
     //[UsercomboBoxChanged_Post]
+    sendChangeMessage();
     //[/UsercomboBoxChanged_Post]
 }
 
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+int SettingsPanel::getTranspose() {
+    return this->transpose;
+}
+
+int SettingsPanel::getPitchbendRange() {
+    return this->pitchbendrange;
+}
 //[/MiscUserCode]
 
 
@@ -199,9 +217,9 @@ void SettingsPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="SettingsPanel" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="600" initialHeight="400">
+                 parentClasses="public Component, public ChangeBroadcaster" constructorParams=""
+                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
+                 overlayOpacity="0.330" fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff">
     <IMAGE pos="0 0 910 600" resource="settings_panel_jpg" opacity="1" mode="0"/>
   </BACKGROUND>

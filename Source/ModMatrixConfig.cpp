@@ -12,12 +12,15 @@
 
 ModMatrixConfig::ModMatrixConfig()
 {
-    // this->config = new ValueTree(Identifier("modMatrix"));
+    this->config = new ValueTree(Identifier("modMatrix"));
 }
 
 ModMatrixConfig::~ModMatrixConfig()
 {
-    clearSlots();
+    // clearSlots();
+    if (this->config != NULL && this->config != nullptr) {
+        delete this->config;
+    }
 }
 
 void ModMatrixConfig::addConfig(ModSlotConfig * config)
@@ -25,7 +28,7 @@ void ModMatrixConfig::addConfig(ModSlotConfig * config)
     this->slotConfigs.push_back(config);
 }
 
-/*
+
 ValueTree * ModMatrixConfig::getConfiguation()
 {
     config->removeAllChildren(nullptr);
@@ -46,7 +49,7 @@ ValueTree * ModMatrixConfig::getConfiguation()
     
     return this->config;
 }
- */
+
 
 ModSlotConfig * ModMatrixConfig::getSlotConfig(int i)
 {

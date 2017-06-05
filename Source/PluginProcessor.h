@@ -87,7 +87,7 @@ public:
     
     void parameterChanged(const String &parameterID, float newValue) override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
-    
+        
     StereoDelay* getStereoDelay();
 
     MultimodeFilter* getFilter();

@@ -794,7 +794,9 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
 	this->settingsPanel = new SettingsPanel();
 	this->settingsPanel->setBounds(x, y, getWidth(), getHeight());
-
+    
+    this->settingsPanel->addChangeListener(this);
+    
     addChildComponent(fxPanel);
     addChildComponent(presetPanel);
     addChildComponent(browserPanel);
@@ -977,8 +979,9 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 MainWindow::~MainWindow()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    stopTimer();
     processor->removeListener(this);
-    processor->removeAllChangeListeners();
+    removeAllChangeListeners();
     processor->parameters->removeParameterListener("mod1_attack",this);
     processor->parameters->removeParameterListener("mod1_decay",this);
     processor->parameters->removeParameterListener("mod1_sustain",this);
@@ -1995,7 +1998,15 @@ bool MainWindow::keyPressed (const KeyPress& key, Component* originatingComponen
 }
 
 void MainWindow::changeListenerCallback (ChangeBroadcaster* source) {
-    presetCombo->setText(processor->getSelectedProgram());
+    
+    if (source == this->settingsPanel) {
+        processor->getModel()->setGlobalTranspose(settingsPanel->getTranspose());
+        processor->getModel()->setPitchbendRange(settingsPanel->getPitchbendRange());
+    }
+    else {
+        presetCombo->setText(processor->getSelectedProgram());
+    }
+    
 }
 
 void MainWindow::parameterChanged(const String &parameterID, float newValue) {

@@ -206,6 +206,29 @@
         <MODULEPATH id="juce_audio_basics" path="..\..\..\vst\JUCE\modules"/>
       </MODULEPATHS>
     </VS2015>
+    <XCODE_IPHONE targetFolder="Builds/iOS" iosScreenOrientation="portraitlandscape"
+                  iosBackgroundBle="0" smallIcon="rHwWAE" bigIcon="rHwWAE">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Trio"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Trio"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_IPHONE>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>

@@ -36,6 +36,7 @@
                                                                     //[/Comments]
 */
 class SettingsPanel  : public Component,
+                       public ChangeBroadcaster,
                        public ComboBoxListener
 {
 public:
@@ -45,6 +46,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    int getTranspose();
+    int getPitchbendRange();
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -58,6 +61,8 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    int pitchbendrange = 0;
+    int transpose = 0;
     //[/UserVariables]
 
     //==============================================================================

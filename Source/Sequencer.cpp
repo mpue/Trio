@@ -27,7 +27,8 @@ Sequencer::Sequencer() {
 }
 
 Sequencer::~Sequencer() {
-    
+    stopTimer();
+    removeAllChangeListeners();
 }
 
 vector<int> Sequencer::getVelocities() {

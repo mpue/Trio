@@ -59,6 +59,7 @@ BrowserPanel::~BrowserPanel()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+    patchBrowser->removeAllChangeListeners();
     //[/Destructor]
 }
 

@@ -65,6 +65,7 @@ PatchBrowserComponent::PatchBrowserComponent()
 
 PatchBrowserComponent::~PatchBrowserComponent()
 {
+    removeAllChangeListeners();
 	table = nullptr;
     data->clear();
     data = nullptr;

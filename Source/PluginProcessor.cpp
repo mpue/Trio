@@ -171,6 +171,7 @@ TrioAudioProcessor::TrioAudioProcessor()
 
 TrioAudioProcessor::~TrioAudioProcessor()
 {
+    removeAllChangeListeners();
     this->modMatrix = nullptr;
     this->registeredParams.clear();
     this->multimodeFilter = nullptr;
@@ -554,18 +555,20 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
         if (m.isNoteOn())
         {
 
+            int noteNumber = m.getNoteNumber() + model->getGlobalTranspose();
+            
             for (int envIdx = 0; envIdx < this->modEnvelopes.size();envIdx++) {
                 modEnvelopes.at(envIdx)->reset();
                 modEnvelopes.at(envIdx)->gate(true);
             }
 			
-            if(!voices[m.getNoteNumber()]->isPlaying()) {
-                voices[m.getNoteNumber()]->setNoteAndVelocity(m.getNoteNumber(), m.getVelocity());
-                voices[m.getNoteNumber()]->setPlaying(true);
-                voices[m.getNoteNumber()]->getAmpEnvelope()->reset();
-                voices[m.getNoteNumber()]->getAmpEnvelope()->gate(true);
-                voices[m.getNoteNumber()]->setDuration(250);
-                voices[m.getNoteNumber()]->setTime(elapsed);
+            if(!voices[noteNumber]->isPlaying()) {
+                voices[noteNumber]->setNoteAndVelocity(noteNumber, m.getVelocity());
+                voices[noteNumber]->setPlaying(true);
+                voices[noteNumber]->getAmpEnvelope()->reset();
+                voices[noteNumber]->getAmpEnvelope()->gate(true);
+                voices[noteNumber]->setDuration(250);
+                voices[noteNumber]->setTime(elapsed);
                 
                 numVoices++;
             }
@@ -573,9 +576,10 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
         }
         if (m.isNoteOff())
         {
+            int noteNumber = m.getNoteNumber() + model->getGlobalTranspose();
             
-			voices[m.getNoteNumber()]->setPlaying(false);
-			voices[m.getNoteNumber()]->getAmpEnvelope()->gate(false);
+			voices[noteNumber]->setPlaying(false);
+			voices[noteNumber]->getAmpEnvelope()->gate(false);
 
             numVoices--;
             
@@ -584,6 +588,11 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
 					modEnvelopes.at(envIdx)->gate(false);
 				}
 			}
+            
+            // under some circumstances we get negative voices :(
+            if (numVoices < 0) {
+                numVoices = 0;
+            }
 			            
 
         }
@@ -595,7 +604,7 @@ void TrioAudioProcessor::processMidi(MidiBuffer& midiMessages) {
             int pitch = m.getPitchWheelValue();
             
             float nPitch = ((float)pitch - (float)0x3fff/2.0) / 8192;
-            float semitones = 2;
+            float semitones = model->getPitchbendRange();
             
             nPitch = (nPitch * semitones) / 12;
             nPitch = pow(2, nPitch);
