@@ -121,7 +121,6 @@ ModSlot::ModSlot (ModMatrix*  m, int index)
     targetCombo1->setEnabled(false);
     targetCombo2->setEnabled(false);
 
-	this->config = new ModSlotConfig();
     //[/Constructor]
 }
 
@@ -141,8 +140,7 @@ ModSlot::~ModSlot()
     titleLabel = nullptr;
     enableButton = nullptr;
 
-    //[Destructor]. You can add your own custom destruction code here..
-	delete config;
+    //[Destructor]. You can add your own custom destruction code here.
     //[/Destructor]
 }
 
@@ -219,7 +217,7 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
                 matrix->getModulations().at(index)->setModulator(matrix->getModel()->getSequencer());
             }
 
-			config->setSourceId(sourceCombo->getSelectedId());
+			config.setSourceId(sourceCombo->getSelectedId());
         }
 
         //[/UserComboBoxCode_sourceCombo]
@@ -287,8 +285,8 @@ void ModSlot::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 
         }
 
-		config->setTargetId1(targetCombo1->getSelectedId());
-		config->setAmount1(modAmountSlider1->getValue());
+		config.setTargetId1(targetCombo1->getSelectedId());
+		config.setAmount1(modAmountSlider1->getValue());
 
         //[/UserComboBoxCode_targetCombo1]
     }
@@ -315,7 +313,7 @@ void ModSlot::sliderValueChanged (Slider* sliderThatWasMoved)
             matrix->getModulations().at(index)->getTargets()[i]->setModAmount(modAmountSlider1->getValue());
         }
 
-		config->setAmount1(modAmountSlider1->getValue());
+		config.setAmount1(modAmountSlider1->getValue());
 
         //[/UserSliderCode_modAmountSlider1]
     }
@@ -339,9 +337,9 @@ void ModSlot::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_enableButton] -- add your button handler code here..
         sourceCombo->setEnabled(enableButton->getToggleState());
         targetCombo1->setEnabled(enableButton->getToggleState());
-        targetCombo2->setEnabled(enableButton->getToggleState());
+        // targetCombo2->setEnabled(enableButton->getToggleState());
         this->slotEnabled = enableButton->getToggleState();
-        matrix->getModulations().at(index)->setEnabled(this->slotEnabled);
+       
         
         // Modulation index does not exist
         if (this->slotEnabled && matrix->getModulations().size() <= index) {
@@ -349,8 +347,11 @@ void ModSlot::buttonClicked (Button* buttonThatWasClicked)
             mod->setEnabled(true);
             matrix->addModulation(mod);
         }
+        else {
+             matrix->getModulations().at(index)->setEnabled(this->slotEnabled);
+        }
 
-		this->config->setEnabled(this->slotEnabled);
+        this->config.setEnabled(this->slotEnabled);
 
         //[/UserButtonCode_enableButton]
     }
@@ -412,32 +413,32 @@ int ModSlot::getIndex() {
     return index;
 }
 
-ModSlotConfig * ModSlot::getConfig()
+ModSlotConfig ModSlot::getConfig()
 {
-	config->setAmount1(modAmountSlider1->getValue());
-	config->setAmount2(modAmountSlider2->getValue());
-	config->setSourceId(sourceCombo->getSelectedId());
-	config->setTargetId1(targetCombo1->getSelectedId());
-	config->setTargetId2(targetCombo2->getSelectedId());
+	config.setAmount1(modAmountSlider1->getValue());
+	config.setAmount2(modAmountSlider2->getValue());
+	config.setSourceId(sourceCombo->getSelectedId());
+	config.setTargetId1(targetCombo1->getSelectedId());
+	config.setTargetId2(targetCombo2->getSelectedId());
 
 	return config;
 }
 
-void ModSlot::setConfig(ModSlotConfig * config)
+void ModSlot::setConfig(ModSlotConfig config)
 {
 	this->config = config;
 
-	this->modAmountSlider1->setValue(config->getAmount1(), juce::NotificationType::dontSendNotification);
-	this->modAmountSlider2->setValue(config->getAmount2(), juce::NotificationType::dontSendNotification);
-	this->sourceCombo->setSelectedId(config->getSourceId(), juce::NotificationType::dontSendNotification);
-	this->targetCombo1->setSelectedId(config->getTargetId1(), juce::NotificationType::dontSendNotification);
-	this->targetCombo2->setSelectedId(config->getTargetId2(), juce::NotificationType::dontSendNotification);
-	this->enableButton->setToggleState(config->isSlotEnabled(), false);
-	this->slotEnabled = config->isSlotEnabled();
+	this->modAmountSlider1->setValue(config.getAmount1(), juce::NotificationType::dontSendNotification);
+	this->modAmountSlider2->setValue(config.getAmount2(), juce::NotificationType::dontSendNotification);
+	this->sourceCombo->setSelectedId(config.getSourceId(), juce::NotificationType::dontSendNotification);
+	this->targetCombo1->setSelectedId(config.getTargetId1(), juce::NotificationType::dontSendNotification);
+	this->targetCombo2->setSelectedId(config.getTargetId2(), juce::NotificationType::dontSendNotification);
+	this->enableButton->setToggleState(config.isSlotEnabled(), false);
+	this->slotEnabled = config.isSlotEnabled();
 
 	sourceCombo->setEnabled(this->slotEnabled);		
 	targetCombo1->setEnabled(this->slotEnabled);
-	targetCombo2->setEnabled(this->slotEnabled);
+	// targetCombo2->setEnabled(this->slotEnabled);
 
 }
 

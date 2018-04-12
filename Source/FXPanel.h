@@ -38,9 +38,9 @@
 class FXPanel  : public Component,
                  public ChangeListener,
                  public KeyListener,
-                 public SliderListener,
-                 public ButtonListener,
-                 public ComboBoxListener
+                public Slider::Listener,
+                public Button::Listener,
+                public ComboBox::Listener
 {
 public:
     //==============================================================================

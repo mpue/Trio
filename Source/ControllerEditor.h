@@ -20,7 +20,7 @@ using namespace std;
 //==============================================================================
 /*
 */
-class ControllerEditor    : public Component, public TableListBoxModel, public LabelListener {
+class ControllerEditor    : public Component, public TableListBoxModel, public Label::Listener {
 
 public:
     ControllerEditor();

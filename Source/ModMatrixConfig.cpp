@@ -12,56 +12,54 @@
 
 ModMatrixConfig::ModMatrixConfig()
 {
-    this->config = new ValueTree(Identifier("modMatrix"));
+    this->config =  ValueTree(Identifier("modMatrix"));
 }
 
 ModMatrixConfig::~ModMatrixConfig()
 {
     // clearSlots();
+    /*
     if (this->config != NULL && this->config != nullptr) {
         delete this->config;
     }
+     */
 }
 
-void ModMatrixConfig::addConfig(ModSlotConfig * config)
+void ModMatrixConfig::addConfig(ModSlotConfig config)
 {
     this->slotConfigs.push_back(config);
 }
 
 
-ValueTree * ModMatrixConfig::getConfiguation()
+ValueTree ModMatrixConfig::getConfiguation()
 {
-    config->removeAllChildren(nullptr);
+    config.removeAllChildren(nullptr);
     
     for (int i = 0; i < slotConfigs.size(); i++) {
         
-        ScopedPointer<ValueTree> slotConfig = new ValueTree(Identifier("slotConfig"));
+        ValueTree slotConfig = ValueTree(Identifier("slotConfig"));
         
-        slotConfig->setProperty("sourceId", slotConfigs.at(i)->sourceId, nullptr);
-        slotConfig->setProperty("targetId1", slotConfigs.at(i)->targetId1, nullptr);
-        slotConfig->setProperty("targetId2", slotConfigs.at(i)->targetId2, nullptr);
-        slotConfig->setProperty("amount1", slotConfigs.at(i)->amount1, nullptr);
-        slotConfig->setProperty("amount2", slotConfigs.at(i)->amount2, nullptr);
-        slotConfig->setProperty("enabled", slotConfigs.at(i)->enabled, nullptr);
+        slotConfig.setProperty("sourceId", slotConfigs.at(i).sourceId, nullptr);
+        slotConfig.setProperty("targetId1", slotConfigs.at(i).targetId1, nullptr);
+        slotConfig.setProperty("targetId2", slotConfigs.at(i).targetId2, nullptr);
+        slotConfig.setProperty("amount1", slotConfigs.at(i).amount1, nullptr);
+        slotConfig.setProperty("amount2", slotConfigs.at(i).amount2, nullptr);
+        slotConfig.setProperty("enabled", slotConfigs.at(i).enabled, nullptr);
         
-        config->addChild(*slotConfig, -1, nullptr);
+        config.addChild(slotConfig, -1, nullptr);
     }
     
     return this->config;
 }
 
 
-ModSlotConfig * ModMatrixConfig::getSlotConfig(int i)
+ModSlotConfig ModMatrixConfig::getSlotConfig(int i)
 {
     return slotConfigs.at(i);
 }
 
 void ModMatrixConfig::clearSlots()
 {
-    for(std::vector<ModSlotConfig*>::iterator it = slotConfigs.begin(); it != slotConfigs.end(); ++it) {
-        if (*it != NULL)
-            delete *it;
-    }
     this->slotConfigs.clear();
 }
 

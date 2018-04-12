@@ -10,11 +10,9 @@
 
 #include "ModMatrix.h"
 
-ModMatrix::ModMatrix(double sampleRate, Model* m) {
+ModMatrix::ModMatrix() {
     this->modSources = new std::map<int,String>();
     this->modTargets = new std::map<int,String>();
-    this->sampleRate = sampleRate;
-    this->model = m;
 }
 
 ModMatrix::~ModMatrix() {
@@ -30,7 +28,6 @@ ModMatrix::~ModMatrix() {
     modTargets->clear();
     delete modSources;
     delete modTargets;
-    delete config;
 }
 
 void ModMatrix::process() {
@@ -69,55 +66,60 @@ double ModMatrix::getSampleRate(){
     return this->sampleRate;
 }
 
+void ModMatrix::setSampleRate(double rate) {
+    this->sampleRate = rate;
+}
+
 Model* ModMatrix::getModel() {
     return this->model;
 }
 
-void ModMatrix::setConfig(ModMatrixConfig * config)
+void ModMatrix::setModel(Model *model) {
+    this->model = model;
+}
+
+void ModMatrix::setConfig(ModMatrixConfig config)
 {
-    if (this->config != NULL) {
-        delete this->config;
-    }
     
 	this->config = config;
 
 	this->modulations.clear();
 	
-	for (int i = 0; i < config->getNumConfigs();i++) {
-		ModSlotConfig* msc = config->getSlotConfig(i);
+	for (int i = 0; i < config.getNumConfigs();i++) {
+		ModSlotConfig msc = config.getSlotConfig(i);
 
 		Modulation* mod = new Modulation();
 		this->modulations.push_back(mod);
 
-		mod->setEnabled(msc->isSlotEnabled());
+		mod->setEnabled(msc.isSlotEnabled());
 
-		if (msc->getSourceId() == 1) {
+		if (msc.getSourceId() == 1) {
 			modulations.at(i)->setModulator(NULL);
 		}
 		// LFO 1
-		else if (msc->getSourceId() == 2) {
+		else if (msc.getSourceId() == 2) {
 			modulations.at(i)->setModulator(model->getLfo1());
 		}
 		// LFO 2
-		else if (msc->getSourceId() == 3) {
+		else if (msc.getSourceId() == 3) {
 			modulations.at(i)->setModulator(model->getLfo2());
 		}
-		else if (msc->getSourceId() == 4) {
+		else if (msc.getSourceId() == 4) {
 			modulations.at(i)->setModulator(model->getModEnvelopes().at(0));
 		}
-		else if (msc->getSourceId() == 5) {
+		else if (msc.getSourceId() == 5) {
 			modulations.at(i)->setModulator(model->getModEnvelopes().at(1));
 		}
-		else if (msc->getSourceId() == 6) {
+		else if (msc.getSourceId() == 6) {
 			modulations.at(i)->setModulator(model->getModEnvelopes().at(2));
 		}
-		else if (msc->getSourceId() == 7) {
+		else if (msc.getSourceId() == 7) {
 			modulations.at(i)->setModulator(model->getSequencer());
 		}			
 
 
 		// Filter envelope
-		if (msc->getTargetId1() == 2) {
+		if (msc.getTargetId1() == 2) {
 
 			ModTarget* target = model->getFilter();
 
@@ -129,46 +131,46 @@ void ModMatrix::setConfig(ModMatrixConfig * config)
 			}
 
 			target->setModulator(modulations.at(i)->getModulator());
-			target->setModAmount(msc->getAmount1());
+			target->setModAmount(msc.getAmount1());
 		}
 		// Osc 1 Pitch
-		if (msc->getTargetId1() == 3) {
+		if (msc.getTargetId1() == 3) {
 
 			modulations.at(i)->getTargets().clear();
 
 			for (int j = 0; j < model->getVoices().size(); j++) {
-				model->getVoices().at(j)->setModAmount(msc->getAmount1());
+				model->getVoices().at(j)->setModAmount(msc.getAmount1());
 				MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(j)->getOscillator(0));
 				m->setModulator(modulations.at(i)->getModulator());
-				m->setModAmount(msc->getAmount1());
+				m->setModAmount(msc.getAmount1());
 				modulations.at(i)->addTarget(m);
 			}
 
 		}
 		// Osc 2 Pitch
-		if (msc->getTargetId1() == 4) {
+		if (msc.getTargetId1() == 4) {
 
 			modulations.at(i)->getTargets().clear();
 
             for (int j = 0; j < model->getVoices().size(); j++) {
-                model->getVoices().at(j)->setModAmount(msc->getAmount1());
+                model->getVoices().at(j)->setModAmount(msc.getAmount1());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(j)->getOscillator(1));
                 m->setModulator(modulations.at(i)->getModulator());
-                m->setModAmount(msc->getAmount1());
+                m->setModAmount(msc.getAmount1());
                 modulations.at(i)->addTarget(m);
             }
             
         }
 		// Osc 3 Pitch
-		if (msc->getTargetId1() == 5) {
+		if (msc.getTargetId1() == 5) {
 
 			modulations.at(i)->getTargets().clear();
 
             for (int j = 0; j < model->getVoices().size(); j++) {
-                model->getVoices().at(j)->setModAmount(msc->getAmount1());
+                model->getVoices().at(j)->setModAmount(msc.getAmount1());
                 MultimodeOscillator* m = static_cast<MultimodeOscillator*>(model->getVoices().at(j)->getOscillator(2));
                 m->setModulator(modulations.at(i)->getModulator());
-                m->setModAmount(msc->getAmount1());
+                m->setModAmount(msc.getAmount1());
                 modulations.at(i)->addTarget(m);
             }
             
@@ -180,27 +182,27 @@ void ModMatrix::setConfig(ModMatrixConfig * config)
 
 }
 
-ModMatrixConfig * ModMatrix::getConfiguration()
+ModMatrixConfig ModMatrix::getConfiguration()
 {
 	return this->config;
 }
 
 void ModMatrix::createDefaultConfig()
 {
-	ModMatrixConfig* mmc = new ModMatrixConfig();
+    ModMatrixConfig mmc;
 
 	for (int i = 0; i < 6;i++) {
 
-		ModSlotConfig* msc = new ModSlotConfig();
+        ModSlotConfig msc;
 
-		msc->setAmount1(0);
-		msc->setAmount2(0);
-		msc->setSourceId(1);
-		msc->setTargetId1(1);
-		msc->setTargetId2(1);
-		msc->setEnabled(false);
+		msc.setAmount1(0);
+		msc.setAmount2(0);
+		msc.setSourceId(1);
+		msc.setTargetId1(1);
+		msc.setTargetId2(1);
+		msc.setEnabled(false);
 
-		mmc->addConfig(msc);
+		mmc.addConfig(msc);
 
 	}
 

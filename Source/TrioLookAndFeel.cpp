@@ -460,7 +460,7 @@ void TrioLookAndFeel::drawTableHeaderBackground(Graphics &g, TableHeaderComponen
 	for (int i = header.getNumColumns(true); --i >= 0;)
 		g.fillRect(header.getColumnPosition(i).removeFromRight(1));
 }
-
+/*
 void TrioLookAndFeel::drawTableHeaderColumn(Graphics &g, const String & columnName, int columnId, int width, int height, bool isMouseOver, bool isMouseDown, int columnFlags)
 {
 	if (isMouseDown)
@@ -485,4 +485,4 @@ void TrioLookAndFeel::drawTableHeaderColumn(Graphics &g, const String & columnNa
 	g.setColour(Colours::black);
 	g.setFont(Font(height * 0.5f, Font::bold));
 	g.drawFittedText(columnName, area, Justification::centredLeft, 1);
-}
+}*/

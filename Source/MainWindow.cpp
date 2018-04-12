@@ -1539,22 +1539,27 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
         modMatrix = ValueTree(Identifier("modMatrix"));
 
-        for (int i = 0; i < processor->getModMatrix()->getConfiguration()->getNumConfigs(); i++) {
+        // if (processor->getModMatrix()->getConfiguration() != NULL) {
+        
+            for (int i = 0; i < processor->getModMatrix()->getConfiguration().getNumConfigs(); i++) {
 
-            ValueTree slotConfig = ValueTree(Identifier("slotConfig"));
+                ValueTree slotConfig = ValueTree(Identifier("slotConfig"));
 
-            slotConfig.setProperty("sourceId", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getSourceId(), nullptr);
-            slotConfig.setProperty("targetId1", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getTargetId1(), nullptr);
-            slotConfig.setProperty("targetId2", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getTargetId2(), nullptr);
-            slotConfig.setProperty("amount1", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getAmount1(), nullptr);
-            slotConfig.setProperty("amount2", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->getAmount2(), nullptr);
-            slotConfig.setProperty("enabled", processor->getModMatrix()->getConfiguration()->getSlotConfig(i)->isSlotEnabled() , nullptr);
+                slotConfig.setProperty("sourceId", processor->getModMatrix()->getConfiguration().getSlotConfig(i).getSourceId(), nullptr);
+                slotConfig.setProperty("targetId1", processor->getModMatrix()->getConfiguration().getSlotConfig(i).getTargetId1(), nullptr);
+                slotConfig.setProperty("targetId2", processor->getModMatrix()->getConfiguration().getSlotConfig(i).getTargetId2(), nullptr);
+                slotConfig.setProperty("amount1", processor->getModMatrix()->getConfiguration().getSlotConfig(i).getAmount1(), nullptr);
+                slotConfig.setProperty("amount2", processor->getModMatrix()->getConfiguration().getSlotConfig(i).getAmount2(), nullptr);
+                slotConfig.setProperty("enabled", processor->getModMatrix()->getConfiguration().getSlotConfig(i).isSlotEnabled() , nullptr);
 
-            modMatrix.addChild(slotConfig, -1, nullptr);
+                modMatrix.addChild(slotConfig, -1, nullptr);
 
-        }
+            }
 
-		processor->getValueTreeState()->state.addChild(modMatrix, -1, nullptr);
+            processor->getValueTreeState()->state.addChild(modMatrix, -1, nullptr);
+        
+        // }
+        
 
         ScopedPointer<XmlElement> xml (processor->getValueTreeState()->state.createXml());
         presetPanel->setData(xml);

@@ -54,8 +54,8 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
 
     std::vector<ModSlot*> getSlots();
-	ModMatrixConfig* getConfig();
-	void setConfig(ModMatrixConfig* config);
+	ModMatrixConfig getConfig();
+	void setConfig(ModMatrixConfig config);
 	virtual void changeListenerCallback(ChangeBroadcaster* source) override;
 
     //[/UserMethods]
@@ -72,7 +72,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     std::vector<ModSlot*> slots;
     ModMatrix* matrix;
-	ModMatrixConfig* config;
+	ModMatrixConfig config;
     //[/UserVariables]
 
     //==============================================================================

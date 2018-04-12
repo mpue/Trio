@@ -43,9 +43,9 @@
                                                                     //[/Comments]
 */
 class MainWindow  : public Component,
-                    public SliderListener,
-                    public ButtonListener,
-                    public ComboBoxListener,
+public Slider::Listener,
+public Button::Listener,
+public ComboBox::Listener,
                     public AudioProcessorListener,
                     public Timer,
                     public ChangeBroadcaster,

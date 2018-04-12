@@ -36,7 +36,7 @@
                                                                     //[/Comments]
 */
 class PresetDialog  : public Component,
-                      public ButtonListener
+public Button::Listener
 {
 public:
     //==============================================================================

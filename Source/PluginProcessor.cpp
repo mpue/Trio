@@ -167,6 +167,21 @@ TrioAudioProcessor::TrioAudioProcessor()
     this->effects.push_back(reverb);
     this->effects.push_back(outputFilter);
     
+    this->modMatrix = new ModMatrix();
+    
+    this->modMatrix->registerSource("none", 1);
+    this->modMatrix->registerSource("LFO1", 2);
+    this->modMatrix->registerSource("LFO2", 3);
+    this->modMatrix->registerSource("ModEnv1", 4);
+    this->modMatrix->registerSource("ModEnv2", 5);
+    this->modMatrix->registerSource("ModEnv3", 6);
+    this->modMatrix->registerSource("Sequencer", 7);
+    
+    this->modMatrix->registerTarget("none", 1);
+    this->modMatrix->registerTarget("Filter1Cutoff", 2);
+    this->modMatrix->registerTarget("Osc1Pitch", 3);
+    this->modMatrix->registerTarget("Osc2Pitch", 4);
+    this->modMatrix->registerTarget("Osc3Pitch", 5);
 }
 
 TrioAudioProcessor::~TrioAudioProcessor()
@@ -330,23 +345,10 @@ void TrioAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 	}
     
 	this->model = new Model(voices, multimodeFilter, modEnvelopes, lfo1, lfo2, sequencer, sampleRate);
-
-    this->modMatrix = new ModMatrix(sampleRate, model);
-
-    this->modMatrix->registerSource("none", 1);
-    this->modMatrix->registerSource("LFO1", 2);
-    this->modMatrix->registerSource("LFO2", 3);
-    this->modMatrix->registerSource("ModEnv1", 4);
-    this->modMatrix->registerSource("ModEnv2", 5);
-    this->modMatrix->registerSource("ModEnv3", 6);
-    this->modMatrix->registerSource("Sequencer", 7);
     
-    this->modMatrix->registerTarget("none", 1);
-    this->modMatrix->registerTarget("Filter1Cutoff", 2);
-    this->modMatrix->registerTarget("Osc1Pitch", 3);
-    this->modMatrix->registerTarget("Osc2Pitch", 4);
-    this->modMatrix->registerTarget("Osc3Pitch", 5);
-
+    this->modMatrix->setSampleRate(sampleRate);
+    this->modMatrix->setModel(model);
+    
 	if (!prepared) {
 		prepared = true;
 
@@ -1125,11 +1127,11 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
 			msc->setTargetId2(child.getProperty("targetId2"));
 			msc->setEnabled(child.getProperty("enabled"));
 
-			mmc->addConfig(msc);
+			mmc->addConfig(*msc);
 
 		}
 
-		modMatrix->setConfig(mmc);
+		modMatrix->setConfig(*mmc);
 
 	}
 	// create default configuration

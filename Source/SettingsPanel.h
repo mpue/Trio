@@ -37,7 +37,7 @@
 */
 class SettingsPanel  : public Component,
                        public ChangeBroadcaster,
-                       public ComboBoxListener
+public ComboBox::Listener
 {
 public:
     //==============================================================================

@@ -37,9 +37,9 @@
                                                                     //[/Comments]
 */
 class ModSlot  : public Component,
-                 public ComboBoxListener,
-                 public SliderListener,
-                 public ButtonListener
+                public ComboBox::Listener,
+                public Slider::Listener,
+                public Button::Listener
 {
 public:
     //==============================================================================
@@ -62,8 +62,8 @@ public:
 	void setSlotEnabled(bool enabled);
     bool isSlotEnabled();
     int getIndex();
-	ModSlotConfig* getConfig();
-	void setConfig(ModSlotConfig* config);
+	ModSlotConfig getConfig();
+	void setConfig(ModSlotConfig config);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -79,7 +79,7 @@ private:
     bool slotEnabled;
     ModMatrix* matrix;
     int index;
-	ModSlotConfig* config;
+	ModSlotConfig config;
     //[/UserVariables]
 
     //==============================================================================

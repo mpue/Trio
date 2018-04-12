@@ -24,7 +24,7 @@ using namespace std;
 class ModMatrix : public ChangeBroadcaster {
   
 public:
-    ModMatrix(double sampleRate, Model* m);
+    ModMatrix();
     ~ModMatrix();
     
     void addModulation(Modulation* mod);
@@ -39,9 +39,11 @@ public:
     map<int,String>* getTargets();
     
     double getSampleRate();
+    void setSampleRate(double rate);
     Model* getModel();
-	void setConfig(ModMatrixConfig* config);
-	ModMatrixConfig* getConfiguration();
+	void setConfig(ModMatrixConfig config);
+	ModMatrixConfig getConfiguration();
+    void setModel(Model* model);
 
 	void createDefaultConfig();
 
@@ -53,7 +55,7 @@ private:
     
     double sampleRate;
     Model* model;
-	ModMatrixConfig* config;
+	ModMatrixConfig config;
 };
 
 

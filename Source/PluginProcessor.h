@@ -191,7 +191,7 @@ private:
     ComboBox* programCombo = 0;
    
     ScopedPointer<Sequencer> sequencer;
-    ScopedPointer<ModMatrix> modMatrix;
+    ModMatrix* modMatrix;
     
     int octave = 0;
     
