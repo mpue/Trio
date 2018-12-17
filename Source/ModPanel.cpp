@@ -141,9 +141,11 @@ std::vector<ModSlot*> ModPanel::getSlots() {
 ModMatrixConfig ModPanel::getConfig()
 {
 	this->config.clearSlots();
-
+    
 	for (int i = 0; i < slots.size();i++) {
-		this->config.addConfig(slots.at(i)->getConfig());
+        if (i < slots.size()) {
+            this->config.addConfig(slots.at(i)->getConfig());
+        }
 	}
 
 	return this->config;
@@ -154,7 +156,9 @@ void ModPanel::setConfig(ModMatrixConfig config)
 	this->config = config;
 
 	for (int i = 0; i < config.getNumConfigs();i++) {
-		slots.at(i)->setConfig(config.getSlotConfig(i));
+        if (i < slots.size()) {
+            slots.at(i)->setConfig(config.getSlotConfig(i));
+        }
 	}
 
 }

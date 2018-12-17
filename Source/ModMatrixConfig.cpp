@@ -65,5 +65,5 @@ void ModMatrixConfig::clearSlots()
 
 int ModMatrixConfig::getNumConfigs()
 {
-    return slotConfigs.size();
+    return (int)slotConfigs.size();
 }

@@ -309,6 +309,10 @@ void ModSlot::sliderValueChanged (Slider* sliderThatWasMoved)
     {
         //[UserSliderCode_modAmountSlider1] -- add your slider handling code here..
 
+        if (index < matrix->getModulations().size()) {
+            
+        }
+        
         for (int i = 0; i <  matrix->getModulations().at(index)->getTargets().size(); i++) {
             matrix->getModulations().at(index)->getTargets()[i]->setModAmount(modAmountSlider1->getValue());
         }
