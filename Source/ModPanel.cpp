@@ -153,7 +153,7 @@ void ModPanel::setConfig(ModMatrixConfig config)
 {
 	this->config = config;
 
-	for (int i = 0; i < slots.size();i++) {
+	for (int i = 0; i < config.getNumConfigs();i++) {
 		slots.at(i)->setConfig(config.getSlotConfig(i));
 	}
 

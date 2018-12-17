@@ -124,7 +124,21 @@ void PresetDialog::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_okButton] -- add your button handler code here..
         String presetName = this->textEditor->getTextValue().toString();
         String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
-        String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+        
+        String basePath = appDataPath + "/Audio/Presets/pueski/";
+        String presetPath = basePath +"Trio/";
+        
+        File baseDir = File(basePath);
+        File presetDir = File(presetPath);
+        
+        if (!baseDir.exists()) {
+            baseDir.createDirectory();
+        }
+        
+        if (!presetDir.exists()){
+            presetDir.createDirectory();
+        }
+        
         File preset = File(presetPath + presetName+".xml");
 
         bool proceed = true;
@@ -134,10 +148,11 @@ void PresetDialog::buttonClicked (Button* buttonThatWasClicked)
             proceed = false;
             presetExists = true;
         }
-
+        /*
         if (!proceed) {
             proceed = AlertWindow::showOkCancelBox(AlertWindow::QuestionIcon, "Warning", "A preset with this name exists already, overwrite?", "Ok", "Fuck! No!",this);
         }
+         */
 
         if (proceed) {
 

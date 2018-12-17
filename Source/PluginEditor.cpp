@@ -18,37 +18,36 @@
 TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    lf = new TrioLookAndFeel();
+
+    this->setLookAndFeel(&lf);
     
-    this->setLookAndFeel(lf);
     
+    lf.setColour(Slider::rotarySliderFillColourId, Colours::darkorange);
+    lf.setColour(Slider::trackColourId, Colours::transparentBlack);
+    lf.setColour(Slider::thumbColourId, Colours::transparentBlack);
     
-    lf->setColour(Slider::rotarySliderFillColourId, Colours::darkorange);
-    lf->setColour(Slider::trackColourId, Colours::transparentBlack);
-    lf->setColour(Slider::thumbColourId, Colours::transparentBlack);
-    
-    lf->setColour(ComboBox::backgroundColourId, Colours::black);
-    lf->setColour(PopupMenu::backgroundColourId, Colours::black);
-    lf->setColour(PopupMenu::highlightedBackgroundColourId, Colours::darkorange);
-    lf->setColour(PopupMenu::textColourId, Colours::darkorange);
-    lf->setColour(ComboBox::textColourId, Colours::darkorange);
-    lf->setColour(ComboBox::outlineColourId, Colours::darkorange);
-    lf->setColour(ComboBox::arrowColourId, Colours::darkorange);
-    lf->setColour(ComboBox::buttonColourId, Colours::darkorange);
-    lf->setColour(TextButton::buttonColourId, Colours::black);
-    lf->setColour(TextButton::buttonOnColourId, Colours::darkorange);
-    lf->setColour(TextEditor::outlineColourId, Colours::darkorange);
-    lf->setColour(TextEditor::backgroundColourId, Colours::black);
-    lf->setColour(TextEditor::highlightColourId, Colours::darkorange);
-    lf->setColour(TextEditor::highlightedTextColourId, Colours::black);
-    lf->setColour(TextEditor::textColourId, Colours::darkorange);
-    lf->setColour(TextButton::textColourOffId, Colours::darkorange);
-    lf->setColour(TextButton::textColourOnId, Colours::black);
-    lf->setColour(CaretComponent::caretColourId, Colours::darkorange);
-    lf->setColour (ScrollBar::thumbColourId,Colours::darkorange);
-    lf->setColour (ScrollBar::backgroundColourId,Colour::fromRGBA(0x5a,0x5a,0x5a,0xff));
-    lf->setColour (Slider::thumbColourId,Colours::darkorange);
-    lf->setColour (Slider::trackColourId,Colour::fromRGBA(0x5a,0x5a,0x5a,0xff));
+    lf.setColour(ComboBox::backgroundColourId, Colours::black);
+    lf.setColour(PopupMenu::backgroundColourId, Colours::black);
+    lf.setColour(PopupMenu::highlightedBackgroundColourId, Colours::darkorange);
+    lf.setColour(PopupMenu::textColourId, Colours::darkorange);
+    lf.setColour(ComboBox::textColourId, Colours::darkorange);
+    lf.setColour(ComboBox::outlineColourId, Colours::darkorange);
+    lf.setColour(ComboBox::arrowColourId, Colours::darkorange);
+    lf.setColour(ComboBox::buttonColourId, Colours::darkorange);
+    lf.setColour(TextButton::buttonColourId, Colours::black);
+    lf.setColour(TextButton::buttonOnColourId, Colours::darkorange);
+    lf.setColour(TextEditor::outlineColourId, Colours::darkorange);
+    lf.setColour(TextEditor::backgroundColourId, Colours::black);
+    lf.setColour(TextEditor::highlightColourId, Colours::darkorange);
+    lf.setColour(TextEditor::highlightedTextColourId, Colours::black);
+    lf.setColour(TextEditor::textColourId, Colours::darkorange);
+    lf.setColour(TextButton::textColourOffId, Colours::darkorange);
+    lf.setColour(TextButton::textColourOnId, Colours::black);
+    lf.setColour(CaretComponent::caretColourId, Colours::darkorange);
+    lf.setColour (ScrollBar::thumbColourId,Colours::darkorange);
+    lf.setColour (ScrollBar::backgroundColourId,Colour::fromRGBA(0x5a,0x5a,0x5a,0xff));
+    lf.setColour (Slider::thumbColourId,Colours::darkorange);
+    lf.setColour (Slider::trackColourId,Colour::fromRGBA(0x5a,0x5a,0x5a,0xff));
     
     // LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     
@@ -62,8 +61,8 @@ TrioAudioProcessorEditor::TrioAudioProcessorEditor (TrioAudioProcessor& p)
 
 TrioAudioProcessorEditor::~TrioAudioProcessorEditor()
 {
-    window = nullptr;
-    lf = nullptr;
+    setLookAndFeel(nullptr);
+    delete window;
 }
 
 //==============================================================================

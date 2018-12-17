@@ -175,7 +175,7 @@ private:
     vector<Voice*> voices;
     int getVoicesPlaying();
     vector<ADSR*> modEnvelopes;
-    Model* model = NULL;
+    Model* model = nullptr;
     
     ScopedPointer<MultimodeOscillator> lfo1;
     ScopedPointer<MultimodeOscillator> lfo2;

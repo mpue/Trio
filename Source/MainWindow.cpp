@@ -25,6 +25,7 @@
 
 #include "MainWindow.h"
 
+#define JUCE_CATCH_UNHANDLED_EXCEPTIONS
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 /*
@@ -1430,6 +1431,8 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     //[UsercomboBoxChanged_Pre]
     //[/UsercomboBoxChanged_Pre]
 
+
+    
     if (comboBoxThatHasChanged == presetCombo)
     {
         //[UserComboBoxCode_presetCombo] -- add your combo box handling code here..
@@ -1437,38 +1440,55 @@ void MainWindow::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         if (comboBoxThatHasChanged->getName() == "presetCombo")
         {
 
-            String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
-            String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
-
-			String name = comboBoxThatHasChanged->getText();
-
-            String filename = name + ".xml";
-            File preset = File(presetPath+filename);
-
-            if (preset.exists()) {
-                ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
-                ValueTree state = ValueTree::fromXml(*xml.get());
-                processor->setState(&state, true);
-                xml = nullptr;
+            try {
+                String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+                String presetPath = appDataPath + "/Audio/Presets/pueski/Trio/";
+                
+                String name = comboBoxThatHasChanged->getText();
+                
+                String filename = name + ".xml";
+                File preset = File(presetPath+filename);
+                
+                if (preset.exists()) {
+                    ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
+                    ValueTree state = ValueTree::fromXml(*xml.get());
+                    processor->setState(&state, true);
+                    xml = nullptr;
+                }
+                
+                
+                vector<String> v = processor->getProgramNames();
+                
+                if (v.size() > 0) {
+                    if (std::find(v.begin(), v.end(), name) == v.end()) {
+                        processor->addProgram(name);
+                        browserPanel->addProgram(name);
+                    }
+                }
+                
+                
+                
+                processor->setSelectedProgram(name);
+                processor->setCurrentProgram(comboBoxThatHasChanged->getItemId(comboBoxThatHasChanged->getSelectedItemIndex()) - 1);
+                
+                processor->updateHostDisplay();
+                
             }
+            catch (std::exception& ex) {
+                std::cerr << ex.what() << std::endl;
+            }
+            catch (...) {
+                std::cerr << "Caught unknown exception." << std::endl;
+            }
+            
 
-			vector<String> v = processor->getProgramNames();
-
-			if (std::find(v.begin(), v.end(), name) == v.end()) {
-				processor->addProgram(name);
-				browserPanel->addProgram(name);
-			}
-
-            processor->setSelectedProgram(name);
-            processor->setCurrentProgram(comboBoxThatHasChanged->getItemId(comboBoxThatHasChanged->getSelectedItemIndex()) - 1);
-
-            processor->updateHostDisplay();
-
+            
         }
 
         //[/UserComboBoxCode_presetCombo]
     }
-    else if (comboBoxThatHasChanged == modEnvCombo)
+    
+    if (comboBoxThatHasChanged == modEnvCombo)
     {
         //[UserComboBoxCode_modEnvCombo] -- add your combo box handling code here..
         processor->setCurrentModEnv(modEnvCombo->getSelectedId() - 1);

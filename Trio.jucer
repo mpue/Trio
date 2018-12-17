@@ -7,8 +7,8 @@
               pluginManufacturerCode="Manu" pluginCode="Uvki" pluginChannelConfigs=""
               pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="TrioAU"
-              pluginRTASCategory="" aaxIdentifier="com.yourcompany.Trio" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
-              jucerVersion="5.2.1">
+              pluginRTASCategory="" aaxIdentifier="com.yourcompany.Trio" pluginAAXCategory="2"
+              jucerVersion="5.3.2" pluginFormats="buildVST,buildAU" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="spDKWA" name="Trio">
     <GROUP id="{2A1EAFF9-2CF2-6681-400F-6E51A93E25C9}" name="Resources">
       <FILE id="h9VOvo" name="Knob_48.png" compile="0" resource="1" file="Knob_48.png"/>

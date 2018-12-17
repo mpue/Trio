@@ -308,8 +308,8 @@ void TrioAudioProcessor::setSelectedProgram(juce::String name) {
             this->programCombo->setText(name, NotificationType::dontSendNotification);
         }
         
-        updateHostDisplay();
-        sendChangeMessage();
+        // updateHostDisplay();
+        // sendChangeMessage();
     }
     
 
@@ -786,6 +786,10 @@ void TrioAudioProcessor::updateParam(const juce::String & parameterID, float new
 {
 	Logger::getCurrentLogger()->writeToLog("Parameter " + parameterID + " changed to " + String(newValue));
 
+    if (model == nullptr) {
+        return;
+    }
+    
 	if (parameterID == "osc1shape") {
 		if (newValue == 0) {
 			this->setupOscillator(0, Oszillator::OscMode::SAW);
@@ -1069,6 +1073,7 @@ AudioProcessorValueTreeState* TrioAudioProcessor::getValueTreeState() {
 
 void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
 
+    /*
     if (state->getChildWithName("sequencer").isValid()) {
         
         ValueTree v = state->getChildWithName("sequencer");
@@ -1107,7 +1112,7 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
         sequencer->setRaster(16);
         sequencer->setEnabled(false);
     }
-       
+       */
 	// existing configuration -> update matrix
 	if (state->getChildWithName("modMatrix").isValid()) {
 
@@ -1139,7 +1144,7 @@ void TrioAudioProcessor::setState(ValueTree* state, bool normalized) {
 		modMatrix->createDefaultConfig();
 	}
 
-
+     
     for (int i = 0; i < state->getNumChildren();i++) {
         
         String id = state->getChild(i).getProperty("id").toString();
