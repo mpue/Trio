@@ -44,12 +44,14 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     //[/Constructor_pre]
 
-    addAndMakeVisible (cutoffSlider = new Slider ("cutoffSlider"));
+    addAndMakeVisible (cutoffSlider = new TrioSlider ("cutoffSlider"));
     cutoffSlider->setRange (0.1, 12, 0.1);
     cutoffSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     cutoffSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     cutoffSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66fff8f8));
     cutoffSlider->addListener (this);
+    cutoffSlider->setPopupMenuEnabled(true);
+
 
     addAndMakeVisible (resoSlider = new Slider ("resoSlider"));
     resoSlider->setRange (0, 10, 0);

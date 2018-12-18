@@ -125,6 +125,8 @@
               file="Source/TrioLookAndFeel.cpp"/>
         <FILE id="kEYhxA" name="TrioLookAndFeel.h" compile="0" resource="0"
               file="Source/TrioLookAndFeel.h"/>
+        <FILE id="WSBsWv" name="TrioSlider.cpp" compile="1" resource="0" file="Source/TrioSlider.cpp"/>
+        <FILE id="X46CwE" name="TrioSlider.h" compile="0" resource="0" file="Source/TrioSlider.h"/>
       </GROUP>
       <FILE id="oMkQhO" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>

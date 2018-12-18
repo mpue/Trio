@@ -30,6 +30,7 @@
 #include "BrowserPanel.h"
 #include "ModPanel.h"
 #include "SettingsPanel.h"
+#include "TrioSlider.h"
 //[/Headers]
 
 
@@ -148,7 +149,7 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> cutoffSlider;
+    ScopedPointer<TrioSlider> cutoffSlider;
     ScopedPointer<Slider> resoSlider;
     ScopedPointer<Slider> osc1PitchSlider;
     ScopedPointer<Slider> osc1FineSlider;

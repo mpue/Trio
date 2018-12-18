@@ -207,6 +207,7 @@ private:
     
     bool sync;
 	int numVoices = 0;
+    std::map<int,juce::String> controllerMappings;
 };
 
 
