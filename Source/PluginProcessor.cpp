@@ -125,7 +125,12 @@ TrioAudioProcessor::TrioAudioProcessor()
     if(presets.exists() && presets.isDirectory()) {
         ScopedPointer<DirectoryIterator> iter = new DirectoryIterator(presets, false);
         while(iter->next()) {
-            programNames.push_back(iter->getFile().getFileNameWithoutExtension());
+            if (iter->getFile().exists() && !iter->getFile().isDirectory()) {
+                String name = iter->getFile().getFileNameWithoutExtension();
+                Logger::getCurrentLogger()->writeToLog("Found preset : "+name);
+                programNames.push_back(name);
+            }
+
         }
         iter = nullptr;
         

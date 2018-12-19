@@ -149,7 +149,7 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<TrioSlider> cutoffSlider;
+    ScopedPointer<Slider> cutoffSlider;
     ScopedPointer<Slider> resoSlider;
     ScopedPointer<Slider> osc1PitchSlider;
     ScopedPointer<Slider> osc1FineSlider;

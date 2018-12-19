@@ -44,7 +44,7 @@ MainWindow::MainWindow (TrioAudioProcessor* p)
 
     //[/Constructor_pre]
 
-    addAndMakeVisible (cutoffSlider = new TrioSlider ("cutoffSlider"));
+    addAndMakeVisible (cutoffSlider = new Slider	 ("cutoffSlider"));
     cutoffSlider->setRange (0.1, 12, 0.1);
     cutoffSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     cutoffSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
